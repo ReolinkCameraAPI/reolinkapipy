@@ -1,26 +1,46 @@
+import io
 import json
+import random
+import string
+from urllib.request import urlopen
+
+from PIL import Image
 
 from resthandle import Request
 
 
 class APIHandler:
+    """
+    The APIHandler class is the backend part of the API.
+    This handles communication directly with the camera.
 
-    def __init__(self, ip):
+    All Code will try to follow the PEP 8 standard as described here: https://www.python.org/dev/peps/pep-0008/
+
+    """
+
+    def __init__(self, ip: str, username: str, password: str):
+        """
+        Initialise the Camera API Handler (maps api calls into python)
+        :param ip:
+        :param username:
+        :param password:
+        """
         self.url = "http://" + ip + "/cgi-bin/api.cgi"
         self.token = None
+        self.username = username
+        self.password = password
 
     # Token
 
-    def login(self, username: str, password: str):
+    def login(self):
         """
         Get login token
         Must be called first, before any other operation can be performed
-        :param username:
-        :param password:
         :return:
         """
         try:
-            body = [{"cmd": "Login", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
+            body = [{"cmd": "Login", "action": 0,
+                     "param": {"User": {"userName": self.username, "password": self.password}}}]
             param = {"cmd": "Login", "token": "null"}
             response = Request.post(self.url, data=body, params=param)
             if response is not None:
@@ -176,3 +196,30 @@ class APIHandler:
         except Exception as e:
             print("Could not get General System settings\n", e)
             raise
+
+    ##########
+    # Image Data
+    ##########
+    def get_snap(self, timeout=3) -> Image or None:
+        """
+        Gets a "snap" of the current camera video data and returns a Pillow Image or None
+        :param timeout:
+        :return:
+        """
+        try:
+            randomstr = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+            snap = "?cmd=Snap&channel=0&rs=" \
+                   + randomstr \
+                   + "&user=" + self.username \
+                   + "&password=" + self.password
+            reader = urlopen(self.url + snap, timeout)
+            if reader.status == 200:
+                b = bytearray(reader.read())
+                return Image.open(io.BytesIO(b))
+            print("Could not retrieve data from camera successfully. Status:", reader.status)
+            return None
+
+        except Exception as e:
+            print("Could not get Image data\n", e)
+            raise
+
