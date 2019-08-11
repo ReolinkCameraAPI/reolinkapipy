@@ -229,6 +229,10 @@ class APIHandler:
     # GET
     ##########
     def get_online_user(self) -> json or None:
+        """
+        Return a list of current logged-in users in json format
+        :return: json or None
+        """
         try:
             param = {"cmd": "GetOnline", "token": self.token}
             body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
@@ -242,6 +246,10 @@ class APIHandler:
             raise
 
     def get_users(self) -> json or None:
+        """
+        Return a list of user accounts from the camera in json format
+        :return: json or None
+        """
         try:
             param = {"cmd": "GetUser", "token": self.token}
             body = [{"cmd": "GetUser", "action": 1, "param": {}}]
@@ -258,6 +266,13 @@ class APIHandler:
     # SET
     ##########
     def add_user(self, username: str, password: str, level: str = "guest") -> bool:
+        """
+        Add a new user account to the camera
+        :param username: The user's username
+        :param password: The user's password
+        :param level: The privilege level 'guest' or 'admin'. Default is 'guest'
+        :return: bool
+        """
         try:
             param = {"cmd": "AddUser", "token": self.token}
             body = [{"cmd": "AddUser", "action": 0,
@@ -276,6 +291,12 @@ class APIHandler:
             raise
 
     def modify_user(self, username: str, password: str) -> bool:
+        """
+        Modify the user's password by specifying their username
+        :param username: The user which would want to be modified
+        :param password: The new password
+        :return: bool
+        """
         try:
             param = {"cmd": "ModifyUser", "token": self.token}
             body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
@@ -292,6 +313,11 @@ class APIHandler:
             raise
 
     def delete_user(self, username: str) -> bool:
+        """
+        Delete a user by specifying their username
+        :param username: The user which would want to be deleted
+        :return: bool
+        """
         try:
             param = {"cmd": "DelUser", "token": self.token}
             body = [{"cmd": "DelUser", "action": 0, "param": {"User": {"userName": username}}}]
@@ -309,11 +335,11 @@ class APIHandler:
     ##########
     # Image Data
     ##########
-    def get_snap(self, timeout=3) -> Image or None:
+    def get_snap(self, timeout: int = 3) -> Image or None:
         """
         Gets a "snap" of the current camera video data and returns a Pillow Image or None
-        :param timeout:
-        :return:
+        :param timeout: Request timeout to camera in seconds
+        :return: Image or None
         """
         try:
             randomstr = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
@@ -330,4 +356,60 @@ class APIHandler:
 
         except Exception as e:
             print("Could not get Image data\n", e)
+            raise
+
+    #########
+    # Device
+    #########
+    def get_hdd_info(self) -> json or None:
+        """
+        Gets all HDD and SD card information from Camera
+        Format is as follows:
+        [{"cmd" : "GetHddInfo",
+        "code" : 0,
+        "value" : {
+        "HddInfo" : [{
+               "capacity" : 15181,
+               "format" : 1,
+               "id" : 0,
+               "mount" : 1,
+               "size" : 15181
+                }]
+            }
+        }]
+
+        :return: json or None
+        """
+        try:
+            param = {"cmd": "GetHddInfo", "token": self.token}
+            body = [{"cmd": "GetHddInfo", "action": 0, "param": {}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                return json.loads(response.text)
+            print("Could not retrieve HDD/SD info from camera successfully. Status:", response.status_code)
+            return None
+        except Exception as e:
+            print("Could not get HDD/SD card information", e)
+            raise
+
+    def format_hdd(self, hdd_id: [int] = [0]) -> bool:
+        """
+        Format specified HDD/SD cards with their id's
+        :param hdd_id: List of id's specified by the camera with get_hdd_info api. Default is 0 (SD card)
+        :return: bool
+        """
+        try:
+            param = {"cmd": "Format", "token": self.token}
+            body = [{"cmd": "Format", "action": 0, "param": {"HddInfo": {"id": hdd_id}}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                r_data = json.loads(response.text)
+                if r_data["value"]["rspCode"] == "200":
+                    return True
+                print("Could not format HDD/SD. Camera responded with:", r_data["value"])
+                return False
+            print("Could not format HDD/SD. Status:", response.status_code)
+            return False
+        except Exception as e:
+            print("Could not format HDD/SD", e)
             raise
