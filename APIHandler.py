@@ -2,10 +2,14 @@ import io
 import json
 import random
 import string
-from urllib.request import urlopen
+import sys
+from urllib import request
 
+import numpy
+import rtsp
 from PIL import Image
 
+from RtspClient import RtspClient
 from resthandle import Request
 
 
@@ -19,17 +23,23 @@ class APIHandler:
 
     """
 
-    def __init__(self, ip: str, username: str, password: str):
+    def __init__(self, ip: str, username: str, password: str, **kwargs):
         """
         Initialise the Camera API Handler (maps api calls into python)
         :param ip:
         :param username:
         :param password:
+        :param proxy: Add a proxy dict for requests to consume.
+        eg: {"http":"socks5://[username]:[password]@[host]:[port], "https": ...}
+        More information on proxies in requests: https://stackoverflow.com/a/15661226/9313679
+
         """
+        self.ip = ip
         self.url = "http://" + ip + "/cgi-bin/api.cgi"
         self.token = None
         self.username = username
         self.password = password
+        Request.proxies = kwargs.get("proxy")  # Defaults to None if key isn't found
 
     ###########
     # Token
@@ -380,7 +390,7 @@ class APIHandler:
             param = {"cmd": "GetDevInfo", "token": self.token}
             body = [{"cmd": "GetDevInfo", "action": 0, "param": {}}]
             response = Request.post(self.url, data=body, params=param)
-            if response == 200:
+            if response.status_code == 200:
                 return json.loads(response.text)
             print("Could not retrieve camera information. Status:", response.status_code)
             return None
@@ -543,12 +553,15 @@ class APIHandler:
         :return: Image or None
         """
         try:
+
             randomstr = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-            snap = "?cmd=Snap&channel=0&rs=" \
+            snap = self.url + "?cmd=Snap&channel=0&rs=" \
                    + randomstr \
                    + "&user=" + self.username \
                    + "&password=" + self.password
-            reader = urlopen(self.url + snap, timeout)
+            req = request.Request(snap)
+            req.set_proxy(Request.proxies, 'http')
+            reader = request.urlopen(req, timeout)
             if reader.status == 200:
                 b = bytearray(reader.read())
                 return Image.open(io.BytesIO(b))
@@ -860,3 +873,25 @@ class APIHandler:
             return None
         except Exception as e:
             print("Could not get advanced recoding", e)
+
+    ###########
+    # RTSP Stream
+    ###########
+    def open_video_stream(self, profile: str = "main") -> Image:
+        """
+        profile is "main" or "sub"
+        https://support.reolink.com/hc/en-us/articles/360007010473-How-to-Live-View-Reolink-Cameras-via-VLC-Media-Player
+        :param profile:
+        :return:
+        """
+        with RtspClient(ip=self.ip, username=self.username, password=self.password,
+                        proxies={"host": "127.0.0.1", "port": 8000}) as rtsp_client:
+            rtsp_client.preview()
+        # with rtsp.Client(
+        #         rtsp_server_uri="rtsp://"
+        #                         + self.username + ":"
+        #                         + self.password + "@"
+        #                         + self.ip
+        #                         + ":554//h264Preview_01_"
+        #                         + profile) as client:
+        #     return client
