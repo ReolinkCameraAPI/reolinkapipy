@@ -32,11 +32,11 @@ class APIHandler:
 
     # Token
 
-    def login(self):
+    def login(self) -> bool:
         """
         Get login token
         Must be called first, before any other operation can be performed
-        :return:
+        :return: bool
         """
         try:
             body = [{"cmd": "Login", "action": 0,
@@ -49,9 +49,12 @@ class APIHandler:
                 if int(code) == 0:
                     self.token = data["value"]["Token"]["name"]
                     print("Login success")
+                    return True
                 print(self.token)
+                return False
             else:
                 print("Failed to login\nStatus Code:", response.status_code)
+                return False
         except Exception as e:
             print("Error Login\n", e)
             raise
@@ -63,43 +66,48 @@ class APIHandler:
     ###########
     # SET Network
     ###########
-    def set_net_port(self, httpPort=80, httpsPort=443, mediaPort=9000, onvifPort=8000, rtmpPort=1935, rtspPort=554):
+    def set_net_port(self, http_port=80, https_port=443, media_port=9000, onvif_port=8000, rtmp_port=1935,
+                     rtsp_port=554) -> bool:
         """
         Set network ports
         If nothing is specified, the default values will be used
-        :param httpPort:
-        :param httpsPort:
-        :param mediaPort:
-        :param onvifPort:
-        :param rtmpPort:
-        :param rtspPort:
-        :return:
+        :param rtsp_port: int
+        :param rtmp_port: int
+        :param onvif_port: int
+        :param media_port: int
+        :param https_port: int
+        :type http_port: int
+        :return: bool
         """
         try:
             if self.token is None:
                 raise ValueError("Login first")
 
             body = [{"cmd": "SetNetPort", "action": 0, "param": {"NetPort": {
-                "httpPort": httpPort,
-                "httpsPort": httpsPort,
-                "mediaPort": mediaPort,
-                "onvifPort": onvifPort,
-                "rtmpPort": rtmpPort,
-                "rtspPort": rtspPort
+                "httpPort": http_port,
+                "httpsPort": https_port,
+                "mediaPort": media_port,
+                "onvifPort": onvif_port,
+                "rtmpPort": rtmp_port,
+                "rtspPort": rtsp_port
             }}}]
             param = {"token": self.token}
             response = Request.post(self.url, data=body, params=param)
             if response is not None:
                 if response.status_code == 200:
                     print("Successfully Set Network Ports")
+                    return True
                 else:
                     print("Something went wront\nStatus Code:", response.status_code)
+                    return False
+
+            return False
 
         except Exception as e:
             print("Setting Network Port Error\n", e)
             raise
 
-    def set_wifi(self, ssid, password):
+    def set_wifi(self, ssid, password) -> json or None:
         try:
             if self.token is None:
                 raise ValueError("Login first")
@@ -185,16 +193,117 @@ class APIHandler:
     ###########
     # GET
     ###########
-    def get_general_system(self):
+    def get_general_system(self) -> json or None:
         try:
             if self.token is None:
                 raise ValueError("Login first")
             body = [{"cmd": "GetTime", "action": 1, "param": {}}, {"cmd": "GetNorm", "action": 1, "param": {}}]
             param = {"token": self.token}
             response = Request.post(self.url, data=body, params=param)
-            return json.loads(response.text)
+            if response.status_code == 200:
+                return json.loads(response.text)
+            print("Could not retrieve general information from camera successfully. Status:", response.status_code)
+            return None
         except Exception as e:
             print("Could not get General System settings\n", e)
+            raise
+
+    def get_osd(self) -> json or None:
+        try:
+            param = {"cmd": "GetOsd", "token": self.token}
+            body = [{"cmd": "GetOsd", "action": 1, "param": {"channel": 0}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                return json.loads(response.text)
+            print("Could not retrieve OSD from camera successfully. Status:", response.status_code)
+            return None
+        except Exception as e:
+            print("Could not get OSD", e)
+            raise
+
+    ##########
+    # User
+    ##########
+
+    ##########
+    # GET
+    ##########
+    def get_online_user(self) -> json or None:
+        try:
+            param = {"cmd": "GetOnline", "token": self.token}
+            body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                return json.loads(response.text)
+            print("Could not retrieve online user from camera. Status:", response.status_code)
+            return None
+        except Exception as e:
+            print("Could not get online user", e)
+            raise
+
+    def get_users(self) -> json or None:
+        try:
+            param = {"cmd": "GetUser", "token": self.token}
+            body = [{"cmd": "GetUser", "action": 1, "param": {}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                return json.loads(response.text)
+            print("Could not retrieve users from camera. Status:", response.status_code)
+            return None
+        except Exception as e:
+            print("Could not get users", e)
+            raise
+
+    ##########
+    # SET
+    ##########
+    def add_user(self, username: str, password: str, level: str = "guest") -> bool:
+        try:
+            param = {"cmd": "AddUser", "token": self.token}
+            body = [{"cmd": "AddUser", "action": 0,
+                     "param": {"User": {"userName": username, "password": password, "level": level}}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                r_data = json.loads(response.text)
+                if r_data["value"]["rspCode"] == "200":
+                    return True
+                print("Could not add user. Camera responded with:", r_data["value"])
+                return False
+            print("Something went wrong. Could not add user. Status:", response.status_code)
+            return False
+        except Exception as e:
+            print("Could not add user", e)
+            raise
+
+    def modify_user(self, username: str, password: str) -> bool:
+        try:
+            param = {"cmd": "ModifyUser", "token": self.token}
+            body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                r_data = json.loads(response.text)
+                if r_data["value"]["rspCode"] == "200":
+                    return True
+                print("Could not modify user:", username, "\nCamera responded with:", r_data["value"])
+            print("Something went wrong. Could not modify user. Status:", response.status_code)
+            return False
+        except Exception as e:
+            print("Could not modify user", e)
+            raise
+
+    def delete_user(self, username: str) -> bool:
+        try:
+            param = {"cmd": "DelUser", "token": self.token}
+            body = [{"cmd": "DelUser", "action": 0, "param": {"User": {"userName": username}}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                r_data = json.loads(response.text)
+                if r_data["value"]["rspCode"] == "200":
+                    return True
+                print("Could not delete user:", username, "\nCamera responded with:", r_data["value"])
+                return False
+        except Exception as e:
+            print("Could not delete user", e)
             raise
 
     ##########
@@ -222,4 +331,3 @@ class APIHandler:
         except Exception as e:
             print("Could not get Image data\n", e)
             raise
-
