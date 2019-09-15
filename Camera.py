@@ -4,9 +4,20 @@ from APIHandler import APIHandler
 class Camera(APIHandler):
 
     def __init__(self, ip, username="admin", password="", https=False):
-        APIHandler.__init__(self, ip, https=https)
+        """
+        Initialise the Camera object by passing the ip address.
+        The default details {"username":"admin", "password":""} will be used if nothing passed
+        :param ip:
+        :param username:
+        :param password:
+        """
+        # For when you need to connect to a camera behind a proxy
+        APIHandler.__init__(self, ip, username, password, proxy={"http": "socks5://127.0.0.1:8000"}, https=https)
+
+        # Normal call without proxy:
+        # APIHandler.__init__(self, ip, username, password)
+
         self.ip = ip
         self.username = username
         self.password = password
-        self.https = https
-        super().login(self.username, self.password)
+        super().login()

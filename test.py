@@ -1,5 +1,5 @@
 from Camera import Camera
 
-c = Camera("192.168.1.100", "admin", "jUa2kUzi")
-c.get_wifi()
-c.scan_wifi()
+c = Camera("192.168.1.112", "admin", "jUa2kUzi")
+# print("Getting information", c.get_information())
+c.open_video_stream()
