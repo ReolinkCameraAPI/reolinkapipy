@@ -23,7 +23,7 @@ class APIHandler:
 
     """
 
-    def __init__(self, ip: str, username: str, password: str, **kwargs):
+    def __init__(self, ip: str, username: str, password: str, https = False, **kwargs):
         """
         Initialise the Camera API Handler (maps api calls into python)
         :param ip:
@@ -34,8 +34,9 @@ class APIHandler:
         More information on proxies in requests: https://stackoverflow.com/a/15661226/9313679
 
         """
+        scheme = 'https' if https else 'http'
+        self.url = f"{scheme}://{ip}/cgi-bin/api.cgi"
         self.ip = ip
-        self.url = "http://" + ip + "/cgi-bin/api.cgi"
         self.token = None
         self.username = username
         self.password = password
