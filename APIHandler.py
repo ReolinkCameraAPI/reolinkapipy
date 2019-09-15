@@ -5,8 +5,9 @@ from resthandle import Request
 
 class APIHandler:
 
-    def __init__(self, ip):
-        self.url = "http://" + ip + "/cgi-bin/api.cgi"
+    def __init__(self, ip, https=False):
+        scheme = 'https' if https else 'http'
+        self.url = f"{scheme}://{ip}/cgi-bin/api.cgi"
         self.token = None
 
     # Token

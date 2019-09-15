@@ -17,9 +17,9 @@ class Request:
         try:
             headers = {'content-type': 'application/json'}
             if params is not None:
-                r = requests.post(url, params=params, json=data, headers=headers)
+                r = requests.post(url, verify=False, params=params, json=data, headers=headers)
             else:
-                r = requests.post(url, json=data)
+                r = requests.post(url, verify=False, json=data)
             if r.status_code == 200:
                 return r
             else:
@@ -38,7 +38,7 @@ class Request:
         :return:
         """
         try:
-            data = requests.get(url=url, params=params, timeout=timeout)
+            data = requests.get(url=url, verify=False, params=params, timeout=timeout)
             return data
         except Exception as e:
             print("Get Error\n", e)
