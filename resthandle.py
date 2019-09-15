@@ -44,7 +44,7 @@ class Request:
         """
         try:
             data = requests.get(url=url, verify=False, params=params, timeout=timeout, proxies=Request.proxies)
-
+            
             return data
         except Exception as e:
             print("Get Error\n", e)

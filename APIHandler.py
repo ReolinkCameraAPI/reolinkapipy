@@ -32,7 +32,6 @@ class APIHandler:
         :param proxy: Add a proxy dict for requests to consume.
         eg: {"http":"socks5://[username]:[password]@[host]:[port], "https": ...}
         More information on proxies in requests: https://stackoverflow.com/a/15661226/9313679
-
         """
         scheme = 'https' if https else 'http'
         self.url = f"{scheme}://{ip}/cgi-bin/api.cgi"
