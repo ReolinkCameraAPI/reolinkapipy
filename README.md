@@ -7,11 +7,11 @@ This repository's purpose is to deliver a complete API for the Reolink Camera's,
 
 ### But Reolink gives an API in their documentation
 
-Not really. They only deliver a really basic API to retrieve Image data and Video data. 
+Not really. They only deliver a really basic API to retrieve Image data and Video data.
 
 ### How?
 
-You can get the Restful API calls by looking through the HTTP Requests made the camera web console. I use Google Chrome developer mode (ctr + shift + i) -> Network. 
+You can get the Restful API calls by looking through the HTTP Requests made the camera web console. I use Google Chrome developer mode (ctr + shift + i) -> Network.
 
 ### Get started
 
@@ -68,7 +68,7 @@ SET:
 - [ ] Alarm -> Motion
 - [X] System -> General
 - [ ] System -> DST
-- [ ] System -> Reboot
+- [X] System -> Reboot
 - [ ] User -> Online User
 - [ ] User -> Add User
 - [ ] User -> Manage User

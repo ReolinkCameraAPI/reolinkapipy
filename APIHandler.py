@@ -398,6 +398,26 @@ class APIHandler:
             print("Could not get device information", e)
             raise
 
+    ###########
+    # SET
+    ###########
+    def reboot_camera(self) -> bool:
+        """
+        Reboots the camera
+        :return: bool
+        """
+        try:
+            param = {"cmd": "Reboot", "token": self.token}
+            body = [{"cmd": "Reboot", "action": 0, "param": {}}]
+            response = Request.post(self.url, data=body, params=param)
+            if response.status_code == 200:
+                return True
+            print("Something went wrong. Could not reboot camera. Status:", response.status_code)
+            return False
+        except Exception as e:
+            print("Could not reboot camera", e)
+            raise
+
     ##########
     # User
     ##########
