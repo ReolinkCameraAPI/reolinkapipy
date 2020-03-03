@@ -2,11 +2,8 @@ import io
 import json
 import random
 import string
-import sys
 from urllib import request
 
-import numpy
-import rtsp
 from PIL import Image
 
 from RtspClient import RtspClient
