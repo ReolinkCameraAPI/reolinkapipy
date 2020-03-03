@@ -71,6 +71,22 @@ class APIHandler:
         except Exception as e:
             print("Error Login\n", e)
             raise
+        
+    def _execute_command(self, command, data):
+        """
+        Send a POST request to the IP camera with given JSON body and
+        :param command: name of the command to send
+        :param data: object to send to the camera
+        :return: response as python object
+        """
+        try:
+            if self.token is None:
+                raise ValueError("Login first")
+            response = Request.post(self.url, data=data, params={"cmd": command, "token": self.token})
+            return json.loads(response.text)
+        except Exception as e:
+            print(f"Command {command} failed: {e}")
+            raise
 
     ###########
     # NETWORK
@@ -119,20 +135,12 @@ class APIHandler:
             raise
 
     def set_wifi(self, ssid, password) -> json or None:
-        try:
-            if self.token is None:
-                raise ValueError("Login first")
-            body = [{"cmd": "SetWifi", "action": 0, "param": {
-                "Wifi": {
-                    "ssid": ssid,
-                    "password": password
-                }}}]
-            param = {"cmd": "SetWifi", "token": self.token}
-            response = Request.post(self.url, data=body, params=param)
-            return json.loads(response.text)
-        except Exception as e:
-            print("Could not Set Wifi details", e)
-            raise
+        body = [{"cmd": "SetWifi", "action": 0, "param": {
+            "Wifi": {
+                "ssid": ssid,
+                "password": password
+            }}}]
+        return self._execute_command('SetWifi', body)
 
     ###########
     # GET
@@ -158,49 +166,13 @@ class APIHandler:
         except Exception as e:
             print("Get Network Ports", e)
 
-    def get_link_local(self):
-        """
-        Get General network data
-        This includes IP address, Device mac, Gateway and DNS
-        :return:
-        """
-        try:
-            if self.token is None:
-                raise ValueError("Login first")
-
-            body = [{"cmd": "GetLocalLink", "action": 1, "param": {}}]
-            param = {"cmd": "GetLocalLink", "token": self.token}
-            request = Request.post(self.url, data=body, params=param)
-            if request.status_code == 200:
-                return json.loads(request.text)
-            print("Could not get ")
-        except Exception as e:
-            print("Could not get Link Local", e)
-            raise
-
     def get_wifi(self):
-        try:
-            if self.token is None:
-                raise ValueError("Login first")
-            body = [{"cmd": "GetWifi", "action": 1, "param": {}}]
-            param = {"cmd": "GetWifi", "token": self.token}
-            response = Request.post(self.url, data=body, params=param)
-            return json.loads(response.text)
-        except Exception as e:
-            print("Could not get Wifi\n", e)
-            raise
+        body = [{"cmd": "GetWifi", "action": 1, "param": {}}]
+        return self._execute_command('GetWifi', body)
 
     def scan_wifi(self):
-        try:
-            if self.token is None:
-                raise ValueError("Login first")
-            body = [{"cmd": "ScanWifi", "action": 1, "param": {}}]
-            param = {"cmd": "ScanWifi", "token": self.token}
-            response = Request.post(self.url, data=body, params=param)
-            return json.loads(response.text)
-        except Exception as e:
-            print("Could not Scan wifi\n", e)
-            raise
+        body = [{"cmd": "ScanWifi", "action": 1, "param": {}}]
+        return self._execute_command('ScanWifi', body)
 
     ###########
     # Display
@@ -226,17 +198,8 @@ class APIHandler:
          }}}]
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetOsd", "token": self.token}
-            body = [{"cmd": "GetOsd", "action": 1, "param": {"channel": 0}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not retrieve OSD from camera successfully. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get OSD", e)
-            raise
+        body = [{"cmd": "GetOsd", "action": 1, "param": {"channel": 0}}]
+        return self._execute_command('GetOsd', body)
 
     def get_mask(self) -> json or None:
         """
@@ -257,17 +220,8 @@ class APIHandler:
         }]
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetMask", "token": self.token}
-            body = [{"cmd": "GetMask", "action": 1, "param": {"channel": 0}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not get Mask from camera successfully. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get mask", e)
-            raise
+        body = [{"cmd": "GetMask", "action": 1, "param": {"channel": 0}}]
+        return self._execute_command('GetMask', body)
 
     ###########
     # SET
@@ -286,28 +240,19 @@ class APIHandler:
         :param osd_time_pos: string time position ["Upper Left","Top Center","Upper Right","Lower Left","Bottom Center","Lower Right"]
         :return:
         """
-        try:
-            param = {"cmd": "setOsd", "token": self.token}
-            body = [{"cmd": "SetOsd", "action": 1, "param":
-                {"Osd": {"bgcolor": bg_color, "channel": channel,
-                         "osdChannel": {"enable": osd_channel_enabled, "name": osd_channel_name,
-                                        "pos": osd_channel_pos},
-                         "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos}
-                         }
-                 }
-                     }]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                r_data = json.loads(response.text)
-                if r_data["value"]["rspCode"] == "200":
-                    return True
-                print("Could not set OSD. Camera responded with status:", r_data["value"])
-                return False
-            print("Could not set OSD. Status:", response.status_code)
-            return False
-        except Exception as e:
-            print("Could not set OSD", e)
-            raise
+        body = [{"cmd": "SetOsd", "action": 1, "param":
+            {"Osd": {"bgcolor": bg_color, "channel": channel,
+                     "osdChannel": {"enable": osd_channel_enabled, "name": osd_channel_name,
+                                    "pos": osd_channel_pos},
+                     "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos}
+                     }
+             }
+                 }]
+        r_data = self._execute_command('SetOsd', body)
+        if r_data["value"]["rspCode"] == "200":
+            return True
+        print("Could not set OSD. Camera responded with status:", r_data["value"])
+        return False
 
     ###########
     # SYSTEM
@@ -325,8 +270,6 @@ class APIHandler:
             response = Request.post(self.url, data=body, params=param)
             if response.status_code == 200:
                 return json.loads(response.text)
-            print("Could not retrieve general information from camera successfully. Status:", response.status_code)
-            return None
         except Exception as e:
             print("Could not get General System settings\n", e)
             raise
@@ -347,17 +290,8 @@ class APIHandler:
         }]
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetPerformance", "token": self.token}
-            body = [{"cmd": "GetPerformance", "action": 0, "param": {}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Cound not retrieve performance information from camera successfully. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get performance", e)
-            raise
+        body = [{"cmd": "GetPerformance", "action": 0, "param": {}}]
+        return self._execute_command('GetPerformance', body)
 
     def get_information(self) -> json or None:
         """
@@ -386,17 +320,8 @@ class APIHandler:
         }]
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetDevInfo", "token": self.token}
-            body = [{"cmd": "GetDevInfo", "action": 0, "param": {}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not retrieve camera information. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get device information", e)
-            raise
+        body = [{"cmd": "GetDevInfo", "action": 0, "param": {}}]
+        return self._execute_command('GetDevInfo', body)
 
     ###########
     # SET
@@ -406,17 +331,8 @@ class APIHandler:
         Reboots the camera
         :return: bool
         """
-        try:
-            param = {"cmd": "Reboot", "token": self.token}
-            body = [{"cmd": "Reboot", "action": 0, "param": {}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return True
-            print("Something went wrong. Could not reboot camera. Status:", response.status_code)
-            return False
-        except Exception as e:
-            print("Could not reboot camera", e)
-            raise
+        body = [{"cmd": "Reboot", "action": 0, "param": {}}]
+        return self._execute_command('Reboot', body)
 
     ##########
     # User
@@ -441,17 +357,8 @@ class APIHandler:
         }]
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetOnline", "token": self.token}
-            body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not retrieve online user from camera. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get online user", e)
-            raise
+        body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
+        return self._execute_command('GetOnline', body)
 
     def get_users(self) -> json or None:
         """
@@ -481,17 +388,8 @@ class APIHandler:
         }]
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetUser", "token": self.token}
-            body = [{"cmd": "GetUser", "action": 1, "param": {}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not retrieve users from camera. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get users", e)
-            raise
+        body = [{"cmd": "GetUser", "action": 1, "param": {}}]
+        return self._execute_command('GetUser', body)
 
     ##########
     # SET
@@ -504,22 +402,13 @@ class APIHandler:
         :param level: The privilege level 'guest' or 'admin'. Default is 'guest'
         :return: bool
         """
-        try:
-            param = {"cmd": "AddUser", "token": self.token}
-            body = [{"cmd": "AddUser", "action": 0,
-                     "param": {"User": {"userName": username, "password": password, "level": level}}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                r_data = json.loads(response.text)
-                if r_data["value"]["rspCode"] == "200":
-                    return True
-                print("Could not add user. Camera responded with:", r_data["value"])
-                return False
-            print("Something went wrong. Could not add user. Status:", response.status_code)
-            return False
-        except Exception as e:
-            print("Could not add user", e)
-            raise
+        body = [{"cmd": "AddUser", "action": 0,
+                 "param": {"User": {"userName": username, "password": password, "level": level}}}]
+        r_data = self._execute_command('AddUser', body)
+        if r_data["value"]["rspCode"] == "200":
+            return True
+        print("Could not add user. Camera responded with:", r_data["value"])
+        return False
 
     def modify_user(self, username: str, password: str) -> bool:
         """
@@ -528,20 +417,12 @@ class APIHandler:
         :param password: The new password
         :return: bool
         """
-        try:
-            param = {"cmd": "ModifyUser", "token": self.token}
-            body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                r_data = json.loads(response.text)
-                if r_data["value"]["rspCode"] == "200":
-                    return True
-                print("Could not modify user:", username, "\nCamera responded with:", r_data["value"])
-            print("Something went wrong. Could not modify user. Status:", response.status_code)
-            return False
-        except Exception as e:
-            print("Could not modify user", e)
-            raise
+        body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
+        r_data = self._execute_command('ModifyUser', body)
+        if r_data["value"]["rspCode"] == "200":
+            return True
+        print("Could not modify user:", username, "\nCamera responded with:", r_data["value"])
+        return False
 
     def delete_user(self, username: str) -> bool:
         """
@@ -549,19 +430,12 @@ class APIHandler:
         :param username: The user which would want to be deleted
         :return: bool
         """
-        try:
-            param = {"cmd": "DelUser", "token": self.token}
-            body = [{"cmd": "DelUser", "action": 0, "param": {"User": {"userName": username}}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                r_data = json.loads(response.text)
-                if r_data["value"]["rspCode"] == "200":
-                    return True
-                print("Could not delete user:", username, "\nCamera responded with:", r_data["value"])
-                return False
-        except Exception as e:
-            print("Could not delete user", e)
-            raise
+        body = [{"cmd": "DelUser", "action": 0, "param": {"User": {"userName": username}}}]
+        r_data = self._execute_command('DelUser', body)
+        if r_data["value"]["rspCode"] == "200":
+            return True
+        print("Could not delete user:", username, "\nCamera responded with:", r_data["value"])
+        return False
 
     ##########
     # Image Data
@@ -614,17 +488,8 @@ class APIHandler:
 
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetHddInfo", "token": self.token}
-            body = [{"cmd": "GetHddInfo", "action": 0, "param": {}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not retrieve HDD/SD info from camera successfully. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get HDD/SD card information", e)
-            raise
+        body = [{"cmd": "GetHddInfo", "action": 0, "param": {}}]
+        return self._execute_command('GetHddInfo', body)
 
     def format_hdd(self, hdd_id: [int] = [0]) -> bool:
         """
@@ -632,21 +497,13 @@ class APIHandler:
         :param hdd_id: List of id's specified by the camera with get_hdd_info api. Default is 0 (SD card)
         :return: bool
         """
-        try:
-            param = {"cmd": "Format", "token": self.token}
-            body = [{"cmd": "Format", "action": 0, "param": {"HddInfo": {"id": hdd_id}}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                r_data = json.loads(response.text)
-                if r_data["value"]["rspCode"] == "200":
-                    return True
-                print("Could not format HDD/SD. Camera responded with:", r_data["value"])
-                return False
-            print("Could not format HDD/SD. Status:", response.status_code)
-            return False
-        except Exception as e:
-            print("Could not format HDD/SD", e)
-            raise
+        body = [{"cmd": "Format", "action": 0, "param": {"HddInfo": {"id": hdd_id}}}]
+        r_data = self._execute_command('Format', body)
+        if r_data["value"]["rspCode"] == "200":
+            return True
+        print("Could not format HDD/SD. Camera responded with:", r_data["value"])
+        return False
+
 
     ###########
     # Recording
@@ -825,17 +682,8 @@ class APIHandler:
 
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetEnc", "token": self.token}
-            body = [{"cmd": "GetEnc", "action": 1, "param": {"channel": 0}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not retrieve recording encoding data. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get recording encoding", e)
-            raise
+        body = [{"cmd": "GetEnc", "action": 1, "param": {"channel": 0}}]
+        return self._execute_command('GetEnc', body)
 
     def get_recording_advanced(self) -> json or None:
         """
@@ -883,16 +731,8 @@ class APIHandler:
 
         :return: json or None
         """
-        try:
-            param = {"cmd": "GetRec", "token": self.token}
-            body = [{"cmd": "GetRec", "action": 1, "param": {"channel": 0}}]
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not retrieve advanced recording. Status:", response.status_code)
-            return None
-        except Exception as e:
-            print("Could not get advanced recoding", e)
+        body = [{"cmd": "GetRec", "action": 1, "param": {"channel": 0}}]
+        return self._execute_command('GetRec', body)
 
     ###########
     # RTSP Stream
