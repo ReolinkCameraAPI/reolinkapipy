@@ -1,9 +1,6 @@
 import json
 
 import requests
-import socket
-
-import socks
 
 
 class Request:
