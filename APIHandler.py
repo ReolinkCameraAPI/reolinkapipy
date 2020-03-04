@@ -126,7 +126,7 @@ class APIHandler:
         print("Successfully Set Network Ports")
         return True
 
-    def set_wifi(self, ssid, password) -> json or None:
+    def set_wifi(self, ssid, password) -> json:
         body = [{"cmd": "SetWifi", "action": 0, "param": {
             "Wifi": {
                 "ssid": ssid,
@@ -137,10 +137,10 @@ class APIHandler:
     ###########
     # GET
     ###########
-    def get_net_ports(self) -> json or None:
+    def get_net_ports(self) -> json:
         """
         Get network ports
-        :return:
+        :return: response json
         """
         body = [{"cmd": "GetNetPort", "action": 1, "param": {}},
                 {"cmd": "GetUpnp", "action": 0, "param": {}},
@@ -162,20 +162,20 @@ class APIHandler:
     ###########
     # GET
     ###########
-    def get_osd(self) -> json or None:
+    def get_osd(self) -> json:
         """
         Get OSD information.
         See examples/response/GetOsd.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetOsd", "action": 1, "param": {"channel": 0}}]
         return self._execute_command('GetOsd', body)
 
-    def get_mask(self) -> json or None:
+    def get_mask(self) -> json:
         """
         Get the camera mask information.
         See examples/response/GetMask.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetMask", "action": 1, "param": {"channel": 0}}]
         return self._execute_command('GetMask', body)
@@ -195,7 +195,7 @@ class APIHandler:
         :param osd_channel_pos: string channel position ["Upper Left","Top Center","Upper Right","Lower Left","Bottom Center","Lower Right"]
         :param osd_time_enabled: bool
         :param osd_time_pos: string time position ["Upper Left","Top Center","Upper Right","Lower Left","Bottom Center","Lower Right"]
-        :return:
+        :return: whether the action was successful
         """
         body = [{"cmd": "SetOsd", "action": 1, "param": {
             "Osd": {"bgcolor": bg_color, "channel": channel,
@@ -217,24 +217,25 @@ class APIHandler:
     ###########
     # GET
     ###########
-    def get_general_system(self) -> json or None:
+    def get_general_system(self) -> json:
+        """:return: response json"""
         body = [{"cmd": "GetTime", "action": 1, "param": {}}, {"cmd": "GetNorm", "action": 1, "param": {}}]
         return self._execute_command('get_general_system', body, multi=True)
 
-    def get_performance(self) -> json or None:
+    def get_performance(self) -> json:
         """
         Get a snapshot of the current performance of the camera.
         See examples/response/GetPerformance.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetPerformance", "action": 0, "param": {}}]
         return self._execute_command('GetPerformance', body)
 
-    def get_information(self) -> json or None:
+    def get_information(self) -> json:
         """
         Get the camera information
         See examples/response/GetDevInfo.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetDevInfo", "action": 0, "param": {}}]
         return self._execute_command('GetDevInfo', body)
@@ -242,10 +243,10 @@ class APIHandler:
     ###########
     # SET
     ###########
-    def reboot_camera(self) -> bool:
+    def reboot_camera(self) -> json:
         """
         Reboots the camera
-        :return: bool
+        :return: response json
         """
         body = [{"cmd": "Reboot", "action": 0, "param": {}}]
         return self._execute_command('Reboot', body)
@@ -257,20 +258,20 @@ class APIHandler:
     ##########
     # GET
     ##########
-    def get_online_user(self) -> json or None:
+    def get_online_user(self) -> json:
         """
         Return a list of current logged-in users in json format
         See examples/response/GetOnline.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
         return self._execute_command('GetOnline', body)
 
-    def get_users(self) -> json or None:
+    def get_users(self) -> json:
         """
         Return a list of user accounts from the camera in json format.
         See examples/response/GetUser.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetUser", "action": 1, "param": {}}]
         return self._execute_command('GetUser', body)
@@ -284,7 +285,7 @@ class APIHandler:
         :param username: The user's username
         :param password: The user's password
         :param level: The privilege level 'guest' or 'admin'. Default is 'guest'
-        :return: bool
+        :return: whether the user was added successfully
         """
         body = [{"cmd": "AddUser", "action": 0,
                  "param": {"User": {"userName": username, "password": password, "level": level}}}]
@@ -299,7 +300,7 @@ class APIHandler:
         Modify the user's password by specifying their username
         :param username: The user which would want to be modified
         :param password: The new password
-        :return: bool
+        :return: whether the user was modified successfully
         """
         body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
         r_data = self._execute_command('ModifyUser', body)
@@ -312,7 +313,7 @@ class APIHandler:
         """
         Delete a user by specifying their username
         :param username: The user which would want to be deleted
-        :return: bool
+        :return: whether the user was deleted successfully
         """
         body = [{"cmd": "DelUser", "action": 0, "param": {"User": {"userName": username}}}]
         r_data = self._execute_command('DelUser', body)
@@ -352,11 +353,11 @@ class APIHandler:
     #########
     # Device
     #########
-    def get_hdd_info(self) -> json or None:
+    def get_hdd_info(self) -> json:
         """
         Gets all HDD and SD card information from Camera
         See examples/response/GetHddInfo.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetHddInfo", "action": 0, "param": {}}]
         return self._execute_command('GetHddInfo', body)
@@ -385,20 +386,20 @@ class APIHandler:
     ###########
     # GET
     ###########
-    def get_recording_encoding(self) -> json or None:
+    def get_recording_encoding(self) -> json:
         """
         Get the current camera encoding settings for "Clear" and "Fluent" profiles.
         See examples/response/GetEnc.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetEnc", "action": 1, "param": {"channel": 0}}]
         return self._execute_command('GetEnc', body)
 
-    def get_recording_advanced(self) -> json or None:
+    def get_recording_advanced(self) -> json:
         """
         Get recording advanced setup data
         See examples/response/GetRec.json for example response data.
-        :return: json or None
+        :return: response json
         """
         body = [{"cmd": "GetRec", "action": 1, "param": {"channel": 0}}]
         return self._execute_command('GetRec', body)
