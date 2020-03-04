@@ -28,7 +28,7 @@ class Request:
             if r.status_code == 200:
                 return r
             else:
-                raise ValueError("Status: ", r.status_code)
+                raise ValueError(f"Http Request had non-200 Status: {r.status_code}", r.status_code)
         except Exception as e:
             print("Post Error\n", e)
             raise

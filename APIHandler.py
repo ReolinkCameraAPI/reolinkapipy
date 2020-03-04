@@ -122,14 +122,8 @@ class APIHandler:
             }}}]
             param = {"token": self.token}
             response = Request.post(self.url, data=body, params=param)
-            if response is not None:
-                if response.status_code == 200:
-                    print("Successfully Set Network Ports")
-                    return True
-                else:
-                    print("Something went wront\nStatus Code:", response.status_code)
-                    return False
-            return False
+            print("Successfully Set Network Ports")
+            return True
         except Exception as e:
             print("Setting Network Port Error\n", e)
             raise
@@ -159,10 +153,7 @@ class APIHandler:
                     {"cmd": "GetP2p", "action": 0, "param": {}}]
             param = {"token": self.token}
             response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return json.loads(response.text)
-            print("Could not get network ports data. Status:", response.status_code)
-            return None
+            return json.loads(response.text)
         except Exception as e:
             print("Get Network Ports", e)
 
@@ -447,7 +438,6 @@ class APIHandler:
         :return: Image or None
         """
         try:
-
             randomstr = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
             snap = self.url + "?cmd=Snap&channel=0&rs=" \
                    + randomstr \
