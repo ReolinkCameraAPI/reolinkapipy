@@ -72,17 +72,23 @@ class APIHandler:
             print("Error Login\n", e)
             raise
         
-    def _execute_command(self, command, data):
+    def _execute_command(self, command, data, multi=False):
         """
-        Send a POST request to the IP camera with given JSON body and
+        Send a POST request to the IP camera with given data.
         :param command: name of the command to send
-        :param data: object to send to the camera
-        :return: response as python object
+        :param data: object to send to the camera (send as json)
+        :param multi: whether the given command name should be added to the
+        url parameters of the request. Defaults to False. (Some multi-step
+        commands seem to not have a single command name)
+        :return: response JSON as python object
         """
+        params = {"token": self.token, 'cmd': command}
+        if multi:
+            del params['cmd']
         try:
             if self.token is None:
                 raise ValueError("Login first")
-            response = Request.post(self.url, data=data, params={"cmd": command, "token": self.token})
+            response = Request.post(self.url, data=data, params=params)
             return json.loads(response.text)
         except Exception as e:
             print(f"Command {command} failed: {e}")
