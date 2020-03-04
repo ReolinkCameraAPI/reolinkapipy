@@ -114,25 +114,17 @@ class APIHandler:
         :type http_port: int
         :return: bool
         """
-        try:
-            if self.token is None:
-                raise ValueError("Login first")
-
-            body = [{"cmd": "SetNetPort", "action": 0, "param": {"NetPort": {
-                "httpPort": http_port,
-                "httpsPort": https_port,
-                "mediaPort": media_port,
-                "onvifPort": onvif_port,
-                "rtmpPort": rtmp_port,
-                "rtspPort": rtsp_port
-            }}}]
-            param = {"token": self.token}
-            response = Request.post(self.url, data=body, params=param)
-            print("Successfully Set Network Ports")
-            return True
-        except Exception as e:
-            print("Setting Network Port Error\n", e)
-            raise
+        body = [{"cmd": "SetNetPort", "action": 0, "param": {"NetPort": {
+            "httpPort": http_port,
+            "httpsPort": https_port,
+            "mediaPort": media_port,
+            "onvifPort": onvif_port,
+            "rtmpPort": rtmp_port,
+            "rtspPort": rtsp_port
+        }}}]
+        self._execute_command('SetNetPort', body, multi=True)
+        print("Successfully Set Network Ports")
+        return True
 
     def set_wifi(self, ssid, password) -> json or None:
         body = [{"cmd": "SetWifi", "action": 0, "param": {
@@ -150,18 +142,10 @@ class APIHandler:
         Get network ports
         :return:
         """
-        try:
-            if self.token is not None:
-                raise ValueError("Login first")
-
-            body = [{"cmd": "GetNetPort", "action": 1, "param": {}},
-                    {"cmd": "GetUpnp", "action": 0, "param": {}},
-                    {"cmd": "GetP2p", "action": 0, "param": {}}]
-            param = {"token": self.token}
-            response = Request.post(self.url, data=body, params=param)
-            return response.json()
-        except Exception as e:
-            print("Get Network Ports", e)
+        body = [{"cmd": "GetNetPort", "action": 1, "param": {}},
+                {"cmd": "GetUpnp", "action": 0, "param": {}},
+                {"cmd": "GetP2p", "action": 0, "param": {}}]
+        return self._execute_command('GetNetPort', body, multi=True)
 
     def get_wifi(self):
         body = [{"cmd": "GetWifi", "action": 1, "param": {}}]
@@ -237,14 +221,13 @@ class APIHandler:
         :param osd_time_pos: string time position ["Upper Left","Top Center","Upper Right","Lower Left","Bottom Center","Lower Right"]
         :return:
         """
-        body = [{"cmd": "SetOsd", "action": 1, "param":
-            {"Osd": {"bgcolor": bg_color, "channel": channel,
-                     "osdChannel": {"enable": osd_channel_enabled, "name": osd_channel_name,
-                                    "pos": osd_channel_pos},
-                     "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos}
-                     }
-             }
-                 }]
+        body = [{"cmd": "SetOsd", "action": 1, "param": {
+            "Osd": {"bgcolor": bg_color, "channel": channel,
+                    "osdChannel": {"enable": osd_channel_enabled, "name": osd_channel_name,
+                                   "pos": osd_channel_pos},
+                    "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos}
+            }
+        }}]
         r_data = self._execute_command('SetOsd', body)
         if r_data["value"]["rspCode"] == "200":
             return True
@@ -259,17 +242,8 @@ class APIHandler:
     # GET
     ###########
     def get_general_system(self) -> json or None:
-        try:
-            if self.token is None:
-                raise ValueError("Login first")
-            body = [{"cmd": "GetTime", "action": 1, "param": {}}, {"cmd": "GetNorm", "action": 1, "param": {}}]
-            param = {"token": self.token}
-            response = Request.post(self.url, data=body, params=param)
-            if response.status_code == 200:
-                return response.json()
-        except Exception as e:
-            print("Could not get General System settings\n", e)
-            raise
+        body = [{"cmd": "GetTime", "action": 1, "param": {}}, {"cmd": "GetNorm", "action": 1, "param": {}}]
+        return self._execute_command('get_general_system', body, multi=True)
 
     def get_performance(self) -> json or None:
         """
