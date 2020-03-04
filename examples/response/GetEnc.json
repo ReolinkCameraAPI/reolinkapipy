@@ -1,0 +1,377 @@
+[
+  {
+    "cmd": "GetEnc",
+    "code": 0,
+    "initial": {
+      "Enc": {
+        "audio": 0,
+        "channel": 0,
+        "mainStream": {
+          "bitRate": 4096,
+          "frameRate": 15,
+          "profile": "High",
+          "size": "3072*1728"
+        },
+        "subStream": {
+          "bitRate": 160,
+          "frameRate": 7,
+          "profile": "High",
+          "size": "640*360"
+        }
+      }
+    },
+    "range": {
+      "Enc": [
+        {
+          "audio": "boolean",
+          "mainStream": {
+            "bitRate": [
+              1024,
+              1536,
+              2048,
+              3072,
+              4096,
+              5120,
+              6144,
+              7168,
+              8192
+            ],
+            "default": {
+              "bitRate": 4096,
+              "frameRate": 15
+            },
+            "frameRate": [
+              20,
+              18,
+              16,
+              15,
+              12,
+              10,
+              8,
+              6,
+              4,
+              2
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "3072*1728"
+          },
+          "subStream": {
+            "bitRate": [
+              64,
+              128,
+              160,
+              192,
+              256,
+              384,
+              512
+            ],
+            "default": {
+              "bitRate": 160,
+              "frameRate": 7
+            },
+            "frameRate": [
+              15,
+              10,
+              7,
+              4
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "640*360"
+          }
+        },
+        {
+          "audio": "boolean",
+          "mainStream": {
+            "bitRate": [
+              1024,
+              1536,
+              2048,
+              3072,
+              4096,
+              5120,
+              6144,
+              7168,
+              8192
+            ],
+            "default": {
+              "bitRate": 4096,
+              "frameRate": 15
+            },
+            "frameRate": [
+              20,
+              18,
+              16,
+              15,
+              12,
+              10,
+              8,
+              6,
+              4,
+              2
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "2592*1944"
+          },
+          "subStream": {
+            "bitRate": [
+              64,
+              128,
+              160,
+              192,
+              256,
+              384,
+              512
+            ],
+            "default": {
+              "bitRate": 160,
+              "frameRate": 7
+            },
+            "frameRate": [
+              15,
+              10,
+              7,
+              4
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "640*360"
+          }
+        },
+        {
+          "audio": "boolean",
+          "mainStream": {
+            "bitRate": [
+              1024,
+              1536,
+              2048,
+              3072,
+              4096,
+              5120,
+              6144,
+              7168,
+              8192
+            ],
+            "default": {
+              "bitRate": 3072,
+              "frameRate": 15
+            },
+            "frameRate": [
+              30,
+              22,
+              20,
+              18,
+              16,
+              15,
+              12,
+              10,
+              8,
+              6,
+              4,
+              2
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "2560*1440"
+          },
+          "subStream": {
+            "bitRate": [
+              64,
+              128,
+              160,
+              192,
+              256,
+              384,
+              512
+            ],
+            "default": {
+              "bitRate": 160,
+              "frameRate": 7
+            },
+            "frameRate": [
+              15,
+              10,
+              7,
+              4
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "640*360"
+          }
+        },
+        {
+          "audio": "boolean",
+          "mainStream": {
+            "bitRate": [
+              1024,
+              1536,
+              2048,
+              3072,
+              4096,
+              5120,
+              6144,
+              7168,
+              8192
+            ],
+            "default": {
+              "bitRate": 3072,
+              "frameRate": 15
+            },
+            "frameRate": [
+              30,
+              22,
+              20,
+              18,
+              16,
+              15,
+              12,
+              10,
+              8,
+              6,
+              4,
+              2
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "2048*1536"
+          },
+          "subStream": {
+            "bitRate": [
+              64,
+              128,
+              160,
+              192,
+              256,
+              384,
+              512
+            ],
+            "default": {
+              "bitRate": 160,
+              "frameRate": 7
+            },
+            "frameRate": [
+              15,
+              10,
+              7,
+              4
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "640*360"
+          }
+        },
+        {
+          "audio": "boolean",
+          "mainStream": {
+            "bitRate": [
+              1024,
+              1536,
+              2048,
+              3072,
+              4096,
+              5120,
+              6144,
+              7168,
+              8192
+            ],
+            "default": {
+              "bitRate": 3072,
+              "frameRate": 15
+            },
+            "frameRate": [
+              30,
+              22,
+              20,
+              18,
+              16,
+              15,
+              12,
+              10,
+              8,
+              6,
+              4,
+              2
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "2304*1296"
+          },
+          "subStream": {
+            "bitRate": [
+              64,
+              128,
+              160,
+              192,
+              256,
+              384,
+              512
+            ],
+            "default": {
+              "bitRate": 160,
+              "frameRate": 7
+            },
+            "frameRate": [
+              15,
+              10,
+              7,
+              4
+            ],
+            "profile": [
+              "Base",
+              "Main",
+              "High"
+            ],
+            "size": "640*360"
+          }
+        }
+      ]
+    },
+    "value": {
+      "Enc": {
+        "audio": 0,
+        "channel": 0,
+        "mainStream": {
+          "bitRate": 2048,
+          "frameRate": 20,
+          "profile": "Main",
+          "size": "3072*1728"
+        },
+        "subStream": {
+          "bitRate": 64,
+          "frameRate": 4,
+          "profile": "High",
+          "size": "640*360"
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "cmd": "GetOnline",
+    "code": 0,
+    "value": {
+      "User": [
+        {
+          "canbeDisconn": 0,
+          "ip": "192.168.1.100",
+          "level": "admin",
+          "sessionId": 1000,
+          "userName": "admin"
+        }
+      ]
+    }
+  }
+]

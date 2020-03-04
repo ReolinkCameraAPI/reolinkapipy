@@ -1,0 +1,26 @@
+[
+  {
+    "cmd": "GetDevInfo",
+    "code": 0,
+    "value": {
+      "DevInfo": {
+        "B485": 0,
+        "IOInputNum": 0,
+        "IOOutputNum": 0,
+        "audioNum": 0,
+        "buildDay": "build 18081408",
+        "cfgVer": "v2.0.0.0",
+        "channelNum": 1,
+        "detail": "IPC_3816M100000000100000",
+        "diskNum": 1,
+        "firmVer": "v2.0.0.1389_18081408",
+        "hardVer": "IPC_3816M",
+        "model": "RLC-411WS",
+        "name": "Camera1_withpersonality",
+        "serial": "00000000000000",
+        "type": "IPC",
+        "wifi": 1
+      }
+    }
+  }
+]

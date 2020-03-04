@@ -1,0 +1,67 @@
+[
+  {
+    "cmd": "GetOsd",
+    "code": 0,
+    "initial": {
+      "Osd": {
+        "bgcolor": 0,
+        "channel": 0,
+        "osdChannel": {
+          "enable": 1,
+          "name": "Camera1",
+          "pos": "Lower Right"
+        },
+        "osdTime": {
+          "enable": 1,
+          "pos": "Top Center"
+        }
+      }
+    },
+    "range": {
+      "Osd": {
+        "bgcolor": "boolean",
+        "channel": 0,
+        "osdChannel": {
+          "enable": "boolean",
+          "name": {
+            "maxLen": 31
+          },
+          "pos": [
+            "Upper Left",
+            "Top Center",
+            "Upper Right",
+            "Lower Left",
+            "Bottom Center",
+            "Lower Right"
+          ]
+        },
+        "osdTime": {
+          "enable": "boolean",
+          "pos": [
+            "Upper Left",
+            "Top Center",
+            "Upper Right",
+            "Lower Left",
+            "Bottom Center",
+            "Lower Right"
+          ]
+        }
+      }
+    },
+    "value": {
+      "Osd": {
+        "bgcolor": 0,
+        "channel": 0,
+        "osdChannel": {
+          "enable": 0,
+          "name": "FarRight",
+          "pos": "Lower Right"
+        },
+        "osdTime": {
+          "enable": 0,
+          "pos": "Top Center"
+        }
+      }
+    }
+  }
+]

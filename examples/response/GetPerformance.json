@@ -1,0 +1,13 @@
+[
+  {
+    "cmd": "GetPerformance",
+    "code": 0,
+    "value": {
+      "Performance": {
+        "codecRate": 2154,
+        "cpuUsed": 14,
+        "netThroughput": 0
+      }
+    }
+  }
+]

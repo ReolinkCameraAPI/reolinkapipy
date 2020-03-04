@@ -23,7 +23,7 @@ class APIHandler:
 
     """
 
-    def __init__(self, ip: str, username: str, password: str, https = False, **kwargs):
+    def __init__(self, ip: str, username: str, password: str, https=False, **kwargs):
         """
         Initialise the Camera API Handler (maps api calls into python)
         :param ip:
@@ -165,18 +165,7 @@ class APIHandler:
     def get_osd(self) -> json or None:
         """
         Get OSD information.
-        Response data format is as follows:
-        [{"cmd" : "GetOsd","code" : 0, "initial" : {
-            "Osd" : {"bgcolor" : 0,"channel" : 0,"osdChannel" : {"enable" : 1,"name" : "Camera1","pos" : "Lower Right"},
-            "osdTime" : {"enable" : 1,"pos" : "Top Center"}
-            }},"range" : {"Osd" : {"bgcolor" : "boolean","channel" : 0,"osdChannel" : {"enable" : "boolean","name" : {"maxLen" : 31},
-               "pos" : ["Upper Left","Top Center","Upper Right","Lower Left","Bottom Center","Lower Right"]
-            },
-            "osdTime" : {"enable" : "boolean","pos" : ["Upper Left","Top Center","Upper Right","Lower Left","Bottom Center","Lower Right"]
-            }
-         }},"value" : {"Osd" : {"bgcolor" : 0,"channel" : 0,"osdChannel" : {"enable" : 0,"name" : "FarRight","pos" : "Lower Right"},
-            "osdTime" : {"enable" : 0,"pos" : "Top Center"}
-         }}}]
+        See examples/response/GetOsd.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetOsd", "action": 1, "param": {"channel": 0}}]
@@ -184,21 +173,8 @@ class APIHandler:
 
     def get_mask(self) -> json or None:
         """
-        Get the camera mask information
-        Response data format is as follows:
-        [{"cmd" : "GetMask","code" : 0,"initial" : {
-         "Mask" : {
-            "area" : [{"block" : {"height" : 0,"width" : 0,"x" : 0,"y" : 0},"screen" : {"height" : 0,"width" : 0}}],
-            "channel" : 0,
-            "enable" : 0
-            }
-        },"range" : {"Mask" : {"channel" : 0,"enable" : "boolean","maxAreas" : 4}},"value" : {
-         "Mask" : {
-            "area" : null,
-            "channel" : 0,
-            "enable" : 0}
-        }
-        }]
+        Get the camera mask information.
+        See examples/response/GetMask.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetMask", "action": 1, "param": {"channel": 0}}]
@@ -226,7 +202,7 @@ class APIHandler:
                     "osdChannel": {"enable": osd_channel_enabled, "name": osd_channel_name,
                                    "pos": osd_channel_pos},
                     "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos}
-            }
+                    }
         }}]
         r_data = self._execute_command('SetOsd', body)
         if r_data["value"]["rspCode"] == "200":
@@ -248,17 +224,7 @@ class APIHandler:
     def get_performance(self) -> json or None:
         """
         Get a snapshot of the current performance of the camera.
-        Response data format is as follows:
-        [{"cmd" : "GetPerformance",
-        "code" : 0,
-        "value" : {
-        "Performance" : {
-            "codecRate" : 2154,
-            "cpuUsed" : 14,
-            "netThroughput" : 0
-            }
-        }
-        }]
+        See examples/response/GetPerformance.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetPerformance", "action": 0, "param": {}}]
@@ -267,28 +233,7 @@ class APIHandler:
     def get_information(self) -> json or None:
         """
         Get the camera information
-        Response data format is as follows:
-        [{"cmd" : "GetDevInfo","code" : 0,"value" : {
-         "DevInfo" : {
-            "B485" : 0,
-            "IOInputNum" : 0,
-            "IOOutputNum" : 0,
-            "audioNum" : 0,
-            "buildDay" : "build 18081408",
-            "cfgVer" : "v2.0.0.0",
-            "channelNum" : 1,
-            "detail" : "IPC_3816M100000000100000",
-            "diskNum" : 1,
-            "firmVer" : "v2.0.0.1389_18081408",
-            "hardVer" : "IPC_3816M",
-            "model" : "RLC-411WS",
-            "name" : "Camera1_withpersonality",
-            "serial" : "00000000000000",
-            "type" : "IPC",
-            "wifi" : 1
-            }
-        }
-        }]
+        See examples/response/GetDevInfo.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetDevInfo", "action": 0, "param": {}}]
@@ -315,17 +260,7 @@ class APIHandler:
     def get_online_user(self) -> json or None:
         """
         Return a list of current logged-in users in json format
-        Response data format is as follows:
-        [{"cmd" : "GetOnline","code" : 0,"value" : {
-         "User" : [{
-               "canbeDisconn" : 0,
-               "ip" : "192.168.1.100",
-               "level" : "admin",
-               "sessionId" : 1000,
-               "userName" : "admin"
-               }]
-            }
-        }]
+        See examples/response/GetOnline.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
@@ -333,30 +268,8 @@ class APIHandler:
 
     def get_users(self) -> json or None:
         """
-        Return a list of user accounts from the camera in json format
-        Response data format is as follows:
-        [{"cmd" : "GetUser","code" : 0,"initial" : {
-         "User" : {
-            "level" : "guest"
-         }},
-         "range" : {"User" : {
-            "level" : [ "guest", "admin" ],
-            "password" : {
-               "maxLen" : 31,
-               "minLen" : 6
-            },
-            "userName" : {
-               "maxLen" : 31,
-               "minLen" : 1
-            }}
-        },"value" : {
-         "User" : [
-            {
-               "level" : "admin",
-               "userName" : "admin"
-            }]
-        }
-        }]
+        Return a list of user accounts from the camera in json format.
+        See examples/response/GetUser.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetUser", "action": 1, "param": {}}]
@@ -442,20 +355,7 @@ class APIHandler:
     def get_hdd_info(self) -> json or None:
         """
         Gets all HDD and SD card information from Camera
-        Response data format is as follows:
-        [{"cmd" : "GetHddInfo",
-        "code" : 0,
-        "value" : {
-        "HddInfo" : [{
-               "capacity" : 15181,
-               "format" : 1,
-               "id" : 0,
-               "mount" : 1,
-               "size" : 15181
-                }]
-            }
-        }]
-
+        See examples/response/GetHddInfo.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetHddInfo", "action": 0, "param": {}}]
@@ -474,7 +374,6 @@ class APIHandler:
         print("Could not format HDD/SD. Camera responded with:", r_data["value"])
         return False
 
-
     ###########
     # Recording
     ###########
@@ -489,167 +388,7 @@ class APIHandler:
     def get_recording_encoding(self) -> json or None:
         """
         Get the current camera encoding settings for "Clear" and "Fluent" profiles.
-        Response data format is as follows:
-        [{
-        "cmd" : "GetEnc",
-        "code" : 0,
-        "initial" : {
-            "Enc" : {
-                "audio" : 0,
-                "channel" : 0,
-                "mainStream" : {
-                "bitRate" : 4096,
-                "frameRate" : 15,
-                "profile" : "High",
-                "size" : "3072*1728"
-                },
-                "subStream" : {
-                    "bitRate" : 160,
-                    "frameRate" : 7,
-                    "profile" : "High",
-                    "size" : "640*360"
-                }
-            }
-        },
-        "range" : {
-            "Enc" : [
-                {
-                "audio" : "boolean",
-                "mainStream" : {
-                    "bitRate" : [ 1024, 1536, 2048, 3072, 4096, 5120, 6144, 7168, 8192 ],
-                    "default" : {
-                        "bitRate" : 4096,
-                        "frameRate" : 15
-                    },
-                    "frameRate" : [ 20, 18, 16, 15, 12, 10, 8, 6, 4, 2 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "3072*1728"
-                },
-                "subStream" : {
-                    "bitRate" : [ 64, 128, 160, 192, 256, 384, 512 ],
-                    "default" : {
-                        "bitRate" : 160,
-                        "frameRate" : 7
-                    },
-                    "frameRate" : [ 15, 10, 7, 4 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "640*360"
-                    }
-                },
-                {
-                "audio" : "boolean",
-                "mainStream" : {
-                    "bitRate" : [ 1024, 1536, 2048, 3072, 4096, 5120, 6144, 7168, 8192 ],
-                    "default" : {
-                        "bitRate" : 4096,
-                        "frameRate" : 15
-                    },
-                    "frameRate" : [ 20, 18, 16, 15, 12, 10, 8, 6, 4, 2 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "2592*1944"
-                },
-                "subStream" : {
-                    "bitRate" : [ 64, 128, 160, 192, 256, 384, 512 ],
-                    "default" : {
-                        "bitRate" : 160,
-                        "frameRate" : 7
-                    },
-                    "frameRate" : [ 15, 10, 7, 4 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "640*360"
-                }
-            },
-                {
-                "audio" : "boolean",
-                "mainStream" : {
-                    "bitRate" : [ 1024, 1536, 2048, 3072, 4096, 5120, 6144, 7168, 8192 ],
-                    "default" : {
-                        "bitRate" : 3072,
-                        "frameRate" : 15
-                    },
-                    "frameRate" : [ 30, 22, 20, 18, 16, 15, 12, 10, 8, 6, 4, 2 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "2560*1440"
-                },
-                "subStream" : {
-                    "bitRate" : [ 64, 128, 160, 192, 256, 384, 512 ],
-                    "default" : {
-                        "bitRate" : 160,
-                        "frameRate" : 7
-                    },
-                    "frameRate" : [ 15, 10, 7, 4 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "640*360"
-                }
-                },
-                {
-                "audio" : "boolean",
-                "mainStream" : {
-                    "bitRate" : [ 1024, 1536, 2048, 3072, 4096, 5120, 6144, 7168, 8192 ],
-                    "default" : {
-                        "bitRate" : 3072,
-                        "frameRate" : 15
-                    },
-                    "frameRate" : [ 30, 22, 20, 18, 16, 15, 12, 10, 8, 6, 4, 2 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "2048*1536"
-                },
-                "subStream" : {
-                    "bitRate" : [ 64, 128, 160, 192, 256, 384, 512 ],
-                    "default" : {
-                        "bitRate" : 160,
-                        "frameRate" : 7
-                    },
-                    "frameRate" : [ 15, 10, 7, 4 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "640*360"
-                }
-                },
-            {
-                "audio" : "boolean",
-                "mainStream" : {
-                    "bitRate" : [ 1024, 1536, 2048, 3072, 4096, 5120, 6144, 7168, 8192 ],
-                    "default" : {
-                        "bitRate" : 3072,
-                        "frameRate" : 15
-                    },
-                    "frameRate" : [ 30, 22, 20, 18, 16, 15, 12, 10, 8, 6, 4, 2 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "2304*1296"
-                },
-                "subStream" : {
-                    "bitRate" : [ 64, 128, 160, 192, 256, 384, 512 ],
-                    "default" : {
-                        "bitRate" : 160,
-                        "frameRate" : 7
-                    },
-                    "frameRate" : [ 15, 10, 7, 4 ],
-                    "profile" : [ "Base", "Main", "High" ],
-                    "size" : "640*360"
-                }
-                }
-            ]
-        },
-        "value" : {
-            "Enc" : {
-                "audio" : 0,
-                "channel" : 0,
-                "mainStream" : {
-                "bitRate" : 2048,
-                "frameRate" : 20,
-                "profile" : "Main",
-                "size" : "3072*1728"
-                },
-                "subStream" : {
-                "bitRate" : 64,
-                "frameRate" : 4,
-                "profile" : "High",
-                "size" : "640*360"
-                }
-            }
-        }
-        }]
-
+        See examples/response/GetEnc.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetEnc", "action": 1, "param": {"channel": 0}}]
@@ -658,47 +397,7 @@ class APIHandler:
     def get_recording_advanced(self) -> json or None:
         """
         Get recording advanced setup data
-        Response data format is as follows:
-        [{
-        "cmd" : "GetRec",
-        "code" : 0,
-        "initial" : {
-            "Rec" : {
-                "channel" : 0,
-                "overwrite" : 1,
-                "postRec" : "15 Seconds",
-                "preRec" : 1,
-                "schedule" : {
-                    "enable" : 1,
-                    "table" : "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
-                }
-            }
-        },
-        "range" : {
-            "Rec" : {
-                "channel" : 0,
-                "overwrite" : "boolean",
-                "postRec" : [ "15 Seconds", "30 Seconds", "1 Minute" ],
-                "preRec" : "boolean",
-                "schedule" : {
-                    "enable" : "boolean"
-                }
-            }
-        },
-        "value" : {
-            "Rec" : {
-                "channel" : 0,
-                "overwrite" : 1,
-                "postRec" : "15 Seconds",
-                "preRec" : 1,
-                "schedule" : {
-                    "enable" : 1,
-                    "table" : "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-                }
-            }
-        }
-        }]
-
+        See examples/response/GetRec.json for example response data.
         :return: json or None
         """
         body = [{"cmd": "GetRec", "action": 1, "param": {"channel": 0}}]
