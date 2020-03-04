@@ -57,7 +57,7 @@ class APIHandler:
             param = {"cmd": "Login", "token": "null"}
             response = Request.post(self.url, data=body, params=param)
             if response is not None:
-                data = json.loads(response.text)[0]
+                data = response.json()[0]
                 code = data["code"]
                 if int(code) == 0:
                     self.token = data["value"]["Token"]["name"]
@@ -89,7 +89,7 @@ class APIHandler:
             if self.token is None:
                 raise ValueError("Login first")
             response = Request.post(self.url, data=data, params=params)
-            return json.loads(response.text)
+            return response.json()
         except Exception as e:
             print(f"Command {command} failed: {e}")
             raise
@@ -159,7 +159,7 @@ class APIHandler:
                     {"cmd": "GetP2p", "action": 0, "param": {}}]
             param = {"token": self.token}
             response = Request.post(self.url, data=body, params=param)
-            return json.loads(response.text)
+            return response.json()
         except Exception as e:
             print("Get Network Ports", e)
 
@@ -266,7 +266,7 @@ class APIHandler:
             param = {"token": self.token}
             response = Request.post(self.url, data=body, params=param)
             if response.status_code == 200:
-                return json.loads(response.text)
+                return response.json()
         except Exception as e:
             print("Could not get General System settings\n", e)
             raise
