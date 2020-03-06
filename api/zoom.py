@@ -33,3 +33,24 @@ class ZoomAPIMixin:
         :return: response json
         """
         return self._stop_zooming_or_focusing()
+
+    def start_focusing_in(self, speed=32):
+        """
+        The camera focuses in until self.stop_focusing() is called.
+        :return: response json
+        """
+        return self._start_operation('FocusInc', speed=speed)
+
+    def start_focusing_out(self, speed=32):
+        """
+        The camera focuses out until self.stop_focusing() is called.
+        :return: response json
+        """
+        return self._start_operation('FocusDec', speed=speed)
+
+    def stop_focusing(self):
+        """
+        Stop focusing.
+        :return: response json
+        """
+        return self._stop_zooming_or_focusing()

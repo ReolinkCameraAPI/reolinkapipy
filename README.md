@@ -74,6 +74,6 @@ SET:
 - [ ] User -> Manage User
 - [ ] Device -> HDD/SD Card
 - [x] Zoom
-- [ ] Focus
+- [x] Focus
 - [ ] Image (Brightness, Contrass, Saturation, Hue, Sharp, Mirror, Rotate)
 - [ ] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
