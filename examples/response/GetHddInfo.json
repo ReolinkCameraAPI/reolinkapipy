@@ -1,0 +1,17 @@
+[
+  {
+    "cmd": "GetHddInfo",
+    "code": 0,
+    "value": {
+      "HddInfo": [
+        {
+          "capacity": 15181,
+          "format": 1,
+          "id": 0,
+          "mount": 1,
+          "size": 15181
+        }
+      ]
+    }
+  }
+]
