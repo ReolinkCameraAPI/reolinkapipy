@@ -1,0 +1,35 @@
+[
+  {
+    "cmd": "GetUser",
+    "code": 0,
+    "initial": {
+      "User": {
+        "level": "guest"
+      }
+    },
+    "range": {
+      "User": {
+        "level": [
+          "guest",
+          "admin"
+        ],
+        "password": {
+          "maxLen": 31,
+          "minLen": 6
+        },
+        "userName": {
+          "maxLen": 31,
+          "minLen": 1
+        }
+      }
+    },
+    "value": {
+      "User": [
+        {
+          "level": "admin",
+          "userName": "admin"
+        }
+      ]
+    }
+  }
+]

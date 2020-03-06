@@ -1,0 +1,40 @@
+[
+  {
+    "cmd": "GetMask",
+    "code": 0,
+    "initial": {
+      "Mask": {
+        "area": [
+          {
+            "block": {
+              "height": 0,
+              "width": 0,
+              "x": 0,
+              "y": 0
+            },
+            "screen": {
+              "height": 0,
+              "width": 0
+            }
+          }
+        ],
+        "channel": 0,
+        "enable": 0
+      }
+    },
+    "range": {
+      "Mask": {
+        "channel": 0,
+        "enable": "boolean",
+        "maxAreas": 4
+      }
+    },
+    "value": {
+      "Mask": {
+        "area": null,
+        "channel": 0,
+        "enable": 0
+      }
+    }
+  }
+]
