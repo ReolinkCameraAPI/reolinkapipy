@@ -4,29 +4,32 @@ class ZoomAPIMixin:
     Note that the API does not allow zooming/focusing by absolute
     values rather that changing focus/zoom for a given time.
     """
-    def _start_zoom(self, direction, speed=60):
-        op = 'ZoomInc' if direction == 'in' else 'ZoomDec'
-        data = [{"cmd": "PtzCtrl", "action": 0, "param": {"channel": 0, "op": op, "speed": speed}}]
+    def _start_operation(self, operation, speed):
+        data = [{"cmd": "PtzCtrl", "action": 0, "param": {"channel": 0, "op": operation, "speed": speed}}]
         return self._execute_command('PtzCtrl', data)
 
-    def start_zoom_in(self, speed=60):
+    def _stop_zooming_or_focusing(self):
+        """This command stops any ongoing zooming or focusing actions."""
+        data = [{"cmd": "PtzCtrl", "action": 0, "param": {"channel": 0, "op": "Stop"}}]
+        return self._execute_command('PtzCtrl', data)
+
+    def start_zooming_in(self, speed=60):
         """
-        The camera zooms in until self.stop_zoom() is called.
+        The camera zooms in until self.stop_zooming() is called.
         :return: response json
         """
-        return self._start_zoom('in', speed=speed)
+        return self._start_operation('ZoomInc', speed=speed)
 
-    def start_zoom_out(self, speed=60):
+    def start_zooming_out(self, speed=60):
         """
-        The camera zooms out until self.stop_zoom() is called.
+        The camera zooms out until self.stop_zooming() is called.
         :return: response json
         """
-        return self._start_zoom('out', speed=speed)
+        return self._start_operation('ZoomDec', speed=speed)
 
-    def stop_zoom(self):
+    def stop_zooming(self):
         """
         Stop zooming.
         :return: response json
         """
-        data = [{"cmd": "PtzCtrl", "action": 0, "param": {"channel": 0, "op": "Stop"}}]
-        return self._execute_command('PtzCtrl', data)
+        return self._stop_zooming_or_focusing()
