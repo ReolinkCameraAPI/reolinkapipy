@@ -16,8 +16,8 @@ class DeviceAPIMixin:
         :return: bool
         """
         body = [{"cmd": "Format", "action": 0, "param": {"HddInfo": {"id": hdd_id}}}]
-        r_data = self._execute_command('Format', body)
-        if r_data["value"]["rspCode"] == "200":
+        r_data = self._execute_command('Format', body)[0]
+        if r_data["value"]["rspCode"] == 200:
             return True
         print("Could not format HDD/SD. Camera responded with:", r_data["value"])
         return False

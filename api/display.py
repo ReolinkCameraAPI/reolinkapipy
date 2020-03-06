@@ -40,8 +40,8 @@ class DisplayAPIMixin:
                     "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos}
                     }
         }}]
-        r_data = self._execute_command('SetOsd', body)
-        if r_data["value"]["rspCode"] == "200":
+        r_data = self._execute_command('SetOsd', body)[0]
+        if r_data["value"]["rspCode"] == 200:
             return True
         print("Could not set OSD. Camera responded with status:", r_data["value"])
         return False

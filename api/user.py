@@ -28,8 +28,8 @@ class UserAPIMixin:
         """
         body = [{"cmd": "AddUser", "action": 0,
                  "param": {"User": {"userName": username, "password": password, "level": level}}}]
-        r_data = self._execute_command('AddUser', body)
-        if r_data["value"]["rspCode"] == "200":
+        r_data = self._execute_command('AddUser', body)[0]
+        if r_data["value"]["rspCode"] == 200:
             return True
         print("Could not add user. Camera responded with:", r_data["value"])
         return False
@@ -42,8 +42,8 @@ class UserAPIMixin:
         :return: whether the user was modified successfully
         """
         body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
-        r_data = self._execute_command('ModifyUser', body)
-        if r_data["value"]["rspCode"] == "200":
+        r_data = self._execute_command('ModifyUser', body)[0]
+        if r_data["value"]["rspCode"] == 200:
             return True
         print("Could not modify user:", username, "\nCamera responded with:", r_data["value"])
         return False
@@ -55,8 +55,8 @@ class UserAPIMixin:
         :return: whether the user was deleted successfully
         """
         body = [{"cmd": "DelUser", "action": 0, "param": {"User": {"userName": username}}}]
-        r_data = self._execute_command('DelUser', body)
-        if r_data["value"]["rspCode"] == "200":
+        r_data = self._execute_command('DelUser', body)[0]
+        if r_data["value"]["rspCode"] == 200:
             return True
         print("Could not delete user:", username, "\nCamera responded with:", r_data["value"])
         return False
