@@ -1,4 +1,4 @@
-from APIHandler import APIHandler
+from api import APIHandler
 
 
 class Camera(APIHandler):
