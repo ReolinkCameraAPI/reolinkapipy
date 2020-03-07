@@ -9,5 +9,8 @@ verify_ssl = true
 pillow = "*"
 pyyaml = "*"
 requests = "*"
+numpy = "*"
+opencv-python = "*"
+pysocks = "*"
 
 [requires]

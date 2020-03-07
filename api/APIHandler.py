@@ -1,4 +1,5 @@
-from api.recording import RecordingAPIMixin
+from .recording import RecordingAPIMixin
+from .zoom import ZoomAPIMixin
 from .device import DeviceAPIMixin
 from .display import DisplayAPIMixin
 from .network import NetworkAPIMixin
@@ -12,7 +13,8 @@ class APIHandler(SystemAPIMixin,
                  UserAPIMixin,
                  DeviceAPIMixin,
                  DisplayAPIMixin,
-                 RecordingAPIMixin):
+                 RecordingAPIMixin,
+                 ZoomAPIMixin):
     """
     The APIHandler class is the backend part of the API, the actual API calls
     are implemented in Mixins.
