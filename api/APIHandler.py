@@ -5,6 +5,7 @@ from .display import DisplayAPIMixin
 from .network import NetworkAPIMixin
 from .system import SystemAPIMixin
 from .user import UserAPIMixin
+from .ptz import PtzAPIMixin
 from resthandle import Request
 
 
@@ -14,7 +15,8 @@ class APIHandler(SystemAPIMixin,
                  DeviceAPIMixin,
                  DisplayAPIMixin,
                  RecordingAPIMixin,
-                 ZoomAPIMixin):
+                 ZoomAPIMixin,
+                 PtzAPIMixin):
     """
     The APIHandler class is the backend part of the API, the actual API calls
     are implemented in Mixins.
@@ -68,7 +70,21 @@ class APIHandler(SystemAPIMixin,
         except Exception as e:
             print("Error Login\n", e)
             raise
-        
+
+    def logout(self) -> bool:
+        """
+        Logout of the camera
+        :return: bool
+        """
+        try:
+            data = [{"cmd": "Logout", "action": 0}]
+            ret = self._execute_command('Logout', data)
+            print(ret)
+            return True
+        except Exception as e:
+            print("Error Logout\n", e)
+            return False
+
     def _execute_command(self, command, data, multi=False):
         """
         Send a POST request to the IP camera with given data.

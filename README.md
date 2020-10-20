@@ -25,6 +25,7 @@ This project intends to stick with [PEP8](https://www.python.org/dev/peps/pep-00
 
 GET:
 - [X] Login
+- [X] Logout
 - [ ] Display -> OSD
 - [ ] Recording -> Encode (Clear and Fluent Stream)
 - [ ] Recording -> Advance (Scheduling)
@@ -73,6 +74,7 @@ SET:
 - [ ] User -> Add User
 - [ ] User -> Manage User
 - [ ] Device -> HDD/SD Card
+- [x] PTZ
 - [x] Zoom
 - [x] Focus
 - [ ] Image (Brightness, Contrass, Saturation, Hue, Sharp, Mirror, Rotate)
