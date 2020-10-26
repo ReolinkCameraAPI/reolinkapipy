@@ -17,6 +17,12 @@ You can get the Restful API calls by looking through the HTTP Requests made the 
 
 Implement a "Camera" object by passing it an IP address, Username and Password. By instantiating the object, it will try retrieve a login token from the Reolink Camera. This token is necessary to interact with the Camera using other commands.
 
+### Using the library as a Python Module
+
+Install the package via Pip
+
+    pip install reolink-api==0.0.1
+
 ### Styling and Standards
 
 This project intends to stick with [PEP8](https://www.python.org/dev/peps/pep-0008/)
