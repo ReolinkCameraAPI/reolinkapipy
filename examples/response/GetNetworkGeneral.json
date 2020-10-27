@@ -1,0 +1,19 @@
+[
+  {
+    "cmd": "GetLocalLink",
+    "code": 0,
+    "value": {
+      "LocalLink": {
+        "activeLink": "LAN",
+        "dns": { "auto": 1, "dns1": "192.168.255.4", "dns2": "192.168.255.4" },
+        "mac": "EC:71:DB:AA:59:CF",
+        "static": {
+          "gateway": "192.168.255.1",
+          "ip": "192.168.255.58",
+          "mask": "255.255.255.0"
+        },
+        "type": "DHCP"
+      }
+    }
+  }
+]

@@ -32,36 +32,36 @@ This project intends to stick with [PEP8](https://www.python.org/dev/peps/pep-00
 GET:
 - [X] Login
 - [X] Logout
-- [ ] Display -> OSD
-- [ ] Recording -> Encode (Clear and Fluent Stream)
-- [ ] Recording -> Advance (Scheduling)
+- [X] Display -> OSD
+- [X] Recording -> Encode (Clear and Fluent Stream)
+- [X] Recording -> Advance (Scheduling)
 - [X] Network -> General
 - [X] Network -> Advanced
-- [ ] Network -> DDNS
-- [ ] Network -> NTP
-- [ ] Network -> E-mail
-- [ ] Network -> FTP
-- [ ] Network -> Push
+- [X] Network -> DDNS
+- [X] Network -> NTP
+- [X] Network -> E-mail
+- [X] Network -> FTP
+- [X] Network -> Push
 - [X] Network -> WIFI
 - [ ] Alarm -> Motion
 - [X] System -> General
-- [ ] System -> DST
-- [ ] System -> Information
+- [X] System -> DST
+- [X] System -> Information
 - [ ] System -> Maintenance
-- [ ] System -> Performance
+- [X] System -> Performance
 - [ ] System -> Reboot
-- [ ] User -> Online User
-- [ ] User -> Add User
-- [ ] User -> Manage User
-- [ ] Device -> HDD/SD Card
+- [X] User -> Online User
+- [X] User -> Add User
+- [X] User -> Manage User
+- [X] Device -> HDD/SD Card
 - [ ] Zoom
 - [ ] Focus
-- [ ] Image (Brightness, Contrass, Saturation, Hue, Sharp, Mirror, Rotate)
+- [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
 - [ ] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
-- [ ] Image Data -> "Snap" Frame from Video Stream
+- [X] Image Data -> "Snap" Frame from Video Stream
 
 SET:
-- [ ] Display -> OSD
+- [X] Display -> OSD
 - [ ] Recording -> Encode (Clear and Fluent Stream)
 - [ ] Recording -> Advance (Scheduling)
 - [X] Network -> General
@@ -73,15 +73,15 @@ SET:
 - [ ] Network -> Push
 - [X] Network -> WIFI
 - [ ] Alarm -> Motion
-- [X] System -> General
+- [ ] System -> General
 - [ ] System -> DST
 - [X] System -> Reboot
-- [ ] User -> Online User
-- [ ] User -> Add User
-- [ ] User -> Manage User
-- [ ] Device -> HDD/SD Card
+- [X] User -> Online User
+- [X] User -> Add User
+- [X] User -> Manage User
+- [X] Device -> HDD/SD Card (Format)
 - [x] PTZ
 - [x] Zoom
 - [x] Focus
-- [ ] Image (Brightness, Contrass, Saturation, Hue, Sharp, Mirror, Rotate)
+- [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
 - [ ] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)

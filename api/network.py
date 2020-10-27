@@ -36,6 +36,7 @@ class NetworkAPIMixin:
     def get_net_ports(self) -> object:
         """
         Get network ports
+        See examples/response/GetNetworkAdvanced.json for example response data.
         :return: response json
         """
         body = [{"cmd": "GetNetPort", "action": 1, "param": {}},
@@ -50,3 +51,65 @@ class NetworkAPIMixin:
     def scan_wifi(self):
         body = [{"cmd": "ScanWifi", "action": 1, "param": {}}]
         return self._execute_command('ScanWifi', body)
+
+    def get_network_general(self) -> object:
+        """
+        Get the camera information
+        See examples/response/GetNetworkGeneral.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetLocalLink", "action": 0, "param": {}}]
+        return self._execute_command('GetLocalLink', body)
+
+    def get_network_ddns(self) -> object:
+        """
+        Get the camera DDNS network information
+        See examples/response/GetNetworkDDNS.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetDdns", "action": 0, "param": {}}]
+        return self._execute_command('GetDdns', body)
+
+    def get_network_ntp(self) -> object:
+        """
+        Get the camera NTP network information
+        See examples/response/GetNetworkNTP.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetNtp", "action": 0, "param": {}}]
+        return self._execute_command('GetNtp', body)
+
+    def get_network_email(self) -> object:
+        """
+        Get the camera email network information
+        See examples/response/GetNetworkEmail.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetEmail", "action": 0, "param": {}}]
+        return self._execute_command('GetEmail', body)
+
+    def get_network_ftp(self) -> object:
+        """
+        Get the camera FTP network information
+        See examples/response/GetNetworkFtp.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetFtp", "action": 0, "param": {}}]
+        return self._execute_command('GetFtp', body)
+
+    def get_network_push(self) -> object:
+        """
+        Get the camera push network information
+        See examples/response/GetNetworkPush.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetPush", "action": 0, "param": {}}]
+        return self._execute_command('GetPush', body)
+
+    def get_network_status(self) -> object:
+        """
+        Get the camera status network information
+        See examples/response/GetNetworkGeneral.json for example response data.
+        :return: response json
+        """
+        return self.get_network_general()

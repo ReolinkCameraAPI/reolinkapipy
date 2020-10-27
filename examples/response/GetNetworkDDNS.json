@@ -1,0 +1,15 @@
+[
+  {
+    "cmd": "GetDdns",
+    "code": 0,
+    "value": {
+      "Ddns": {
+        "domain": "",
+        "enable": 0,
+        "password": "",
+        "type": "no-ip",
+        "userName": ""
+      }
+    }
+  }
+]
