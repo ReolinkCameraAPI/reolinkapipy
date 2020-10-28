@@ -43,7 +43,7 @@ GET:
 - [X] Network -> FTP
 - [X] Network -> Push
 - [X] Network -> WIFI
-- [ ] Alarm -> Motion
+- [X] Alarm -> Motion
 - [X] System -> General
 - [X] System -> DST
 - [X] System -> Information
