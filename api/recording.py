@@ -30,16 +30,15 @@ class RecordingAPIMixin:
     ###########
     # RTSP Stream
     ###########
-    def open_video_stream(self, profile: str = "main") -> Image:
+    def open_video_stream(self, profile: str = "main", proxies=None) -> None:
         """
-        profile is "main" or "sub"
-        https://support.reolink.com/hc/en-us/articles/360007010473-How-to-Live-View-Reolink-Cameras-via-VLC-Media-Player
-        :param profile:
-        :return:
+        'https://support.reolink.com/hc/en-us/articles/360007010473-How-to-Live-View-Reolink-Cameras-via-VLC-Media-Player'
+        :param profile: profile is "main" or "sub"
+        :param proxies: Default is none, example: {"host": "localhost", "port": 8000}
         """
-        with RtspClient(ip=self.ip, username=self.username, password=self.password,
-                        proxies={"host": "127.0.0.1", "port": 8000}) as rtsp_client:
-            rtsp_client.preview()
+        rtsp_client = RtspClient(
+            ip=self.ip, username=self.username, password=self.password, proxies=proxies)
+        rtsp_client.preview()
 
     def get_snap(self, timeout: int = 3, proxies=None) -> Image or None:
         """
