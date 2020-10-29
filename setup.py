@@ -65,6 +65,7 @@ setup(name=NAME,
           'api.recording',
           'api.system',
           'api.user',
-          'api.zoom'
+          'api.zoom',
+          'api.alarm'
       ]
       )

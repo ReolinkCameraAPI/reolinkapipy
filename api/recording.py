@@ -1,12 +1,10 @@
-import io
+import requests
 import random
 import string
-from urllib import request
-
+from urllib import parse
+from io import BytesIO
 from PIL import Image
-
 from RtspClient import RtspClient
-from resthandle import Request
 
 
 class RecordingAPIMixin:
@@ -43,25 +41,26 @@ class RecordingAPIMixin:
                         proxies={"host": "127.0.0.1", "port": 8000}) as rtsp_client:
             rtsp_client.preview()
 
-    def get_snap(self, timeout: int = 3) -> Image or None:
+    def get_snap(self, timeout: int = 3, proxies=None) -> Image or None:
         """
         Gets a "snap" of the current camera video data and returns a Pillow Image or None
         :param timeout: Request timeout to camera in seconds
+        :param proxies: http/https proxies to pass to the request object.
         :return: Image or None
         """
-        randomstr = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        snap = self.url + "?cmd=Snap&channel=0&rs=" \
-               + randomstr \
-               + "&user=" + self.username \
-               + "&password=" + self.password
+        data = {}
+        data['cmd'] = 'Snap'
+        data['channel'] = 0
+        data['rs'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        data['user'] = self.username
+        data['password'] = self.password
+        parms = parse.urlencode(data).encode("utf-8")
+
         try:
-            req = request.Request(snap)
-            req.set_proxy(Request.proxies, 'http')
-            reader = request.urlopen(req, timeout)
-            if reader.status == 200:
-                b = bytearray(reader.read())
-                return Image.open(io.BytesIO(b))
-            print("Could not retrieve data from camera successfully. Status:", reader.status)
+            response = requests.get(self.url, proxies=proxies, params=parms, timeout=timeout)
+            if response.status_code == 200:
+                return Image.open(BytesIO(response.content))
+            print("Could not retrieve data from camera successfully. Status:", response.stats_code)
             return None
 
         except Exception as e:

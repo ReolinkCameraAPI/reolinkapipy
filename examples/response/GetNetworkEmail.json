@@ -1,0 +1,25 @@
+[
+  {
+    "cmd": "GetEmail",
+    "code": 0,
+    "value": {
+      "Email": {
+        "addr1": "",
+        "addr2": "",
+        "addr3": "",
+        "attachment": "picture",
+        "interval": "5 Minutes",
+        "nickName": "",
+        "password": "",
+        "schedule": {
+          "enable": 1,
+          "table": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "smtpPort": 465,
+        "smtpServer": "smtp.gmail.com",
+        "ssl": 1,
+        "userName": ""
+      }
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "cmd": "GetTime",
+    "code": 0,
+    "value": {
+      "Dst": {
+        "enable": 1,
+        "endHour": 2,
+        "endMin": 0,
+        "endMon": 11,
+        "endSec": 0,
+        "endWeek": 1,
+        "endWeekday": 0,
+        "offset": 1,
+        "startHour": 2,
+        "startMin": 0,
+        "startMon": 3,
+        "startSec": 0,
+        "startWeek": 1,
+        "startWeekday": 0
+      },
+      "Time": {
+        "day": 27,
+        "hour": 18,
+        "hourFmt": 0,
+        "min": 50,
+        "mon": 10,
+        "sec": 46,
+        "timeFmt": "MM/DD/YYYY",
+        "timeZone": 21600,
+        "year": 2020
+      }
+    }
+  }
+]

@@ -30,3 +30,12 @@ class SystemAPIMixin:
         """
         body = [{"cmd": "Reboot", "action": 0, "param": {}}]
         return self._execute_command('Reboot', body)
+
+    def get_dst(self) -> object:
+        """
+        Get the camera DST information
+        See examples/response/GetDSTInfo.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetTime", "action": 0, "param": {}}]
+        return self._execute_command('GetTime', body)
