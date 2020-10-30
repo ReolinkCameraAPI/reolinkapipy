@@ -62,7 +62,7 @@ GET:
 
 SET:
 - [X] Display -> OSD
-- [ ] Recording -> Encode (Clear and Fluent Stream)
+- [X] Recording -> Encode (Clear and Fluent Stream)
 - [ ] Recording -> Advance (Scheduling)
 - [X] Network -> General
 - [X] Network -> Advanced

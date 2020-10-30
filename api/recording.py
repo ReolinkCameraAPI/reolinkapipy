@@ -27,6 +27,48 @@ class RecordingAPIMixin:
         body = [{"cmd": "GetRec", "action": 1, "param": {"channel": 0}}]
         return self._execute_command('GetRec', body)
 
+    def set_recording_encoding(self,
+                               audio=0,
+                               main_bit_rate=8192,
+                               main_frame_rate=8,
+                               main_profile='High',
+                               main_size="2560*1440",
+                               sub_bit_rate=160,
+                               sub_frame_rate=7,
+                               sub_profile='High',
+                               sub_size='640*480') -> object:
+        """
+        Sets the current camera encoding settings for "Clear" and "Fluent" profiles.
+        :param audio: int Audio on or off
+        :param main_bit_rate: int Clear Bit Rate
+        :param main_frame_rate: int Clear Frame Rate
+        :param main_profile: string Clear Profile
+        :param main_size: string Clear Size
+        :param sub_bit_rate: int Fluent Bit Rate
+        :param sub_frame_rate: int Fluent Frame Rate
+        :param sub_profile: string Fluent Profile
+        :param sub_size: string Fluent Size
+        :return: response
+        """
+        body = [{"cmd": "SetEnc",
+                 "action": 0,
+                 "param":
+                 {"Enc":
+                  {"audio": audio,
+                   "channel": 0,
+                   "mainStream": {
+                       "bitRate": main_bit_rate,
+                       "frameRate": main_frame_rate,
+                       "profile": main_profile,
+                       "size": main_size},
+                   "subStream": {
+                       "bitRate": sub_bit_rate,
+                       "frameRate": sub_frame_rate,
+                       "profile": sub_profile,
+                       "size": sub_size}}
+                  }}]
+        return self._execute_command('SetEnc', body)
+
     ###########
     # RTSP Stream
     ###########

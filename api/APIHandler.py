@@ -80,8 +80,8 @@ class APIHandler(SystemAPIMixin,
         """
         try:
             data = [{"cmd": "Logout", "action": 0}]
-            ret = self._execute_command('Logout', data)
-            print(ret)
+            self._execute_command('Logout', data)
+            # print(ret)
             return True
         except Exception as e:
             print("Error Logout\n", e)
