@@ -7,6 +7,7 @@ from .system import SystemAPIMixin
 from .user import UserAPIMixin
 from .ptz import PtzAPIMixin
 from .alarm import AlarmAPIMixin
+from .image import ImageAPIMixin
 from resthandle import Request
 
 
@@ -18,7 +19,8 @@ class APIHandler(SystemAPIMixin,
                  RecordingAPIMixin,
                  ZoomAPIMixin,
                  PtzAPIMixin,
-                 AlarmAPIMixin):
+                 AlarmAPIMixin,
+                 ImageAPIMixin):
     """
     The APIHandler class is the backend part of the API, the actual API calls
     are implemented in Mixins.
