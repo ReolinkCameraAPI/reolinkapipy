@@ -84,4 +84,4 @@ SET:
 - [x] Zoom
 - [x] Focus
 - [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
-- [ ] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
+- [X] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
