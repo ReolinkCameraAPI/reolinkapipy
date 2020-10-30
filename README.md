@@ -62,7 +62,7 @@ GET:
 
 SET:
 - [X] Display -> OSD
-- [ ] Recording -> Encode (Clear and Fluent Stream)
+- [X] Recording -> Encode (Clear and Fluent Stream)
 - [ ] Recording -> Advance (Scheduling)
 - [X] Network -> General
 - [X] Network -> Advanced
@@ -83,5 +83,5 @@ SET:
 - [x] PTZ
 - [x] Zoom
 - [x] Focus
-- [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
-- [ ] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
+- [X] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
+- [X] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)

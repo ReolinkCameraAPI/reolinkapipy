@@ -66,6 +66,7 @@ setup(name=NAME,
           'api.system',
           'api.user',
           'api.zoom',
-          'api.alarm'
+          'api.alarm',
+          'api.image'
       ]
       )
