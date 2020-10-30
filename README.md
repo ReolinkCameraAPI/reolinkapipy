@@ -83,5 +83,5 @@ SET:
 - [x] PTZ
 - [x] Zoom
 - [x] Focus
-- [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
+- [X] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
 - [X] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
