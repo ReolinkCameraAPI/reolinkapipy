@@ -1,5 +1,9 @@
 ## ReolinkCameraAPI
 
+### Join us on Discord
+
+    https://discord.gg/8z3fdAmZJP
+
 ### Purpose
 
 This repository's purpose is to deliver a complete API for the Reolink Camera's, ( TESTED on RLC-411WS )
