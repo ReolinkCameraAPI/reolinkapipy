@@ -18,9 +18,9 @@ def non_blocking():
     # t in this case is a thread
     t = c.open_video_stream(callback=inner_callback)
 
-    print(t.isAlive())
+    print(t.is_alive())
     while True:
-        if not t.isAlive():
+        if not t.is_alive():
             print("continuing")
             break
         # stop the stream
