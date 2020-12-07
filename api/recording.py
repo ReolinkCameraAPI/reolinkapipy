@@ -9,6 +9,7 @@ from RtspClient import RtspClient
 
 class RecordingAPIMixin:
     """API calls for recording/streaming image or video."""
+
     def get_recording_encoding(self) -> object:
         """
         Get the current camera encoding settings for "Clear" and "Fluent" profiles.
@@ -53,34 +54,35 @@ class RecordingAPIMixin:
         body = [{"cmd": "SetEnc",
                  "action": 0,
                  "param":
-                 {"Enc":
-                  {"audio": audio,
-                   "channel": 0,
-                   "mainStream": {
-                       "bitRate": main_bit_rate,
-                       "frameRate": main_frame_rate,
-                       "profile": main_profile,
-                       "size": main_size},
-                   "subStream": {
-                       "bitRate": sub_bit_rate,
-                       "frameRate": sub_frame_rate,
-                       "profile": sub_profile,
-                       "size": sub_size}}
-                  }}]
+                     {"Enc":
+                          {"audio": audio,
+                           "channel": 0,
+                           "mainStream": {
+                               "bitRate": main_bit_rate,
+                               "frameRate": main_frame_rate,
+                               "profile": main_profile,
+                               "size": main_size},
+                           "subStream": {
+                               "bitRate": sub_bit_rate,
+                               "frameRate": sub_frame_rate,
+                               "profile": sub_profile,
+                               "size": sub_size}}
+                      }}]
         return self._execute_command('SetEnc', body)
 
     ###########
     # RTSP Stream
     ###########
-    def open_video_stream(self, profile: str = "main", proxies=None) -> None:
+    def open_video_stream(self, callback=None, profile: str = "main", proxies=None):
         """
         'https://support.reolink.com/hc/en-us/articles/360007010473-How-to-Live-View-Reolink-Cameras-via-VLC-Media-Player'
+        Blocking function creates a generator and returns the frames as it is spawned
         :param profile: profile is "main" or "sub"
         :param proxies: Default is none, example: {"host": "localhost", "port": 8000}
         """
         rtsp_client = RtspClient(
-            ip=self.ip, username=self.username, password=self.password, proxies=proxies)
-        rtsp_client.preview()
+            ip=self.ip, username=self.username, password=self.password, proxies=proxies, callback=callback)
+        return rtsp_client.open_stream()
 
     def get_snap(self, timeout: int = 3, proxies=None) -> Image or None:
         """
