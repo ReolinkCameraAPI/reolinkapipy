@@ -1,0 +1,100 @@
+[
+  {
+    "cmd": "GetTime",
+    "code": 0,
+    "initial": {
+      "Dst": {
+        "enable": 0,
+        "endHour": 2,
+        "endMin": 0,
+        "endMon": 10,
+        "endSec": 0,
+        "endWeek": 5,
+        "endWeekday": 0,
+        "offset": 1,
+        "startHour": 2,
+        "startMin": 0,
+        "startMon": 3,
+        "startSec": 0,
+        "startWeek": 2,
+        "startWeekday": 0
+      },
+      "Time": {
+        "day": 1,
+        "hour": 0,
+        "hourFmt": 0,
+        "min": 0,
+        "mon": 0,
+        "sec": 0,
+        "timeFmt": "DD/MM/YYYY",
+        "timeZone": 28800,
+        "year": 0
+      }
+    },
+    "range": {
+      "Dst": {
+        "enable": "boolean",
+        "endHour": { "max": 23, "min": 0 },
+        "endMin": { "max": 59, "min": 0 },
+        "endMon": { "max": 12, "min": 1 },
+        "endSec": { "max": 59, "min": 0 },
+        "endWeek": { "max": 5, "min": 1 },
+        "endWeekday": { "max": 6, "min": 0 },
+        "offset": { "max": 2, "min": 1 },
+        "startHour": { "max": 23, "min": 0 },
+        "startMin": { "max": 59, "min": 0 },
+        "startMon": { "max": 12, "min": 1 },
+        "startSec": { "max": 59, "min": 0 },
+        "startWeek": { "max": 5, "min": 1 },
+        "startWeekday": { "max": 6, "min": 0 }
+      },
+      "Time": {
+        "day": { "max": 31, "min": 1 },
+        "hour": { "max": 23, "min": 0 },
+        "hourFmt": { "max": 1, "min": 0 },
+        "min": { "max": 59, "min": 0 },
+        "mon": { "max": 12, "min": 1 },
+        "sec": { "max": 59, "min": 0 },
+        "timeFmt": ["MM/DD/YYYY", "YYYY/MM/DD", "DD/MM/YYYY"],
+        "timeZone": { "max": 43200, "min": -46800 },
+        "year": { "max": 2100, "min": 1900 }
+      }
+    },
+    "value": {
+      "Dst": {
+        "enable": 1,
+        "endHour": 2,
+        "endMin": 0,
+        "endMon": 11,
+        "endSec": 0,
+        "endWeek": 1,
+        "endWeekday": 0,
+        "offset": 1,
+        "startHour": 2,
+        "startMin": 0,
+        "startMon": 3,
+        "startSec": 0,
+        "startWeek": 1,
+        "startWeekday": 0
+      },
+      "Time": {
+        "day": 9,
+        "hour": 15,
+        "hourFmt": 0,
+        "min": 33,
+        "mon": 12,
+        "sec": 58,
+        "timeFmt": "MM/DD/YYYY",
+        "timeZone": 21600,
+        "year": 2020
+      }
+    }
+  },
+  {
+    "cmd": "GetNorm",
+    "code": 0,
+    "initial": { "norm": "NTSC" },
+    "range": { "norm": ["PAL", "NTSC"] },
+    "value": { "norm": "NTSC" }
+  }
+]
