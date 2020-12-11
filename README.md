@@ -3,6 +3,7 @@
 <p align="center">
  <img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraApi/reolink-python-api?style=flat-square">
  <img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/ReolinkCameraApi/reolink-python-api?style=flat-square">
+ <img alt="PyPI" src="https://img.shields.io/pypi/v/reolink-api?style=flat-square">
 </p>
 
 ---
