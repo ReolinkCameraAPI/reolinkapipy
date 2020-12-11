@@ -1,4 +1,11 @@
-## Reolink Python Api Client
+<h1 align="center"> Reolink Python Api Client </h1>
+
+<p align="center">
+ <img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraApi/reolink-python-api?style=flat-square">
+ <img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/ReolinkCameraApi/reolink-python-api?style=flat-square">
+</p>
+
+---
 
 A Reolink Camera client written in Python. 
 
@@ -33,6 +40,10 @@ See the `examples` directory.
 Install the package via Pip
 
     pip install reolink-api==0.0.5
+
+## Contributors
+
+---
 
 ### Styling and Standards
 
