@@ -4,7 +4,7 @@ import string
 from urllib import parse
 from io import BytesIO
 from PIL import Image
-from RtspClient import RtspClient
+from reolink_api.RtspClient import RtspClient
 
 
 class RecordingAPIMixin:

@@ -1,7 +1,7 @@
 class NetworkAPIMixin:
     """API calls for network settings."""
-    def set_net_port(self, http_port=80, https_port=443, media_port=9000, onvif_port=8000, rtmp_port=1935,
-                     rtsp_port=554) -> bool:
+    def set_net_port(self, http_port: int = 80, https_port: int = 443, media_port: int = 9000,
+                     onvif_port: int = 8000, rtmp_port: int = 1935, rtsp_port: int = 554) -> bool:
         """
         Set network ports
         If nothing is specified, the default values will be used
@@ -25,7 +25,7 @@ class NetworkAPIMixin:
         print("Successfully Set Network Ports")
         return True
 
-    def set_wifi(self, ssid, password) -> object:
+    def set_wifi(self, ssid: str, password: str) -> object:
         body = [{"cmd": "SetWifi", "action": 0, "param": {
             "Wifi": {
                 "ssid": ssid,

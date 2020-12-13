@@ -1,5 +1,4 @@
 import json
-
 import requests
 
 
@@ -17,7 +16,8 @@ class Request:
         """
         try:
             headers = {'content-type': 'application/json'}
-            r = requests.post(url, verify=False, params=params, json=data, headers=headers, proxies=Request.proxies)
+            r = requests.post(url, verify=False, params=params, json=data, headers=headers,
+                              proxies=Request.proxies)
             # if params is not None:
             #     r = requests.post(url, params=params, json=data, headers=headers, proxies=proxies)
             # else:

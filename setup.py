@@ -1,31 +1,8 @@
 #!/usr/bin/python3
-
 import os
 import re
 import codecs
 from setuptools import setup
-
-# Package meta-data.
-NAME = 'reolink-api'
-DESCRIPTION = 'Reolink Camera API written in Python 3.6'
-URL = 'https://github.com/Benehiko/ReolinkCameraAPI'
-AUTHOR_EMAIL = ''
-AUTHOR = 'Benehiko'
-LICENSE = 'GPL-3.0'
-INSTALL_REQUIRES = [
-    'pillow',
-    'pyyaml',
-    'requests>=2.18.4',
-    'numpy',
-    'opencv-python',
-    'pysocks'
-]
-
-
-here = os.path.abspath(os.path.dirname(__file__))
-# read the contents of your README file
-with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
 
 
 def read(*parts):
@@ -41,32 +18,39 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-setup(name=NAME,
-      python_requires='>=3.6.0',
-      version=find_version('api', '__init__.py'),
-      description=DESCRIPTION,
-      long_description=long_description,
-      long_description_content_type='text/markdown',
-      author=AUTHOR,
-      author_email=AUTHOR_EMAIL,
-      url=URL,
-      license=LICENSE,
-      install_requires=INSTALL_REQUIRES,
-      py_modules=[
-          'Camera',
-          'ConfigHandler',
-          'RtspClient',
-          'resthandle',
-          'api.APIHandler',
-          'api.device',
-          'api.display',
-          'api.network',
-          'api.ptz',
-          'api.recording',
-          'api.system',
-          'api.user',
-          'api.zoom',
-          'api.alarm',
-          'api.image'
-      ]
-      )
+here = os.path.abspath(os.path.dirname(__file__))
+# read the contents of your README file
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
+
+# Package meta-data.
+NAME = 'reolink_api'
+DESCRIPTION = 'Reolink Camera API written in Python 3.6'
+URL = 'https://github.com/Benehiko/ReolinkCameraAPI'
+AUTHOR_EMAIL = ''
+AUTHOR = 'Benehiko'
+LICENSE = 'GPL-3.0'
+INSTALL_REQUIRES = [
+    'numpy==1.19.4',
+    'opencv-python==4.4.0.46',
+    'Pillow==8.0.1',
+    'PySocks==1.7.1',
+    'PyYaml==5.3.1',
+    'requests>=2.18.4',
+]
+
+
+setup(
+    name=NAME,
+    python_requires='>=3.6.0',
+    version=find_version('reolink_api', '__init__.py'),
+    description=DESCRIPTION,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    url=URL,
+    license=LICENSE,
+    install_requires=INSTALL_REQUIRES
+)

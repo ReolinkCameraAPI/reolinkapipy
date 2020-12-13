@@ -1,9 +1,9 @@
-from api import APIHandler
+from reolink_api import APIHandler
 
 
 class Camera(APIHandler):
 
-    def __init__(self, ip, username="admin", password="", https=False):
+    def __init__(self, ip: str, username: str = "admin", password: str = "", https: bool = False):
         """
         Initialise the Camera object by passing the ip address.
         The default details {"username":"admin", "password":""} will be used if nothing passed

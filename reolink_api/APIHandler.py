@@ -1,26 +1,30 @@
-from .recording import RecordingAPIMixin
-from .zoom import ZoomAPIMixin
+from reolink_api.resthandle import Request
+from .alarm import AlarmAPIMixin
 from .device import DeviceAPIMixin
 from .display import DisplayAPIMixin
+from .download import DownloadAPIMixin
+from .image import ImageAPIMixin
+from .motion import MotionAPIMixin
 from .network import NetworkAPIMixin
+from .ptz import PtzAPIMixin
+from .recording import RecordingAPIMixin
 from .system import SystemAPIMixin
 from .user import UserAPIMixin
-from .ptz import PtzAPIMixin
-from .alarm import AlarmAPIMixin
-from .image import ImageAPIMixin
-from resthandle import Request
+from .zoom import ZoomAPIMixin
 
 
-class APIHandler(SystemAPIMixin,
-                 NetworkAPIMixin,
-                 UserAPIMixin,
+class APIHandler(AlarmAPIMixin,
                  DeviceAPIMixin,
                  DisplayAPIMixin,
-                 RecordingAPIMixin,
-                 ZoomAPIMixin,
+                 DownloadAPIMixin,
+                 ImageAPIMixin,
+                 MotionAPIMixin,
+                 NetworkAPIMixin,
                  PtzAPIMixin,
-                 AlarmAPIMixin,
-                 ImageAPIMixin):
+                 RecordingAPIMixin,
+                 SystemAPIMixin,
+                 UserAPIMixin,
+                 ZoomAPIMixin):
     """
     The APIHandler class is the backend part of the API, the actual API calls
     are implemented in Mixins.

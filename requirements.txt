@@ -1,4 +1,0 @@
-requests
-opencv-python
-numpy
-socks

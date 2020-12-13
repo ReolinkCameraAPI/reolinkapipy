@@ -1,9 +1,7 @@
 import os
 from threading import ThreadError
-
 import cv2
-
-from util import threaded
+from reolink_api.util import threaded
 
 
 class RtspClient:
@@ -91,9 +89,6 @@ class RtspClient:
         """
         Opens OpenCV Video stream and returns the result according to the OpenCV documentation
         https://docs.opencv.org/3.4/d8/dfe/classcv_1_1VideoCapture.html#a473055e77dd7faa4d26d686226b292c1
-
-        :param callback: The function to callback the cv::mat frame to if required to be non-blocking. If this is left
-            as None, then the function returns a generator which is blocking.
         """
 
         # Reset the capture object
