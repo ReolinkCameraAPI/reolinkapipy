@@ -1,6 +1,6 @@
 class DownloadAPIMixin:
     """API calls for downloading video files."""
-    def get_file(self, filename: str) -> object:
+    def get_file(self, filename: str, output_path: str) -> bool:
         """
         Download the selected video file
         :return: response json
@@ -9,7 +9,10 @@ class DownloadAPIMixin:
             {
                 "cmd": "Download",
                 "source": filename,
-                "output": filename
+                "output": filename,
+                "filepath": output_path
             }
         ]
-        return self._execute_command('Download', body)
+        resp = self._execute_command('Download', body)
+
+        return resp

@@ -1,3 +1,4 @@
+import requests
 from reolink_api.resthandle import Request
 from .alarm import AlarmAPIMixin
 from .device import DeviceAPIMixin
@@ -109,7 +110,23 @@ class APIHandler(AlarmAPIMixin,
         try:
             if self.token is None:
                 raise ValueError("Login first")
-            response = Request.post(self.url, data=data, params=params)
+            if command == 'Download':
+                # Special handling for downloading an mp4
+                # Pop the filepath from data
+                tgt_filepath = data[0].pop('filepath')
+                # Apply the data to the params
+                params.update(data[0])
+                with requests.get(self.url, params=params, stream=True) as req:
+                    if req.status_code == 200:
+                        with open(tgt_filepath, 'wb') as f:
+                            f.write(req.content)
+                        return True
+                    else:
+                        print(f'Error received: {req.status_code}')
+                        return False
+
+            else:
+                response = Request.post(self.url, data=data, params=params)
             return response.json()
         except Exception as e:
             print(f"Command {command} failed: {e}")
