@@ -2,7 +2,7 @@
 import os
 import re
 import codecs
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def read(*parts):
@@ -52,5 +52,6 @@ setup(
     author_email=AUTHOR_EMAIL,
     url=URL,
     license=LICENSE,
-    install_requires=INSTALL_REQUIRES
+    install_requires=INSTALL_REQUIRES,
+    packages=find_packages(exclude=['examples', 'tests'])
 )
