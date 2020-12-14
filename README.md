@@ -112,3 +112,14 @@ SET:
 - [x] Focus
 - [X] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
 - [X] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
+
+### Supported Camera's
+
+Any Reolink camera that has a web UI should work. The other's requiring special Reolink clients
+do not work and is not supported here.
+
+- RLC-411WS
+- RLC-423
+- RLC-420-5MP
+- RLC-410-5MP
+- RLC-520
