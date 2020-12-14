@@ -1,14 +1,17 @@
 <h1 align="center"> Reolink Python Api Client </h1>
 
 <p align="center">
+ <img alt="Reolink Approval" src="https://img.shields.io/badge/reolink-approved-blue?style=flat-square">
  <img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraApi/reolink-python-api?style=flat-square">
  <img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/ReolinkCameraApi/reolink-python-api?style=flat-square">
  <img alt="PyPI" src="https://img.shields.io/pypi/v/reolink-api?style=flat-square">
+ <img alt="Discord" src="https://img.shields.io/discord/773257004911034389?style=flat-square">
 </p>
 
 ---
 
-A Reolink Camera client written in Python. 
+A Reolink Camera client written in Python. This repository's purpose **(with Reolink's full support)** is to deliver a complete API for the Reolink Camera's,
+although they have a basic API document - it does not satisfy the need for extensive camera communication.
 
 Other Supported Languages:
  - Go: [reolink-go-api](https://github.com/ReolinkCameraAPI/reolink-go-api)
@@ -17,18 +20,7 @@ Other Supported Languages:
 
     https://discord.gg/8z3fdAmZJP
 
-### Purpose
 
-This repository's purpose is to deliver a complete API for the Reolink Camera's, ( TESTED on RLC-411WS )
-
-
-### But Reolink gives an API in their documentation
-
-Not really. They only deliver a really basic API to retrieve Image data and Video data.
-
-### How?
-
-You can get the Restful API calls by looking through the HTTP Requests made the camera web console. I use Google Chrome developer mode (ctr + shift + i) -> Network.
 
 ### Get started
 
@@ -49,6 +41,20 @@ Install the package via Pip
 ### Styling and Standards
 
 This project intends to stick with [PEP8](https://www.python.org/dev/peps/pep-0008/)
+
+### How can I become a contributor?
+
+#### Step 1
+
+Get the Restful API calls by looking through the HTTP Requests made in the camera's web UI. I use Google Chrome developer mode (ctr + shift + i) -> Network.
+
+#### Step 2
+
+Fork the repository and make your changes.
+
+#### Step 3
+
+Make a pull request.
 
 ### API Requests Implementation Plan:
 
@@ -113,7 +119,7 @@ SET:
 - [X] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
 - [X] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
 
-### Supported Camera's
+### Supported Cameras
 
 Any Reolink camera that has a web UI should work. The other's requiring special Reolink clients
 do not work and is not supported here.
