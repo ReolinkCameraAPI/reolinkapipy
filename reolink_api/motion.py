@@ -46,7 +46,8 @@ class MotionAPIMixin:
         body = [{"cmd": "Search", "action": 1, "param": search_params}]
 
         resp = self._execute_command('Search', body)[0]
-        files = resp['value']['SearchResult']['File']
+        result = resp['value']['SearchResult']
+        files = result.get('File', [])
         if len(files) > 0:
             # Begin processing files
             processed_files = self._process_motion_files(files)
