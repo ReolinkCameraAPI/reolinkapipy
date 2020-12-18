@@ -48,7 +48,7 @@ class UserAPIMixin:
         r_data = self._execute_command('ModifyUser', body)[0]
         if r_data["value"]["rspCode"] == 200:
             return True
-        print("Could not modify user:", username, "\nCamera responded with:", r_data["value"])
+        print(f"Could not modify user: {username}\nCamera responded with: {r_data['value']}")
         return False
 
     def delete_user(self, username: str) -> bool:
@@ -61,5 +61,5 @@ class UserAPIMixin:
         r_data = self._execute_command('DelUser', body)[0]
         if r_data["value"]["rspCode"] == 200:
             return True
-        print("Could not delete user:", username, "\nCamera responded with:", r_data["value"])
+        print(f"Could not delete user: {username}\nCamera responded with: {r_data['value']}")
         return False
