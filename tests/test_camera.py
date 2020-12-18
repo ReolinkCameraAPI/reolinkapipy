@@ -1,7 +1,7 @@
 import os
 from configparser import RawConfigParser
 import unittest
-from reolink_api import Camera
+from reolinkapi import Camera
 
 
 def read_config(props_path: str) -> dict:

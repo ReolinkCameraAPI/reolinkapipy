@@ -2,7 +2,7 @@
 import os
 from configparser import RawConfigParser
 from datetime import datetime as dt, timedelta
-from reolink_api import Camera
+from reolinkapi import Camera
 
 
 def read_config(props_path: str) -> dict:

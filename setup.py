@@ -19,7 +19,7 @@ def find_version(*file_paths):
 
 
 # Package meta-data.
-NAME = 'reolink_api'
+NAME = 'reolinkapi'
 DESCRIPTION = 'Reolink Camera API written in Python 3.6'
 URL = 'https://github.com/Benehiko/ReolinkCameraAPI'
 AUTHOR_EMAIL = ''
@@ -44,7 +44,7 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name=NAME,
     python_requires='>=3.6.0',
-    version=find_version('reolink_api', '__init__.py'),
+    version=find_version('reolinkapi', '__init__.py'),
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type='text/markdown',
