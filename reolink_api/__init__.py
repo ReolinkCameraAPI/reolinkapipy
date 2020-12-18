@@ -1,4 +1,4 @@
-from .APIHandler import APIHandler
-from .Camera import Camera
+from .api_handler import APIHandler
+from .camera import Camera
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"

@@ -1,6 +1,9 @@
+from typing import Dict
+
+
 class UserAPIMixin:
     """User-related API calls."""
-    def get_online_user(self) -> object:
+    def get_online_user(self) -> Dict:
         """
         Return a list of current logged-in users in json format
         See examples/response/GetOnline.json for example response data.
@@ -9,7 +12,7 @@ class UserAPIMixin:
         body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
         return self._execute_command('GetOnline', body)
 
-    def get_users(self) -> object:
+    def get_users(self) -> Dict:
         """
         Return a list of user accounts from the camera in json format.
         See examples/response/GetUser.json for example response data.
