@@ -22,7 +22,7 @@ class DisplayAPIMixin:
         body = [{"cmd": "GetMask", "action": 1, "param": {"channel": 0}}]
         return self._execute_command('GetMask', body)
 
-    def set_osd(self, bg_color: bool = 0, channel: int = 0, osd_channel_enabled: bool = 0,
+    def set_osd(self, bg_color: bool = 0, channel: float = 0, osd_channel_enabled: bool = 0,
                 osd_channel_name: str = "", osd_channel_pos: str = "Lower Right", osd_time_enabled: bool = 0,
                 osd_time_pos: str = "Lower Right") -> bool:
         """

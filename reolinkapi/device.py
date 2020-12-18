@@ -1,11 +1,11 @@
-from typing import List
+from typing import List, Dict
 
 
 class DeviceAPIMixin:
     """API calls for getting device information."""
     DEFAULT_HDD_ID = [0]
 
-    def get_hdd_info(self) -> object:
+    def get_hdd_info(self) -> Dict:
         """
         Gets all HDD and SD card information from Camera
         See examples/response/GetHddInfo.json for example response data.
@@ -14,7 +14,7 @@ class DeviceAPIMixin:
         body = [{"cmd": "GetHddInfo", "action": 0, "param": {}}]
         return self._execute_command('GetHddInfo', body)
 
-    def format_hdd(self, hdd_id: List[int] = None) -> bool:
+    def format_hdd(self, hdd_id: List[float] = None) -> bool:
         """
         Format specified HDD/SD cards with their id's
         :param hdd_id: List of id's specified by the camera with get_hdd_info api. Default is 0 (SD card)

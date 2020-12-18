@@ -3,7 +3,7 @@ from datetime import datetime as dt
 
 
 # Type hints for input and output of the motion api response
-RAW_MOTION_LIST_TYPE = List[Dict[str, Union[str, int, Dict[str, str]]]]
+RAW_MOTION_LIST_TYPE = List[Dict[str, Union[str, float, Dict[str, str]]]]
 PROCESSED_MOTION_LIST_TYPE = List[Dict[str, Union[str, dt]]]
 
 

@@ -1,18 +1,18 @@
 import requests
 from typing import Dict, List, Optional, Union
-from reolink_api.alarm import AlarmAPIMixin
-from reolink_api.device import DeviceAPIMixin
-from reolink_api.display import DisplayAPIMixin
-from reolink_api.download import DownloadAPIMixin
-from reolink_api.image import ImageAPIMixin
-from reolink_api.motion import MotionAPIMixin
-from reolink_api.network import NetworkAPIMixin
-from reolink_api.ptz import PtzAPIMixin
-from reolink_api.recording import RecordingAPIMixin
-from reolink_api.resthandle import Request
-from reolink_api.system import SystemAPIMixin
-from reolink_api.user import UserAPIMixin
-from reolink_api.zoom import ZoomAPIMixin
+from reolinkapi.alarm import AlarmAPIMixin
+from reolinkapi.device import DeviceAPIMixin
+from reolinkapi.display import DisplayAPIMixin
+from reolinkapi.download import DownloadAPIMixin
+from reolinkapi.image import ImageAPIMixin
+from reolinkapi.motion import MotionAPIMixin
+from reolinkapi.network import NetworkAPIMixin
+from reolinkapi.ptz import PtzAPIMixin
+from reolinkapi.recording import RecordingAPIMixin
+from reolinkapi.resthandle import Request
+from reolinkapi.system import SystemAPIMixin
+from reolinkapi.user import UserAPIMixin
+from reolinkapi.zoom import ZoomAPIMixin
 
 
 class APIHandler(AlarmAPIMixin,

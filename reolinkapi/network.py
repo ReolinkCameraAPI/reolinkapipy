@@ -3,8 +3,8 @@ from typing import Dict
 
 class NetworkAPIMixin:
     """API calls for network settings."""
-    def set_net_port(self, http_port: int = 80, https_port: int = 443, media_port: int = 9000,
-                     onvif_port: int = 8000, rtmp_port: int = 1935, rtsp_port: int = 554) -> bool:
+    def set_net_port(self, http_port: float = 80, https_port: float = 443, media_port: float = 9000,
+                     onvif_port: float = 8000, rtmp_port: float = 1935, rtsp_port: float = 554) -> bool:
         """
         Set network ports
         If nothing is specified, the default values will be used

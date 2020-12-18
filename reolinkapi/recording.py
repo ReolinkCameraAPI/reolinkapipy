@@ -5,7 +5,7 @@ from urllib import parse
 from io import BytesIO
 from typing import Dict, Any, Optional
 from PIL.Image import Image, open as open_image
-from reolink_api.rtsp_client import RtspClient
+from reolinkapi.rtsp_client import RtspClient
 
 
 class RecordingAPIMixin:

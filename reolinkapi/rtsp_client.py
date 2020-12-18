@@ -2,7 +2,7 @@ import os
 from threading import ThreadError
 from typing import Any
 import cv2
-from reolink_api.util import threaded
+from reolinkapi.util import threaded
 
 
 class RtspClient:
