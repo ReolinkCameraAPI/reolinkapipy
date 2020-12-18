@@ -1,5 +1,5 @@
 import cv2
-from reolink_api.Camera import Camera
+from reolink_api import Camera
 
 
 def non_blocking():

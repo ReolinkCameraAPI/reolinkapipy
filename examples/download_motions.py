@@ -1,3 +1,4 @@
+"""Downloads all motion events from camera from the past hour."""
 import os
 from configparser import RawConfigParser
 from datetime import datetime as dt, timedelta
