@@ -10,17 +10,28 @@
 
 ---
 
-A Reolink Camera client written in Python. This repository's purpose **(with Reolink's full support)** is to deliver a complete API for the Reolink Camera's,
+A Reolink Camera client written in Python. This repository's purpose **(with Reolink's full support)** is to deliver a complete API for the Reolink Cameras,
 although they have a basic API document - it does not satisfy the need for extensive camera communication.
 
+Check out our documentation for more information on how to use the software at [https://reolink.oleaintueri.com](https://reolink.oleaintueri.com)
+
+
 Other Supported Languages:
- - Go: [reolink-go-api](https://github.com/ReolinkCameraAPI/reolink-go-api)
+ - Go: [reolinkapigo](https://github.com/ReolinkCameraAPI/reolinkapigo)
 
 ### Join us on Discord
 
     https://discord.gg/8z3fdAmZJP
+    
+
+### Sponsorship
+
+<a href="https://oleaintueri.com"><img src="https://oleaintueri.com/images/oliv.svg" width="60px"/><img width="200px" style="padding-bottom: 10px" src="https://oleaintueri.com/images/oleaintueri.svg"/></a>
+
+[Oleaintueri](https://oleaintueri.com) is sponsoring the development and maintenance of these projects within their organisation.
 
 
+---
 
 ### Get started
 
@@ -34,6 +45,10 @@ Install the package via Pip
 
     pip install reolink-api==0.0.5
 
+Install from GitHub
+
+    pip install git+https://github.com/ReolinkCameraAPI/reolink-python-api.git
+    
 ## Contributors
 
 ---
