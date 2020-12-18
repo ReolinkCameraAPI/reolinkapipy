@@ -18,12 +18,6 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-here = os.path.abspath(os.path.dirname(__file__))
-# read the contents of your README file
-with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
-
-
 # Package meta-data.
 NAME = 'reolink_api'
 DESCRIPTION = 'Reolink Camera API written in Python 3.6'
@@ -39,6 +33,12 @@ INSTALL_REQUIRES = [
     'PyYaml==5.3.1',
     'requests>=2.18.4',
 ]
+
+
+here = os.path.abspath(os.path.dirname(__file__))
+# read the contents of your README file
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 
 setup(
