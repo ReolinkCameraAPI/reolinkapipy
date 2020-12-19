@@ -20,9 +20,9 @@ def find_version(*file_paths):
 
 # Package meta-data.
 NAME = 'reolinkapi'
-DESCRIPTION = 'Reolink Camera API written in Python 3.6'
-URL = 'https://github.com/Benehiko/ReolinkCameraAPI'
-AUTHOR_EMAIL = ''
+DESCRIPTION = 'Reolink Camera API client written in Python 3'
+URL = 'https://github.com/ReolinkCameraAPI/reolinkapipy'
+AUTHOR_EMAIL = 'alanoterblanche@gmail.com'
 AUTHOR = 'Benehiko'
 LICENSE = 'GPL-3.0'
 INSTALL_REQUIRES = [

@@ -1,18 +1,19 @@
 import requests
 from typing import Dict, List, Optional, Union
-from reolinkapi.alarm import AlarmAPIMixin
-from reolinkapi.device import DeviceAPIMixin
-from reolinkapi.display import DisplayAPIMixin
-from reolinkapi.download import DownloadAPIMixin
-from reolinkapi.image import ImageAPIMixin
-from reolinkapi.motion import MotionAPIMixin
-from reolinkapi.network import NetworkAPIMixin
-from reolinkapi.ptz import PtzAPIMixin
-from reolinkapi.recording import RecordingAPIMixin
-from reolinkapi.resthandle import Request
-from reolinkapi.system import SystemAPIMixin
-from reolinkapi.user import UserAPIMixin
-from reolinkapi.zoom import ZoomAPIMixin
+from reolinkapi.mixins.alarm import AlarmAPIMixin
+from reolinkapi.mixins.device import DeviceAPIMixin
+from reolinkapi.mixins.display import DisplayAPIMixin
+from reolinkapi.mixins.download import DownloadAPIMixin
+from reolinkapi.mixins.image import ImageAPIMixin
+from reolinkapi.mixins.motion import MotionAPIMixin
+from reolinkapi.mixins.network import NetworkAPIMixin
+from reolinkapi.mixins.ptz import PtzAPIMixin
+from reolinkapi.mixins.record import RecordAPIMixin
+from reolinkapi.handlers.rest_handler import Request
+from reolinkapi.mixins.stream import StreamAPIMixin
+from reolinkapi.mixins.system import SystemAPIMixin
+from reolinkapi.mixins.user import UserAPIMixin
+from reolinkapi.mixins.zoom import ZoomAPIMixin
 
 
 class APIHandler(AlarmAPIMixin,
@@ -23,10 +24,11 @@ class APIHandler(AlarmAPIMixin,
                  MotionAPIMixin,
                  NetworkAPIMixin,
                  PtzAPIMixin,
-                 RecordingAPIMixin,
+                 RecordAPIMixin,
                  SystemAPIMixin,
                  UserAPIMixin,
-                 ZoomAPIMixin):
+                 ZoomAPIMixin,
+                 StreamAPIMixin):
     """
     The APIHandler class is the backend part of the API, the actual API calls
     are implemented in Mixins.
@@ -42,6 +44,7 @@ class APIHandler(AlarmAPIMixin,
         :param ip:
         :param username:
         :param password:
+        :param https: connect over https
         :param proxy: Add a proxy dict for requests to consume.
         eg: {"http":"socks5://[username]:[password]@[host]:[port], "https": ...}
         More information on proxies in requests: https://stackoverflow.com/a/15661226/9313679

@@ -2,11 +2,12 @@ import os
 from threading import ThreadError
 from typing import Any
 import cv2
-from reolinkapi.util import threaded
+from reolinkapi.utils.util import threaded
 
 
 class RtspClient:
     """
+    This is a wrapper of the OpenCV VideoCapture method
     Inspiration from:
         - https://benhowell.github.io/guide/2015/03/09/opencv-and-web-cam-streaming
         - https://stackoverflow.com/questions/19846332/python-threading-inside-a-class
