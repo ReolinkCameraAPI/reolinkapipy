@@ -41,13 +41,13 @@ See the `examples` directory.
 
 ### Using the library as a Python Module
 
-Install the package via Pip
+Install the package via PyPi
 
-    pip install reolink-api==0.0.5
+    pip install reolinkapi
 
 Install from GitHub
 
-    pip install git+https://github.com/ReolinkCameraAPI/reolink-python-api.git
+    pip install git+https://github.com/ReolinkCameraAPI/reolinkapipy.git
     
 ## Contributors
 
@@ -65,7 +65,9 @@ Get the Restful API calls by looking through the HTTP Requests made in the camer
 
 #### Step 2
 
-Fork the repository and make your changes.
+- Fork the repository
+- pip install -r requirements.txt
+- Make your changes
 
 #### Step 3
 
