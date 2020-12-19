@@ -1,6 +1,9 @@
+from typing import Dict
+
+
 class UserAPIMixin:
     """User-related API calls."""
-    def get_online_user(self) -> object:
+    def get_online_user(self) -> Dict:
         """
         Return a list of current logged-in users in json format
         See examples/response/GetOnline.json for example response data.
@@ -9,7 +12,7 @@ class UserAPIMixin:
         body = [{"cmd": "GetOnline", "action": 1, "param": {}}]
         return self._execute_command('GetOnline', body)
 
-    def get_users(self) -> object:
+    def get_users(self) -> Dict:
         """
         Return a list of user accounts from the camera in json format.
         See examples/response/GetUser.json for example response data.
@@ -45,7 +48,7 @@ class UserAPIMixin:
         r_data = self._execute_command('ModifyUser', body)[0]
         if r_data["value"]["rspCode"] == 200:
             return True
-        print("Could not modify user:", username, "\nCamera responded with:", r_data["value"])
+        print(f"Could not modify user: {username}\nCamera responded with: {r_data['value']}")
         return False
 
     def delete_user(self, username: str) -> bool:
@@ -58,5 +61,5 @@ class UserAPIMixin:
         r_data = self._execute_command('DelUser', body)[0]
         if r_data["value"]["rspCode"] == 200:
             return True
-        print("Could not delete user:", username, "\nCamera responded with:", r_data["value"])
+        print(f"Could not delete user: {username}\nCamera responded with: {r_data['value']}")
         return False

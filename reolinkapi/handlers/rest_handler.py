@@ -1,13 +1,13 @@
-import json
-
 import requests
+from typing import List, Dict, Union, Optional
 
 
 class Request:
     proxies = None
 
     @staticmethod
-    def post(url: str, data, params=None) -> requests.Response or None:
+    def post(url: str, data: List[Dict], params: Dict[str, Union[str, float]] = None) -> \
+            Optional[requests.Response]:
         """
         Post request
         :param params:
@@ -17,11 +17,8 @@ class Request:
         """
         try:
             headers = {'content-type': 'application/json'}
-            r = requests.post(url, verify=False, params=params, json=data, headers=headers, proxies=Request.proxies)
-            # if params is not None:
-            #     r = requests.post(url, params=params, json=data, headers=headers, proxies=proxies)
-            # else:
-            #     r = requests.post(url, json=data)
+            r = requests.post(url, verify=False, params=params, json=data, headers=headers,
+                              proxies=Request.proxies)
             if r.status_code == 200:
                 return r
             else:
@@ -31,7 +28,7 @@ class Request:
             raise
 
     @staticmethod
-    def get(url, params, timeout=1) -> json or None:
+    def get(url: str, params: Dict[str, Union[str, float]], timeout: float = 1) -> Optional[requests.Response]:
         """
         Get request
         :param url:
@@ -41,7 +38,6 @@ class Request:
         """
         try:
             data = requests.get(url=url, verify=False, params=params, timeout=timeout, proxies=Request.proxies)
-            
             return data
         except Exception as e:
             print("Get Error\n", e)

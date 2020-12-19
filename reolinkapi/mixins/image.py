@@ -1,24 +1,26 @@
+from typing import Dict
+
 
 class ImageAPIMixin:
     """API calls for image settings."""
 
     def set_adv_image_settings(self,
-                               anti_flicker='Outdoor',
-                               exposure='Auto',
-                               gain_min=1,
-                               gain_max=62,
-                               shutter_min=1,
-                               shutter_max=125,
-                               blue_gain=128,
-                               red_gain=128,
-                               white_balance='Auto',
-                               day_night='Auto',
-                               back_light='DynamicRangeControl',
-                               blc=128,
-                               drc=128,
-                               rotation=0,
-                               mirroring=0,
-                               nr3d=1) -> object:
+                               anti_flicker: str = 'Outdoor',
+                               exposure: str = 'Auto',
+                               gain_min: float = 1,
+                               gain_max: float = 62,
+                               shutter_min: float = 1,
+                               shutter_max: float = 125,
+                               blue_gain: float = 128,
+                               red_gain: float = 128,
+                               white_balance: str = 'Auto',
+                               day_night: str = 'Auto',
+                               back_light: str = 'DynamicRangeControl',
+                               blc: float = 128,
+                               drc: float = 128,
+                               rotation: float = 0,
+                               mirroring: float = 0,
+                               nr3d: float = 1) -> Dict:
         """
         Sets the advanced camera settings.
 
@@ -66,11 +68,11 @@ class ImageAPIMixin:
         return self._execute_command('SetIsp', body)
 
     def set_image_settings(self,
-                           brightness=128,
-                           contrast=62,
-                           hue=1,
-                           saturation=125,
-                           sharpness=128) -> object:
+                           brightness: float = 128,
+                           contrast: float = 62,
+                           hue: float = 1,
+                           saturation: float = 125,
+                           sharpness: float = 128) -> Dict:
         """
         Sets the camera image settings.
 

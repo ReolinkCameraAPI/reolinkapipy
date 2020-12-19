@@ -1,7 +1,10 @@
+from typing import Dict
+
+
 class NetworkAPIMixin:
     """API calls for network settings."""
-    def set_net_port(self, http_port=80, https_port=443, media_port=9000, onvif_port=8000, rtmp_port=1935,
-                     rtsp_port=554) -> bool:
+    def set_net_port(self, http_port: float = 80, https_port: float = 443, media_port: float = 9000,
+                     onvif_port: float = 8000, rtmp_port: float = 1935, rtsp_port: float = 554) -> bool:
         """
         Set network ports
         If nothing is specified, the default values will be used
@@ -25,7 +28,7 @@ class NetworkAPIMixin:
         print("Successfully Set Network Ports")
         return True
 
-    def set_wifi(self, ssid, password) -> object:
+    def set_wifi(self, ssid: str, password: str) -> Dict:
         body = [{"cmd": "SetWifi", "action": 0, "param": {
             "Wifi": {
                 "ssid": ssid,
@@ -33,7 +36,7 @@ class NetworkAPIMixin:
             }}}]
         return self._execute_command('SetWifi', body)
 
-    def get_net_ports(self) -> object:
+    def get_net_ports(self) -> Dict:
         """
         Get network ports
         See examples/response/GetNetworkAdvanced.json for example response data.
@@ -44,15 +47,15 @@ class NetworkAPIMixin:
                 {"cmd": "GetP2p", "action": 0, "param": {}}]
         return self._execute_command('GetNetPort', body, multi=True)
 
-    def get_wifi(self):
+    def get_wifi(self) -> Dict:
         body = [{"cmd": "GetWifi", "action": 1, "param": {}}]
         return self._execute_command('GetWifi', body)
 
-    def scan_wifi(self):
+    def scan_wifi(self) -> Dict:
         body = [{"cmd": "ScanWifi", "action": 1, "param": {}}]
         return self._execute_command('ScanWifi', body)
 
-    def get_network_general(self) -> object:
+    def get_network_general(self) -> Dict:
         """
         Get the camera information
         See examples/response/GetNetworkGeneral.json for example response data.
@@ -61,7 +64,7 @@ class NetworkAPIMixin:
         body = [{"cmd": "GetLocalLink", "action": 0, "param": {}}]
         return self._execute_command('GetLocalLink', body)
 
-    def get_network_ddns(self) -> object:
+    def get_network_ddns(self) -> Dict:
         """
         Get the camera DDNS network information
         See examples/response/GetNetworkDDNS.json for example response data.
@@ -70,7 +73,7 @@ class NetworkAPIMixin:
         body = [{"cmd": "GetDdns", "action": 0, "param": {}}]
         return self._execute_command('GetDdns', body)
 
-    def get_network_ntp(self) -> object:
+    def get_network_ntp(self) -> Dict:
         """
         Get the camera NTP network information
         See examples/response/GetNetworkNTP.json for example response data.
@@ -79,7 +82,7 @@ class NetworkAPIMixin:
         body = [{"cmd": "GetNtp", "action": 0, "param": {}}]
         return self._execute_command('GetNtp', body)
 
-    def get_network_email(self) -> object:
+    def get_network_email(self) -> Dict:
         """
         Get the camera email network information
         See examples/response/GetNetworkEmail.json for example response data.
@@ -88,7 +91,7 @@ class NetworkAPIMixin:
         body = [{"cmd": "GetEmail", "action": 0, "param": {}}]
         return self._execute_command('GetEmail', body)
 
-    def get_network_ftp(self) -> object:
+    def get_network_ftp(self) -> Dict:
         """
         Get the camera FTP network information
         See examples/response/GetNetworkFtp.json for example response data.
@@ -97,7 +100,7 @@ class NetworkAPIMixin:
         body = [{"cmd": "GetFtp", "action": 0, "param": {}}]
         return self._execute_command('GetFtp', body)
 
-    def get_network_push(self) -> object:
+    def get_network_push(self) -> Dict:
         """
         Get the camera push network information
         See examples/response/GetNetworkPush.json for example response data.
@@ -106,7 +109,7 @@ class NetworkAPIMixin:
         body = [{"cmd": "GetPush", "action": 0, "param": {}}]
         return self._execute_command('GetPush', body)
 
-    def get_network_status(self) -> object:
+    def get_network_status(self) -> Dict:
         """
         Get the camera status network information
         See examples/response/GetNetworkGeneral.json for example response data.

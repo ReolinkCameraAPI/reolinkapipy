@@ -1,26 +1,34 @@
-from .recording import RecordingAPIMixin
-from .zoom import ZoomAPIMixin
-from .device import DeviceAPIMixin
-from .display import DisplayAPIMixin
-from .network import NetworkAPIMixin
-from .system import SystemAPIMixin
-from .user import UserAPIMixin
-from .ptz import PtzAPIMixin
-from .alarm import AlarmAPIMixin
-from .image import ImageAPIMixin
-from resthandle import Request
+import requests
+from typing import Dict, List, Optional, Union
+from reolinkapi.mixins.alarm import AlarmAPIMixin
+from reolinkapi.mixins.device import DeviceAPIMixin
+from reolinkapi.mixins.display import DisplayAPIMixin
+from reolinkapi.mixins.download import DownloadAPIMixin
+from reolinkapi.mixins.image import ImageAPIMixin
+from reolinkapi.mixins.motion import MotionAPIMixin
+from reolinkapi.mixins.network import NetworkAPIMixin
+from reolinkapi.mixins.ptz import PtzAPIMixin
+from reolinkapi.mixins.record import RecordAPIMixin
+from reolinkapi.handlers.rest_handler import Request
+from reolinkapi.mixins.stream import StreamAPIMixin
+from reolinkapi.mixins.system import SystemAPIMixin
+from reolinkapi.mixins.user import UserAPIMixin
+from reolinkapi.mixins.zoom import ZoomAPIMixin
 
 
-class APIHandler(SystemAPIMixin,
-                 NetworkAPIMixin,
-                 UserAPIMixin,
+class APIHandler(AlarmAPIMixin,
                  DeviceAPIMixin,
                  DisplayAPIMixin,
-                 RecordingAPIMixin,
-                 ZoomAPIMixin,
+                 DownloadAPIMixin,
+                 ImageAPIMixin,
+                 MotionAPIMixin,
+                 NetworkAPIMixin,
                  PtzAPIMixin,
-                 AlarmAPIMixin,
-                 ImageAPIMixin):
+                 RecordAPIMixin,
+                 SystemAPIMixin,
+                 UserAPIMixin,
+                 ZoomAPIMixin,
+                 StreamAPIMixin):
     """
     The APIHandler class is the backend part of the API, the actual API calls
     are implemented in Mixins.
@@ -30,12 +38,13 @@ class APIHandler(SystemAPIMixin,
     All Code will try to follow the PEP 8 standard as described here: https://www.python.org/dev/peps/pep-0008/
     """
 
-    def __init__(self, ip: str, username: str, password: str, https=False, **kwargs):
+    def __init__(self, ip: str, username: str, password: str, https: bool = False, **kwargs):
         """
         Initialise the Camera API Handler (maps api calls into python)
         :param ip:
         :param username:
         :param password:
+        :param https: connect over https
         :param proxy: Add a proxy dict for requests to consume.
         eg: {"http":"socks5://[username]:[password]@[host]:[port], "https": ...}
         More information on proxies in requests: https://stackoverflow.com/a/15661226/9313679
@@ -69,7 +78,10 @@ class APIHandler(SystemAPIMixin,
                 print(self.token)
                 return False
             else:
-                print("Failed to login\nStatus Code:", response.status_code)
+                # TODO: Verify this change w/ owner. Delete old code if acceptable.
+                #  A this point, response is NoneType. There won't be a status code property.
+                # print("Failed to login\nStatus Code:", response.status_code)
+                print("Failed to login\nResponse was null.")
                 return False
         except Exception as e:
             print("Error Login\n", e)
@@ -89,7 +101,8 @@ class APIHandler(SystemAPIMixin,
             print("Error Logout\n", e)
             return False
 
-    def _execute_command(self, command, data, multi=False):
+    def _execute_command(self, command: str, data: List[Dict], multi: bool = False) -> \
+            Optional[Union[Dict, bool]]:
         """
         Send a POST request to the IP camera with given data.
         :param command: name of the command to send
@@ -105,8 +118,24 @@ class APIHandler(SystemAPIMixin,
         try:
             if self.token is None:
                 raise ValueError("Login first")
-            response = Request.post(self.url, data=data, params=params)
-            return response.json()
+            if command == 'Download':
+                # Special handling for downloading an mp4
+                # Pop the filepath from data
+                tgt_filepath = data[0].pop('filepath')
+                # Apply the data to the params
+                params.update(data[0])
+                with requests.get(self.url, params=params, stream=True) as req:
+                    if req.status_code == 200:
+                        with open(tgt_filepath, 'wb') as f:
+                            f.write(req.content)
+                        return True
+                    else:
+                        print(f'Error received: {req.status_code}')
+                        return False
+
+            else:
+                response = Request.post(self.url, data=data, params=params)
+                return response.json()
         except Exception as e:
             print(f"Command {command} failed: {e}")
             raise

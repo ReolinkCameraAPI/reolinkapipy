@@ -1,20 +1,21 @@
 import os
 from threading import ThreadError
-
+from typing import Any
 import cv2
-
-from util import threaded
+from reolinkapi.utils.util import threaded
 
 
 class RtspClient:
     """
+    This is a wrapper of the OpenCV VideoCapture method
     Inspiration from:
         - https://benhowell.github.io/guide/2015/03/09/opencv-and-web-cam-streaming
         - https://stackoverflow.com/questions/19846332/python-threading-inside-a-class
         - https://stackoverflow.com/questions/55828451/video-streaming-from-ip-camera-in-python-using-opencv-cv2-videocapture
     """
 
-    def __init__(self, ip, username, password, port=554, profile="main", use_udp=True, callback=None, **kwargs):
+    def __init__(self, ip: str, username: str, password: str, port: float = 554, profile: str = "main",
+                 use_udp: bool = True, callback: Any = None, **kwargs):
         """
         RTSP client is used to retrieve frames from the camera in a stream
 
@@ -36,12 +37,8 @@ class RtspClient:
         self.password = password
         self.port = port
         self.proxy = kwargs.get("proxies")
-        self.url = "rtsp://" + self.username + ":" + self.password + "@" + \
-                   self.ip + ":" + str(self.port) + "//h264Preview_01_" + profile
-        if use_udp:
-            capture_options = capture_options + 'udp'
-        else:
-            capture_options = capture_options + 'tcp'
+        self.url = f'rtsp://{self.username}:{self.password}@{self.ip}:{self.port}//h264Preview_01_{profile}'
+        capture_options += 'udp' if use_udp else 'tcp'
 
         os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = capture_options
 
@@ -91,9 +88,6 @@ class RtspClient:
         """
         Opens OpenCV Video stream and returns the result according to the OpenCV documentation
         https://docs.opencv.org/3.4/d8/dfe/classcv_1_1VideoCapture.html#a473055e77dd7faa4d26d686226b292c1
-
-        :param callback: The function to callback the cv::mat frame to if required to be non-blocking. If this is left
-            as None, then the function returns a generator which is blocking.
         """
 
         # Reset the capture object
