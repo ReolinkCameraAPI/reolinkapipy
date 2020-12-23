@@ -32,7 +32,7 @@ INSTALL_REQUIRES = [
     'PySocks==1.7.1',
     'PyYaml==5.3.1',
     'requests>=2.25.1',
-    'pyphorus==0.0.2',
+    'pyphorus==0.0.3',
     'netaddr>=0.8.0',
 ]
 
