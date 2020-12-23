@@ -31,7 +31,9 @@ INSTALL_REQUIRES = [
     'Pillow==8.0.1',
     'PySocks==1.7.1',
     'PyYaml==5.3.1',
-    'requests>=2.18.4',
+    'requests>=2.25.1',
+    'pyphorus==0.0.2',
+    'netaddr>=0.8.0',
 ]
 
 

@@ -36,3 +36,8 @@ class Camera(APIHandler):
 
         if not defer_login:
             super().login()
+
+    @property
+    def is_loggedin(self):
+        return self.token is not None
+

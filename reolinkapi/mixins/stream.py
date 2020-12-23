@@ -7,7 +7,7 @@ from io import BytesIO
 import requests
 from PIL.Image import Image, open as open_image
 
-from reolinkapi.utils.rtsp_client import RtspClient
+from reolinkapi.utils import RtspClient
 
 
 class StreamAPIMixin:

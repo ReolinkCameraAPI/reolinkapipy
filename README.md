@@ -39,7 +39,7 @@ Implement a "Camera" object by passing it an IP address, Username and Password. 
 
 See the `examples` directory.
 
-### Using the library as a Python Module
+### Installation
 
 Install the package via PyPi
 
@@ -49,6 +49,48 @@ Install from GitHub
 
     pip install git+https://github.com/ReolinkCameraAPI/reolinkapipy.git
     
+### Usage
+
+```python
+
+import reolinkapi
+
+if __name__ == "__main__":
+    # this will immediately log in with default camera credentials
+    cam = reolinkapi.Camera("192.168.0.100")
+
+    # OR in the case of managing a pool of cameras' - it's better to defer login 
+    # foo is the username
+    # bar is the password
+    _ = reolinkapi.Camera("192.168.0.100", "foo", "bar", defer_login = True)
+
+    # to scan your network for reolink cameras
+    
+    # when UPnP is enabled on the camera, simply use:
+    discovery = reolinkapi.Discover()
+    devices = discovery.discover_upnp()
+
+    # OR
+    _ = discovery.discover_port()
+
+    # when many cameras share the same credentials
+    # foo is the username
+    # bar is the password
+    factory = reolinkapi.CameraFactory(username="foo", password="bar")
+    _ = factory.get_cameras_from_devices(devices)
+
+    # when using the CameraFactory, we need to log in manually on each camera
+    # since it creates a pool of cameras
+    # one can use the utility function in camera factory to run an asyncio task
+    factory.initialise_cameras()
+
+    # now one can check if the camera has been initialised
+    for camera in factory.cameras:
+        if camera.is_loggedin():
+            print(f'Camera {camera.ip} is logged in')
+        else:
+            print(f'Camera {camera.ip} is NOT logged in')
+```
 ## Contributors
 
 ---
