@@ -26,13 +26,17 @@ AUTHOR_EMAIL = 'alanoterblanche@gmail.com'
 AUTHOR = 'Benehiko'
 LICENSE = 'GPL-3.0'
 INSTALL_REQUIRES = [
-    'numpy==1.19.4',
-    'opencv-python==4.4.0.46',
-    'Pillow==8.0.1',
     'PySocks==1.7.1',
     'PyYaml==5.3.1',
     'requests>=2.18.4',
 ]
+EXTRAS_REQUIRE = {
+    'streaming': [
+        'numpy==1.19.4',
+        'opencv-python==4.4.0.46',
+        'Pillow==8.0.1',
+    ],
+}
 
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -53,5 +57,6 @@ setup(
     url=URL,
     license=LICENSE,
     install_requires=INSTALL_REQUIRES,
-    packages=find_packages(exclude=['examples', 'tests'])
+    packages=find_packages(exclude=['examples', 'tests']),
+    extras_require=EXTRAS_REQUIRE
 )
