@@ -48,6 +48,10 @@ Install the package via PyPi
 Install from GitHub
 
     pip install git+https://github.com/ReolinkCameraAPI/reolinkapipy.git
+
+If you want to include the video streaming functionality you need to include the streaming "extra" dependencies
+
+    pip install 'reolinkapi[streaming]'
     
 ## Contributors
 
