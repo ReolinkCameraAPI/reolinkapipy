@@ -51,7 +51,7 @@ class DisplayAPIMixin:
                         "watermark": osd_watermark_enabled,
                     }}}]
         r_data = self._execute_command('SetOsd', body)[0]
-        if r_data["value"]["rspCode"] == 200:
+        if 'value' in r_data and r_data["value"]["rspCode"] == 200:
             return True
-        print("Could not set OSD. Camera responded with status:", r_data["value"])
+        print("Could not set OSD. Camera responded with status:", r_data["error"])
         return False
