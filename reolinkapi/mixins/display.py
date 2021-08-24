@@ -24,7 +24,7 @@ class DisplayAPIMixin:
 
     def set_osd(self, bg_color: bool = 0, channel: float = 0, osd_channel_enabled: bool = 0,
                 osd_channel_name: str = "", osd_channel_pos: str = "Lower Right", osd_time_enabled: bool = 0,
-                osd_time_pos: str = "Lower Right") -> bool:
+                osd_time_pos: str = "Lower Right", osd_watermark_enabled: bool = 0) -> bool:
         """
         Set OSD
         :param bg_color: bool
@@ -47,7 +47,8 @@ class DisplayAPIMixin:
                             "enable": osd_channel_enabled, "name": osd_channel_name,
                             "pos": osd_channel_pos
                         },
-                        "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos}
+                        "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos},
+                        "watermark": osd_watermark_enabled,
                     }}}]
         r_data = self._execute_command('SetOsd', body)[0]
         if r_data["value"]["rspCode"] == 200:
