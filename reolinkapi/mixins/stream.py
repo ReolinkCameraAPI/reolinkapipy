@@ -1,5 +1,5 @@
 import string
-from random import random
+from random import choices
 from typing import Any, Optional
 from urllib import parse
 from io import BytesIO
@@ -36,7 +36,7 @@ try:
             data = {
                 'cmd': 'Snap',
                 'channel': 0,
-                'rs': ''.join(random.choices(string.ascii_uppercase + string.digits, k=10)),
+                'rs': ''.join(choices(string.ascii_uppercase + string.digits, k=10)),
                 'user': self.username,
                 'password': self.password,
             }
