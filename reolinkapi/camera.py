@@ -8,6 +8,7 @@ class Camera(APIHandler):
                  password: str = "",
                  https: bool = False,
                  defer_login: bool = False,
+                 profile: str = "main",
                  **kwargs):
         """
         Initialise the Camera object by passing the ip address.
@@ -23,6 +24,9 @@ class Camera(APIHandler):
         eg: {"http":"socks5://[username]:[password]@[host]:[port], "https": ...}
         More information on proxies in requests: https://stackoverflow.com/a/15661226/9313679
         """
+        if profile not in ["main", "sub"]:
+            raise Exception("Profile argument must be either \"main\" or \"sub\"")
+
         # For when you need to connect to a camera behind a proxy, pass
         # a proxy argument: proxy={"http": "socks5://127.0.0.1:8000"}
         APIHandler.__init__(self, ip, username, password, https=https, **kwargs)
@@ -33,6 +37,7 @@ class Camera(APIHandler):
         self.ip = ip
         self.username = username
         self.password = password
+        self.profile = profile
 
         if not defer_login:
             super().login()

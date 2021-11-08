@@ -23,7 +23,7 @@ try:
             :param proxies: Default is none, example: {"host": "localhost", "port": 8000}
             """
             rtsp_client = RtspClient(
-                ip=self.ip, username=self.username, password=self.password, proxies=proxies, callback=callback)
+                ip=self.ip, username=self.username, password=self.password, profile=self.profile, proxies=proxies, callback=callback)
             return rtsp_client.open_stream()
 
         def get_snap(self, timeout: float = 3, proxies: Any = None) -> Optional[Image]:
