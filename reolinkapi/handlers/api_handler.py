@@ -124,7 +124,7 @@ class APIHandler(AlarmAPIMixin,
                 tgt_filepath = data[0].pop('filepath')
                 # Apply the data to the params
                 params.update(data[0])
-                with requests.get(self.url, params=params, stream=True, verify=False, timeout=(1, None)) as req:
+                with requests.get(self.url, params=params, stream=True, verify=False, timeout=(1, None), proxies=Request.proxies) as req:
                     if req.status_code == 200:
                         with open(tgt_filepath, 'wb') as f:
                             f.write(req.content)
