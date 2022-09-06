@@ -149,6 +149,7 @@ do not work and is not supported here.
 - RLC-423
 - RLC-420-5MP
 - RLC-410-5MP
+- RLC-510A
 - RLC-520
 - C1-Pro
 - D400
