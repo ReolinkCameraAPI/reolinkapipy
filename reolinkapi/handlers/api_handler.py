@@ -75,6 +75,7 @@ class APIHandler(AlarmAPIMixin,
                     self.token = data["value"]["Token"]["name"]
                     print("Login success")
                     return True
+                print("Logged in failure data: ", response.json())
                 print(self.token)
                 return False
             else:
