@@ -23,7 +23,7 @@ class RecordAPIMixin:
         return self._execute_command('GetRec', body)
 
     def set_recording_encoding(self,
-                               audio: float = 0,
+                               audio: bool = 0,
                                main_bit_rate: float = 8192,
                                main_frame_rate: float = 8,
                                main_profile: str = 'High',
@@ -34,7 +34,7 @@ class RecordAPIMixin:
                                sub_size: str = '640*480') -> Dict:
         """
         Sets the current camera encoding settings for "Clear" and "Fluent" profiles.
-        :param audio: int Audio on or off
+        :param audio: bool Audio on or off
         :param main_bit_rate: int Clear Bit Rate
         :param main_frame_rate: int Clear Frame Rate
         :param main_profile: string Clear Profile
@@ -51,7 +51,7 @@ class RecordAPIMixin:
                 "action": 0,
                 "param": {
                     "Enc": {
-                        "audio": audio,
+                        "audio": int(audio),
                         "channel": 0,
                         "mainStream": {
                             "bitRate": main_bit_rate,
