@@ -85,7 +85,10 @@ class APIHandler(AlarmAPIMixin,
                 return False
         except Exception as e:
             print("Error Login\n", e)
-            raise
+            return False
+
+    def is_logged_in(self) -> bool:
+        return self.token is not None
 
     def logout(self) -> bool:
         """

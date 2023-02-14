@@ -94,10 +94,14 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        host = f"darknet{argv[1]}"
+        host = f"watchdog{argv[1]}"
         cam = Camera(host, username="rtsp", password="darknet")
     except:
         print(f"Failed to open camera: {host}")
+        exit(1)
+
+    if not cam.is_logged_in():
+        print(f"Login failed for {host}")
         exit(1)
 
     # Call the methods. Either Blocking (using generator) or Non-Blocking using threads
