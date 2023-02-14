@@ -28,6 +28,52 @@ class NetworkAPIMixin:
         print("Successfully Set Network Ports")
         return True
 
+    def set_network_ftp(self, username, password, directory, server_ip, enable) -> Dict:
+        """
+        Set the camera FTP network information
+        {
+            "cmd": "GetFtp",
+            "code": 0,
+            "value": {
+                "Ftp": {
+                    "anonymous": 0,
+                    "interval": 15,
+                    "maxSize": 100,
+                    "mode": 0,
+                    "password": "***********",
+                    "port": 21,
+                    "remoteDir": "incoming1",
+                    "schedule": {
+                        "enable": 1,
+                        "table": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+                    },
+                    "server": "192.168.1.2",
+                    "streamType": 0,
+                    "userName": "ftpuser"
+                }
+            }
+        }
+        :return: response
+        """
+        body = [
+            {
+                "cmd": "SetFtp",
+                "action": 0,
+                "param": {
+                    "Ftp": {
+                        "password": password,
+                        "remoteDir": directory,
+                        "server": server_ip,
+                        "userName": username,
+                        "schedule": {
+                            "enable": enable
+                        }
+                    }
+                }
+            }
+        ]
+        return self._execute_command('SetFtp', body)
+
     def set_wifi(self, ssid: str, password: str) -> Dict:
         body = [{"cmd": "SetWifi", "action": 0, "param": {
             "Wifi": {
