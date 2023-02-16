@@ -138,7 +138,17 @@ class APIHandler(AlarmAPIMixin,
 
             else:
                 response = Request.post(self.url, data=data, params=params)
-                return response.json()
+                # print(f"Command: {command}, Response: {response.text}")
+                response.raise_for_status()  # raises exception when not a 2xx response
+                if response.status_code != 204:
+                    try:
+                        return response.json()
+                    except Exception as e:
+                        print(f"JSON failure for {command}; Respose: ", response.text)
+                        raise e
+
+                raise RuntimeError(f"Unexpected response code {response.status_code}")
+
         except Exception as e:
             print(f"Command {command} failed: {e}")
             raise
