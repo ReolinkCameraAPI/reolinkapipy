@@ -19,8 +19,11 @@ class RecordAPIMixin:
         See examples/response/GetRec.json for example response data.
         :return: response json
         """
-        body = [{"cmd": "GetRec", "action": 1, "param": {"channel": 0}}]
-        return self._execute_command('GetRec', body)
+        cmd = "GetRec"
+        if self.scheduleVersion == 1:
+            cmd = "GetRecV20"
+        body = [{"cmd": cmd, "action": 1, "param": {"channel": 0}}]
+        return self._execute_command(cmd, body)
 
     def set_recording_encoding(self,
                                audio: float = 0,
@@ -45,9 +48,12 @@ class RecordAPIMixin:
         :param sub_size: string Fluent Size
         :return: response
         """
+        cmd = "SetRec"
+        if self.scheduleVersion == 1:
+            cmd = "SetRecV20"
         body = [
             {
-                "cmd": "SetEnc",
+                "cmd": cmd,
                 "action": 0,
                 "param": {
                     "Enc": {
@@ -69,4 +75,4 @@ class RecordAPIMixin:
                 }
             }
         ]
-        return self._execute_command('SetEnc', body)
+        return self._execute_command(cmd, body)

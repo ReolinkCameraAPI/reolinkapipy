@@ -134,8 +134,11 @@ class NetworkAPIMixin:
         See examples/response/GetNetworkEmail.json for example response data.
         :return: response json
         """
-        body = [{"cmd": "GetEmail", "action": 0, "param": {}}]
-        return self._execute_command('GetEmail', body)
+        cmd = "GetEmail"
+        if self.scheduleVersion == 1:
+            cmd = "GetEmailV20"
+        body = [{"cmd": cmd, "action": 0, "param": {}}]
+        return self._execute_command(cmd, body)
 
     def get_network_ftp(self) -> Dict:
         """
@@ -143,8 +146,11 @@ class NetworkAPIMixin:
         See examples/response/GetNetworkFtp.json for example response data.
         :return: response json
         """
-        body = [{"cmd": "GetFtp", "action": 0, "param": {}}]
-        return self._execute_command('GetFtp', body)
+        cmd = "GetFtp"
+        if self.scheduleVersion == 1:
+            cmd = "GetFtpV20"
+        body = [{"cmd": cmd, "action": 0, "param": {}}]
+        return self._execute_command(cmd, body)
 
     def get_network_push(self) -> Dict:
         """
@@ -152,8 +158,11 @@ class NetworkAPIMixin:
         See examples/response/GetNetworkPush.json for example response data.
         :return: response json
         """
-        body = [{"cmd": "GetPush", "action": 0, "param": {}}]
-        return self._execute_command('GetPush', body)
+        cmd = "GetPush"
+        if self.scheduleVersion == 1:
+            cmd = "GetPushV20"
+        body = [{"cmd": cmd, "action": 0, "param": {}}]
+        return self._execute_command(cmd, body)
 
     def get_network_status(self) -> Dict:
         """

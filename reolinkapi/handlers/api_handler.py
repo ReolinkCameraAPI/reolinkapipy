@@ -1,4 +1,6 @@
 import requests
+from urllib3.exceptions import InsecureRequestWarning
+
 from typing import Dict, List, Optional, Union
 from reolinkapi.mixins.alarm import AlarmAPIMixin
 from reolinkapi.mixins.device import DeviceAPIMixin
@@ -53,6 +55,8 @@ class APIHandler(AlarmAPIMixin,
         self.url = f"{scheme}://{ip}/cgi-bin/api.cgi"
         self.ip = ip
         self.token = None
+        self.ability = None
+        self.scheduleVersion = 0
         self.username = username
         self.password = password
         Request.proxies = kwargs.get("proxy")  # Defaults to None if key isn't found
@@ -64,6 +68,9 @@ class APIHandler(AlarmAPIMixin,
         :return: bool
         """
         try:
+            # Suppress only the single warning from urllib3 needed.
+            requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+
             body = [{"cmd": "Login", "action": 0,
                      "param": {"User": {"userName": self.username, "password": self.password}}}]
             param = {"cmd": "Login", "token": "null"}
@@ -73,9 +80,15 @@ class APIHandler(AlarmAPIMixin,
                 code = data["code"]
                 if int(code) == 0:
                     self.token = data["value"]["Token"]["name"]
-                    print("Login success")
+                    # print("Login success")
+                    ability = self.get_ability()
+                    self.ability = ability[0]["value"]["Ability"]
+                    self.scheduleVersion = self.ability["scheduleVersion"]["ver"]
+                    print("API VERSION: ", self.scheduleVersion)
                     return True
-                print(self.token)
+
+                # print(self.token)
+                print("ERROR: LOGIN RESPONSE: ", response.text)
                 return False
             else:
                 # TODO: Verify this change w/ owner. Delete old code if acceptable.
