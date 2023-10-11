@@ -1,4 +1,5 @@
 from typing import Dict
+import json
 
 
 class DisplayAPIMixin:
@@ -22,8 +23,8 @@ class DisplayAPIMixin:
         body = [{"cmd": "GetMask", "action": 1, "param": {"channel": 0}}]
         return self._execute_command('GetMask', body)
 
-    def set_osd(self, bg_color: bool = 0, channel: float = 0, osd_channel_enabled: bool = 0,
-                osd_channel_name: str = "", osd_channel_pos: str = "Lower Right", osd_time_enabled: bool = 0,
+    def set_osd(self, bg_color: bool = 0, channel: int = 0, osd_channel_enabled: bool = 1,
+                osd_channel_name: str = "Camera", osd_channel_pos: str = "Lower Right", osd_time_enabled: bool = 1,
                 osd_time_pos: str = "Lower Right", osd_watermark_enabled: bool = 0) -> bool:
         """
         Set OSD
@@ -38,18 +39,21 @@ class DisplayAPIMixin:
             ["Upper Left","Top Center","Upper Right","Lower Left","Bottom Center","Lower Right"]
         :return: whether the action was successful
         """
-        body = [{"cmd": "SetOsd", "action": 1,
+        body = [{"cmd": "SetOsd", # "action": 1,
                  "param": {
                     "Osd": {
-                        "bgcolor": bg_color,
+                        # "bgcolor": bg_color,
                         "channel": channel,
                         "osdChannel": {
-                            "enable": osd_channel_enabled, "name": osd_channel_name,
+                            "enable": int(osd_channel_enabled),
+                            "name": osd_channel_name,
                             "pos": osd_channel_pos
                         },
-                        "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos},
-                        "watermark": osd_watermark_enabled,
+                        "osdTime": {"enable": int(osd_time_enabled),
+                                    "pos": osd_time_pos},
+                        "watermark": int(osd_watermark_enabled),
                     }}}]
+        # print("SetOsd:", json.dumps(body[0], indent=4))
         r_data = self._execute_command('SetOsd', body)[0]
         if 'value' in r_data and r_data["value"]["rspCode"] == 200:
             return True

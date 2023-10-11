@@ -76,20 +76,16 @@ class APIHandler(AlarmAPIMixin,
             param = {"cmd": "Login", "token": "null"}
             response = Request.post(self.url, data=body, params=param)
             if response is not None:
+                # print("LOGIN GOT: ", response.text)
                 data = response.json()[0]
                 code = data["code"]
                 if int(code) == 0:
                     self.token = data["value"]["Token"]["name"]
                     # print("Login success")
-                    ability = self.get_ability()
-                    self.ability = ability[0]["value"]["Ability"]
-                    self.scheduleVersion = self.ability["scheduleVersion"]["ver"]
-                    print("API VERSION: ", self.scheduleVersion)
-                    return True
-
-                # print(self.token)
-                print("ERROR: LOGIN RESPONSE: ", response.text)
-                return False
+                else:
+                    # print(self.token)
+                    print("ERROR: LOGIN RESPONSE: ", response.text)
+                    return False
             else:
                 # TODO: Verify this change w/ owner. Delete old code if acceptable.
                 #  A this point, response is NoneType. There won't be a status code property.
@@ -97,8 +93,19 @@ class APIHandler(AlarmAPIMixin,
                 print("Failed to login\nResponse was null.")
                 return False
         except Exception as e:
-            print("Error Login\n", e)
+            print(f"ERROR Login Failed, exception: {e}")
             return False
+
+        try:
+            ability = self.get_ability()
+            self.ability = ability[0]["value"]["Ability"]
+            self.scheduleVersion = self.ability["scheduleVersion"]["ver"]
+            print("API VERSION: ", self.scheduleVersion)
+        except Exception as e:
+            self.logout()
+            return False
+
+        return True
 
     def is_logged_in(self) -> bool:
         return self.token is not None
@@ -114,7 +121,7 @@ class APIHandler(AlarmAPIMixin,
             # print(ret)
             return True
         except Exception as e:
-            print("Error Logout\n", e)
+            print(f"ERROR Logout Failed, exception: {e}")
             return False
 
     def _execute_command(self, command: str, data: List[Dict], multi: bool = False) -> \
@@ -151,17 +158,7 @@ class APIHandler(AlarmAPIMixin,
 
             else:
                 response = Request.post(self.url, data=data, params=params)
-                # print(f"Command: {command}, Response: {response.text}")
-                response.raise_for_status()  # raises exception when not a 2xx response
-                if response.status_code != 204:
-                    try:
-                        return response.json()
-                    except Exception as e:
-                        print(f"JSON failure for {command}; Respose: ", response.text)
-                        raise e
-
-                raise RuntimeError(f"Unexpected response code {response.status_code}")
-
+                return response.json()
         except Exception as e:
-            print(f"Command {command} failed: {e}")
+            print(f"ERROR Command {command} failed, exception: {e}")
             raise

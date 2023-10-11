@@ -1,4 +1,5 @@
 from typing import Dict
+import json
 
 
 class UserAPIMixin:
@@ -32,23 +33,37 @@ class UserAPIMixin:
         body = [{"cmd": "AddUser", "action": 0,
                  "param": {"User": {"userName": username, "password": password, "level": level}}}]
         r_data = self._execute_command('AddUser', body)[0]
-        if r_data["value"]["rspCode"] == 200:
+
+        if r_data["code"] == 0 and r_data["value"]["rspCode"] == 200:
             return True
-        print("Could not add user. Camera responded with:", r_data["value"])
+
+        print("Could not add user. Camera responded with:", json.dumps(r_data, indent=4))
         return False
 
-    def modify_user(self, username: str, password: str) -> bool:
+    def modify_user(self, username: str, oldpassword: str, password: str) -> bool:
         """
         Modify the user's password by specifying their username
         :param username: The user which would want to be modified
         :param password: The new password
         :return: whether the user was modified successfully
         """
-        body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
+        body = [{"cmd": "ModifyUser",
+                 "action": 0,
+                 "param": {"User":
+                           {"userName": username,
+                            "oldPassword": oldpassword,
+                            "newPassword": password
+                            }
+                           }
+                 }
+                ]
         r_data = self._execute_command('ModifyUser', body)[0]
-        if r_data["value"]["rspCode"] == 200:
+        # print(f"modify user: {username}\nCamera responded with: {json.dumps(r_data, indent=4)}")
+
+        if r_data["code"] == 0 and r_data["value"]["rspCode"] == 200:
             return True
-        print(f"Could not modify user: {username}\nCamera responded with: {r_data['value']}")
+
+        print(f"Could not modify user: {username}\nCamera responded with: {json.dumps(r_data, indent=4)}")
         return False
 
     def delete_user(self, username: str) -> bool:
