@@ -25,14 +25,16 @@ class RecordAPIMixin:
         body = [{"cmd": cmd, "action": 1, "param": {"channel": 0}}]
         return self._execute_command(cmd, body)
 
+    # NOTE: Changing the camera encoding values apparently makes some (all?) cameras do a full restart.
+    #       Subsequent API calls will fail. Clients must re-connect after the camera resets.
     def set_recording_encoding(self,
-                               audio: float = 0,
-                               main_bit_rate: float = 8192,
-                               main_frame_rate: float = 8,
+                               audio: bool = True,
+                               main_bit_rate: int = 8192,
+                               main_frame_rate: int = 8,
                                main_profile: str = 'High',
-                               main_size: str = "2560*1440",
-                               sub_bit_rate: float = 160,
-                               sub_frame_rate: float = 7,
+                               main_size: str = "2560*1920",
+                               sub_bit_rate: int = 160,
+                               sub_frame_rate: int = 7,
                                sub_profile: str = 'High',
                                sub_size: str = '640*480') -> Dict:
         """
@@ -48,16 +50,14 @@ class RecordAPIMixin:
         :param sub_size: string Fluent Size
         :return: response
         """
-        cmd = "SetRec"
-        if self.scheduleVersion == 1:
-            cmd = "SetRecV20"
+        cmd = "SetEnc"
         body = [
             {
                 "cmd": cmd,
                 "action": 0,
                 "param": {
                     "Enc": {
-                        "audio": audio,
+                        "audio": int(audio),
                         "channel": 0,
                         "mainStream": {
                             "bitRate": main_bit_rate,
