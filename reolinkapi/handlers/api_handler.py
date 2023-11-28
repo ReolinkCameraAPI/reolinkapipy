@@ -14,6 +14,7 @@ from reolinkapi.mixins.stream import StreamAPIMixin
 from reolinkapi.mixins.system import SystemAPIMixin
 from reolinkapi.mixins.user import UserAPIMixin
 from reolinkapi.mixins.zoom import ZoomAPIMixin
+from reolinkapi.mixins.nvrdownload import NvrDownloadAPIMixin
 
 
 class APIHandler(AlarmAPIMixin,
@@ -28,7 +29,8 @@ class APIHandler(AlarmAPIMixin,
                  SystemAPIMixin,
                  UserAPIMixin,
                  ZoomAPIMixin,
-                 StreamAPIMixin):
+                 StreamAPIMixin,
+                 NvrDownloadAPIMixin):
     """
     The APIHandler class is the backend part of the API, the actual API calls
     are implemented in Mixins.
