@@ -38,8 +38,11 @@ class NvrDownloadAPIMixin:
             }
         }
         body = [{"cmd": "NvrDownload", "action": 1, "param": search_params}]
-
-        resp = self._execute_command('NvrDownload', body)[0]
+        try:
+            resp = self._execute_command('NvrDownload', body)[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return []
         if 'value' not in resp:
             return []
         values = resp['value']
