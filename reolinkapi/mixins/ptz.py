@@ -5,6 +5,39 @@ class PtzAPIMixin:
     """
     API for PTZ functions.
     """
+    def get_ptz_check_state(self) -> Dict:
+        """
+        Get PTZ Check State Information that indicates whether calibration is required (0) running (1) or done (2)
+        Value is contained in response[0]["value"]["PtzCheckState"].
+        See examples/response/GetPtzCheckState.json for example response data.
+        :return: response json
+        """
+        body = [{"cmd": "GetPtzCheckState", "action": 1, "param": { "channel": 0}}]
+        return self._execute_command('GetPtzCheckState', body)
+
+    def get_ptz_presets(self) -> Dict:
+        """
+        Get ptz presets
+        See examples/response/GetPtzPresets.json for example response data.
+        :return: response json
+        """
+
+        body = [{"cmd": "GetPtzPreset", "action": 1, "param": { "channel": 0}}]
+        return self._execute_command('GetPtzPreset', body)
+
+    def perform_calibration(self) -> Dict:
+        """
+        Do the calibration (like app -> ptz -> three dots -> calibration). Moves camera to all end positions.
+        If not calibrated, your viewpoint of presets might drift. So before setting new presets, or moving to preset,
+        check calibration status (get_ptz_check_state -> 2 = calibrated) and perform calibration if not yet calibrated.
+        As of 2024-01-23 (most recent firmware 3.1.0.1711_23010700 for E1 Zoom) does not do this on startup.
+        Method blocks while calibrating.
+        See examples/response/PtzCheck.json for example response data.
+        :return: response json
+        """
+        data = [{"cmd": "PtzCheck", "action": 0, "param": {"channel": 0}}]
+        return self._execute_command('PtzCheck', data)
+
     def _send_operation(self, operation: str, speed: float, index: float = None) -> Dict:
         # Refactored to reduce redundancy
         param = {"channel": 0, "op": operation, "speed": speed}

@@ -108,6 +108,7 @@ GET:
 - [X] User -> Add User
 - [X] User -> Manage User
 - [X] Device -> HDD/SD Card
+- [x] PTZ -> Presets, Calibration Status
 - [ ] Zoom
 - [ ] Focus
 - [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
@@ -134,7 +135,7 @@ SET:
 - [X] User -> Add User
 - [X] User -> Manage User
 - [X] Device -> HDD/SD Card (Format)
-- [x] PTZ
+- [x] PTZ (including calibrate)
 - [x] Zoom
 - [x] Focus
 - [X] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
@@ -153,3 +154,5 @@ do not work and is not supported here.
 - RLC-520
 - C1-Pro
 - D400
+- E1 Zoom
+
