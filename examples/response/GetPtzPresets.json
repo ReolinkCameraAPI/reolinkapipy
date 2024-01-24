@@ -1,0 +1,926 @@
+[
+  {
+    "cmd": "GetPtzPreset",
+    "code": 0,
+    "initial": {
+      "PtzPreset": [
+        {
+          "channel": 0,
+          "enable": 1,
+          "id": 0,
+          "imgName": "preset_00",
+          "name": "namepos0"
+        },
+        {
+          "channel": 0,
+          "enable": 1,
+          "id": 1,
+          "imgName": "preset_01",
+          "name": "othernamepos1"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 2,
+          "imgName": "",
+          "name": "pos3"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 3,
+          "imgName": "",
+          "name": "pos4"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 4,
+          "imgName": "",
+          "name": "pos5"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 5,
+          "imgName": "",
+          "name": "pos6"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 6,
+          "imgName": "",
+          "name": "pos7"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 7,
+          "imgName": "",
+          "name": "pos8"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 8,
+          "imgName": "",
+          "name": "pos9"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 9,
+          "imgName": "",
+          "name": "pos10"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 10,
+          "imgName": "",
+          "name": "pos11"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 11,
+          "imgName": "",
+          "name": "pos12"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 12,
+          "imgName": "",
+          "name": "pos13"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 13,
+          "imgName": "",
+          "name": "pos14"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 14,
+          "imgName": "",
+          "name": "pos15"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 15,
+          "imgName": "",
+          "name": "pos16"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 16,
+          "imgName": "",
+          "name": "pos17"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 17,
+          "imgName": "",
+          "name": "pos18"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 18,
+          "imgName": "",
+          "name": "pos19"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 19,
+          "imgName": "",
+          "name": "pos20"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 20,
+          "imgName": "",
+          "name": "pos21"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 21,
+          "imgName": "",
+          "name": "pos22"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 22,
+          "imgName": "",
+          "name": "pos23"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 23,
+          "imgName": "",
+          "name": "pos24"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 24,
+          "imgName": "",
+          "name": "pos25"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 25,
+          "imgName": "",
+          "name": "pos26"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 26,
+          "imgName": "",
+          "name": "pos27"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 27,
+          "imgName": "",
+          "name": "pos28"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 28,
+          "imgName": "",
+          "name": "pos29"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 29,
+          "imgName": "",
+          "name": "pos30"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 30,
+          "imgName": "",
+          "name": "pos31"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 31,
+          "imgName": "",
+          "name": "pos32"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 32,
+          "imgName": "",
+          "name": "pos33"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 33,
+          "imgName": "",
+          "name": "pos34"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 34,
+          "imgName": "",
+          "name": "pos35"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 35,
+          "imgName": "",
+          "name": "pos36"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 36,
+          "imgName": "",
+          "name": "pos37"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 37,
+          "imgName": "",
+          "name": "pos38"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 38,
+          "imgName": "",
+          "name": "pos39"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 39,
+          "imgName": "",
+          "name": "pos40"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 40,
+          "imgName": "",
+          "name": "pos41"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 41,
+          "imgName": "",
+          "name": "pos42"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 42,
+          "imgName": "",
+          "name": "pos43"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 43,
+          "imgName": "",
+          "name": "pos44"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 44,
+          "imgName": "",
+          "name": "pos45"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 45,
+          "imgName": "",
+          "name": "pos46"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 46,
+          "imgName": "",
+          "name": "pos47"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 47,
+          "imgName": "",
+          "name": "pos48"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 48,
+          "imgName": "",
+          "name": "pos49"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 49,
+          "imgName": "",
+          "name": "pos50"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 50,
+          "imgName": "",
+          "name": "pos51"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 51,
+          "imgName": "",
+          "name": "pos52"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 52,
+          "imgName": "",
+          "name": "pos53"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 53,
+          "imgName": "",
+          "name": "pos54"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 54,
+          "imgName": "",
+          "name": "pos55"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 55,
+          "imgName": "",
+          "name": "pos56"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 56,
+          "imgName": "",
+          "name": "pos57"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 57,
+          "imgName": "",
+          "name": "pos58"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 58,
+          "imgName": "",
+          "name": "pos59"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 59,
+          "imgName": "",
+          "name": "pos60"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 60,
+          "imgName": "",
+          "name": "pos61"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 61,
+          "imgName": "",
+          "name": "pos62"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 62,
+          "imgName": "",
+          "name": "pos63"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 63,
+          "imgName": "",
+          "name": "pos64"
+        }
+      ]
+    },
+    "range": {
+      "PtzPreset": {
+        "channel": 0,
+        "enable": "boolean",
+        "id": {
+          "max": 64,
+          "min": 1
+        },
+        "imgName": {
+          "maxLen": 31
+        },
+        "name": {
+          "maxLen": 31
+        }
+      }
+    },
+    "value": {
+      "PtzPreset": [
+        {
+          "channel": 0,
+          "enable": 1,
+          "id": 0,
+          "imgName": "preset_00",
+          "name": "0"
+        },
+        {
+          "channel": 0,
+          "enable": 1,
+          "id": 1,
+          "imgName": "preset_01",
+          "name": "1"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 2,
+          "imgName": "",
+          "name": "pos3"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 3,
+          "imgName": "",
+          "name": "pos4"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 4,
+          "imgName": "",
+          "name": "pos5"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 5,
+          "imgName": "",
+          "name": "pos6"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 6,
+          "imgName": "",
+          "name": "pos7"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 7,
+          "imgName": "",
+          "name": "pos8"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 8,
+          "imgName": "",
+          "name": "pos9"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 9,
+          "imgName": "",
+          "name": "pos10"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 10,
+          "imgName": "",
+          "name": "pos11"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 11,
+          "imgName": "",
+          "name": "pos12"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 12,
+          "imgName": "",
+          "name": "pos13"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 13,
+          "imgName": "",
+          "name": "pos14"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 14,
+          "imgName": "",
+          "name": "pos15"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 15,
+          "imgName": "",
+          "name": "pos16"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 16,
+          "imgName": "",
+          "name": "pos17"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 17,
+          "imgName": "",
+          "name": "pos18"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 18,
+          "imgName": "",
+          "name": "pos19"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 19,
+          "imgName": "",
+          "name": "pos20"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 20,
+          "imgName": "",
+          "name": "pos21"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 21,
+          "imgName": "",
+          "name": "pos22"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 22,
+          "imgName": "",
+          "name": "pos23"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 23,
+          "imgName": "",
+          "name": "pos24"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 24,
+          "imgName": "",
+          "name": "pos25"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 25,
+          "imgName": "",
+          "name": "pos26"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 26,
+          "imgName": "",
+          "name": "pos27"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 27,
+          "imgName": "",
+          "name": "pos28"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 28,
+          "imgName": "",
+          "name": "pos29"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 29,
+          "imgName": "",
+          "name": "pos30"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 30,
+          "imgName": "",
+          "name": "pos31"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 31,
+          "imgName": "",
+          "name": "pos32"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 32,
+          "imgName": "",
+          "name": "pos33"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 33,
+          "imgName": "",
+          "name": "pos34"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 34,
+          "imgName": "",
+          "name": "pos35"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 35,
+          "imgName": "",
+          "name": "pos36"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 36,
+          "imgName": "",
+          "name": "pos37"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 37,
+          "imgName": "",
+          "name": "pos38"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 38,
+          "imgName": "",
+          "name": "pos39"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 39,
+          "imgName": "",
+          "name": "pos40"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 40,
+          "imgName": "",
+          "name": "pos41"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 41,
+          "imgName": "",
+          "name": "pos42"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 42,
+          "imgName": "",
+          "name": "pos43"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 43,
+          "imgName": "",
+          "name": "pos44"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 44,
+          "imgName": "",
+          "name": "pos45"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 45,
+          "imgName": "",
+          "name": "pos46"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 46,
+          "imgName": "",
+          "name": "pos47"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 47,
+          "imgName": "",
+          "name": "pos48"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 48,
+          "imgName": "",
+          "name": "pos49"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 49,
+          "imgName": "",
+          "name": "pos50"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 50,
+          "imgName": "",
+          "name": "pos51"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 51,
+          "imgName": "",
+          "name": "pos52"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 52,
+          "imgName": "",
+          "name": "pos53"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 53,
+          "imgName": "",
+          "name": "pos54"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 54,
+          "imgName": "",
+          "name": "pos55"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 55,
+          "imgName": "",
+          "name": "pos56"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 56,
+          "imgName": "",
+          "name": "pos57"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 57,
+          "imgName": "",
+          "name": "pos58"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 58,
+          "imgName": "",
+          "name": "pos59"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 59,
+          "imgName": "",
+          "name": "pos60"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 60,
+          "imgName": "",
+          "name": "pos61"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 61,
+          "imgName": "",
+          "name": "pos62"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 62,
+          "imgName": "",
+          "name": "pos63"
+        },
+        {
+          "channel": 0,
+          "enable": 0,
+          "id": 63,
+          "imgName": "",
+          "name": "pos64"
+        }
+      ]
+    }
+  }
+]
