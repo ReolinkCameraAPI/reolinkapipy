@@ -43,7 +43,7 @@ try:
             parms = parse.urlencode(data).encode("utf-8")
 
             try:
-                response = requests.get(self.url, proxies=proxies, params=parms, timeout=timeout)
+                response = requests.get(self.url, proxies=proxies, params=parms, timeout=timeout, verify=False)
                 if response.status_code == 200:
                     return open_image(BytesIO(response.content))
                 print("Could not retrieve data from camera successfully. Status:", response.status_code)
