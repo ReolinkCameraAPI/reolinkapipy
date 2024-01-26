@@ -41,14 +41,14 @@ class DisplayAPIMixin:
         body = [{"cmd": "SetOsd", "action": 1,
                  "param": {
                     "Osd": {
-                        "bgcolor": bg_color,
+                        "bgcolor": int(bg_color),
                         "channel": channel,
                         "osdChannel": {
-                            "enable": osd_channel_enabled, "name": osd_channel_name,
+                            "enable": int(osd_channel_enabled), "name": osd_channel_name,
                             "pos": osd_channel_pos
                         },
-                        "osdTime": {"enable": osd_time_enabled, "pos": osd_time_pos},
-                        "watermark": osd_watermark_enabled,
+                        "osdTime": {"enable": int(osd_time_enabled), "pos": osd_time_pos},
+                        "watermark": int(osd_watermark_enabled),
                     }}}]
         r_data = self._execute_command('SetOsd', body)[0]
         if 'value' in r_data and r_data["value"]["rspCode"] == 200:
