@@ -25,8 +25,126 @@ class NetworkAPIMixin:
             "rtspPort": rtsp_port
         }}}]
         self._execute_command('SetNetPort', body, multi=True)
-        print("Successfully Set Network Ports")
+        # print("Successfully Set Network Ports")
         return True
+
+    def set_network_ftp(self, username, password, directory, server_ip, enable) -> Dict:
+        """
+        Set the camera FTP network information
+        {
+            "cmd": "GetFtp",
+            "code": 0,
+            "value": {
+                "Ftp": {
+                    "anonymous": 0,
+                    "interval": 15,
+                    "maxSize": 100,
+                    "mode": 0,
+                    "password": "***********",
+                    "port": 21,
+                    "remoteDir": "incoming1",
+                    "schedule": {
+                        "enable": 1,
+                        "table": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+                    },
+                    "server": "192.168.1.2",
+                    "streamType": 0,
+                    "userName": "ftpuser"
+                }
+            }
+        }
+        
+        For Version 2.0 API:
+        [{
+            "cmd": "SetFtpV20", "param": {
+                "Ftp": { "anonymous": 0,
+                    "autoDir": 1,
+                    "bpicSingle": 0, "bvideoSingle": 0,
+                    "enable": 1,
+                    "interval": 30,
+                    "maxSize": 100,
+                    "mode": 0,
+                    "onlyFtps": 1,
+                    "password": "***********",
+                    "picCaptureMode": 3,
+                    "picHeight": 1920,
+                    "picInterval": 60,
+                    "picName": "",
+                    "picWidth": 2304,
+                    "port": 21,
+                    "remoteDir": "hello",
+                    "schedule": {
+                        "channel": 0, "table": {
+                            "AI_DOG_CA T": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                            "AI_PEOPLE": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                            "AI_VEHICLE": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                            "MD": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                            "TIMING": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+                    } },
+                    "server": "192.168.1.236",
+                    "streamType": 6,
+                    "userName": "ft***er",
+                    "videoName": "sdfs"
+                } }
+        }]
+        :return: response
+        """
+        """
+        body = [{
+            "action": 0,
+            "param": {
+                "Ftp": {
+                    "password": password,
+                    "remoteDir": directory,
+                    "server": server_ip,
+                    "userName": username,
+                }
+            }
+        }]
+        """
+
+        cmd = "SetFtp"
+        if self.scheduleVersion == 1:
+            cmd = "SetFtpV20"
+
+        body = [
+            {
+                "cmd": cmd,
+                # "action": 0,
+                "param": {
+                    "Ftp": {
+                        "password": password,
+                        "remoteDir": directory,
+                        "server": server_ip,
+                        "userName": username
+                    }
+                }
+            }
+        ]
+        if self.scheduleVersion == 1:
+            body[0]["param"]["Ftp"]["enable"] = int(enable)
+        else:
+            body[0]["param"]["Ftp"]["schedule"] = { "enable": int(enable) }
+
+        # print(f"Sending {cmd} command: ", body)
+        return self._execute_command(cmd, body)
+
+    def set_network_ntp(self, enable: bool, server: str, port: int = 123, interval: int = 1440) -> Dict:
+        body = [
+            {
+                "cmd": "SetNtp",
+                # "action": 0,
+                "param": {
+                    "Ntp": {
+                        "enable": int(enable),
+                        "server": server,
+                        "port": port,
+                        "interval": interval
+                    }
+                }
+            }
+        ]
+        return self._execute_command('SetNtp', body)
 
     def set_wifi(self, ssid: str, password: str) -> Dict:
         body = [{"cmd": "SetWifi", "action": 0, "param": {
@@ -88,8 +206,30 @@ class NetworkAPIMixin:
         See examples/response/GetNetworkEmail.json for example response data.
         :return: response json
         """
-        body = [{"cmd": "GetEmail", "action": 0, "param": {}}]
-        return self._execute_command('GetEmail', body)
+        cmd = "GetEmail"
+        if self.scheduleVersion == 1:
+            cmd = "GetEmailV20"
+        body = [{"cmd": cmd, "action": 1, "param": { "channel": 0 }}]
+        return self._execute_command(cmd, body)
+
+    def set_network_email(self, enable: bool) -> Dict:
+        cmd = "SetEmail"
+        if self.scheduleVersion == 1:
+            cmd = "SetEmailV20"
+
+        body = [ { "cmd": cmd,
+                    "param": {
+                        "Email": {
+                            }
+                        }
+                  }
+                ]
+
+        if self.scheduleVersion == 1:
+            body[0]["param"]["Email"]["enable"] = int(enable)
+        else:
+            body[0]["param"]["Email"]["schedule"] = { "enable": int(enable) }
+        return self._execute_command('SetEmail', body)
 
     def get_network_ftp(self) -> Dict:
         """
@@ -97,8 +237,11 @@ class NetworkAPIMixin:
         See examples/response/GetNetworkFtp.json for example response data.
         :return: response json
         """
-        body = [{"cmd": "GetFtp", "action": 0, "param": {}}]
-        return self._execute_command('GetFtp', body)
+        cmd = "GetFtp"
+        if self.scheduleVersion == 1:
+            cmd = "GetFtpV20"
+        body = [{"cmd": cmd, "action": 0, "param": {}}]
+        return self._execute_command(cmd, body)
 
     def get_network_push(self) -> Dict:
         """
@@ -106,8 +249,11 @@ class NetworkAPIMixin:
         See examples/response/GetNetworkPush.json for example response data.
         :return: response json
         """
-        body = [{"cmd": "GetPush", "action": 0, "param": {}}]
-        return self._execute_command('GetPush', body)
+        cmd = "GetPush"
+        if self.scheduleVersion == 1:
+            cmd = "GetPushV20"
+        body = [{"cmd": cmd, "action": 0, "param": {}}]
+        return self._execute_command(cmd, body)
 
     def get_network_status(self) -> Dict:
         """

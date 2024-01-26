@@ -1,54 +1,65 @@
+#!/opt/homebrew/bin/python3
+
 import cv2
+from queue import Queue
+from sys import argv
 from reolinkapi import Camera
 
+_resize = 1024
 
-def non_blocking():
-    print("calling non-blocking")
+def display_frame(cam, frame, count):
+    if frame is not None:
+        print("Frame %5d" % count, end='\r')
+        cv2.imshow(cam.ip, frame)
 
-    def inner_callback(img):
-        cv2.imshow("name", maintain_aspect_ratio_resize(img, width=600))
-        print("got the image non-blocking")
-        key = cv2.waitKey(1)
-        if key == ord('q'):
-            cv2.destroyAllWindows()
-            exit(1)
+    key = cv2.waitKey(1)
+    if key == ord('q') or key == ord('Q') or key == 27:
+        cam.stop_stream()
+        cv2.destroyAllWindows()
+        return False
 
-    c = Camera("192.168.1.112", "admin", "jUa2kUzi")
+    return True
+
+def non_blocking(cam):
+    frames = Queue(maxsize=30)
+
+    def inner_callback(frame):
+        if _resize > 10:
+            frames.put(maintain_aspect_ratio_resize(frame, width=_resize))
+        else:
+            frames.put(frame.copy())
+
     # t in this case is a thread
-    t = c.open_video_stream(callback=inner_callback)
+    t = cam.open_video_stream(callback=inner_callback)
 
-    print(t.is_alive())
-    while True:
-        if not t.is_alive():
-            print("continuing")
+    counter = 0
+
+    while t.is_alive():
+        frame = frames.get()
+        counter = counter+1
+
+        if not display_frame(cam, frame, counter):
             break
-        # stop the stream
-        # client.stop_stream()
+
+        if __debug__ and frames.qsize() > 1:
+            # Can't consume frames fast enough??
+            print("\nQueue: %d" % frames.qsize())
 
 
-def blocking():
-    c = Camera("192.168.1.112", "admin", "jUa2kUzi")
+
+def blocking(cam):
     # stream in this case is a generator returning an image (in mat format)
-    stream = c.open_video_stream()
+    stream = cam.open_video_stream()
+    counter = 0
 
-    # using next()
-    # while True:
-    #     img = next(stream)
-    #     cv2.imshow("name", maintain_aspect_ratio_resize(img, width=600))
-    #     print("got the image blocking")
-    #     key = cv2.waitKey(1)
-    #     if key == ord('q'):
-    #         cv2.destroyAllWindows()
-    #         exit(1)
+    for frame in stream:
+        if _resize > 10:
+            frame = maintain_aspect_ratio_resize(frame, width=_resize)
 
-    # or using a for loop
-    for img in stream:
-        cv2.imshow("name", maintain_aspect_ratio_resize(img, width=600))
-        print("got the image blocking")
-        key = cv2.waitKey(1)
-        if key == ord('q'):
-            cv2.destroyAllWindows()
-            exit(1)
+        counter = counter + 1
+
+        if not display_frame(cam, frame, counter):
+            break;
 
 
 # Resizes a image and maintains aspect ratio
@@ -76,6 +87,25 @@ def maintain_aspect_ratio_resize(image, width=None, height=None, inter=cv2.INTER
     return cv2.resize(image, dim, interpolation=inter)
 
 
-# Call the methods. Either Blocking (using generator) or Non-Blocking using threads
-# non_blocking()
-blocking()
+
+if __name__ == "__main__":
+    if len(argv) != 2:
+        print(f"Usage: {argv[0]} <Camera #>")
+        exit(1)
+
+    try:
+        host = f"watchdog{argv[1]}"
+        cam = Camera(host, username="rtsp", password="darknet")
+    except:
+        print(f"Failed to open camera: {host}")
+        exit(1)
+
+    if not cam.is_logged_in():
+        print(f"Login failed for {host}")
+        exit(1)
+
+    # Call the methods. Either Blocking (using generator) or Non-Blocking using threads
+    non_blocking(cam)
+    # blocking(cam)
+
+    print("\nDone.")

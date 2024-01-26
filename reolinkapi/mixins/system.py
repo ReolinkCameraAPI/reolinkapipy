@@ -8,6 +8,14 @@ class SystemAPIMixin:
         body = [{"cmd": "GetTime", "action": 1, "param": {}}, {"cmd": "GetNorm", "action": 1, "param": {}}]
         return self._execute_command('get_general_system', body, multi=True)
 
+    def get_ability(self) -> Dict:
+        """
+        Get a the users capability set. We need this to know which API calls to use.
+        :return: response json
+        """
+        body = [{"cmd": "GetAbility", "action": 0, "param": {"User": {"userName": ""}}}]
+        return self._execute_command('GetAbility', body)
+
     def get_performance(self) -> Dict:
         """
         Get a snapshot of the current performance of the camera.

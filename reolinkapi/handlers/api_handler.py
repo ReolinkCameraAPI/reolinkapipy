@@ -1,4 +1,6 @@
 import requests
+from urllib3.exceptions import InsecureRequestWarning
+
 from typing import Dict, List, Optional, Union
 from reolinkapi.mixins.alarm import AlarmAPIMixin
 from reolinkapi.mixins.device import DeviceAPIMixin
@@ -55,6 +57,8 @@ class APIHandler(AlarmAPIMixin,
         self.url = f"{scheme}://{ip}/cgi-bin/api.cgi"
         self.ip = ip
         self.token = None
+        self.ability = None
+        self.scheduleVersion = 0
         self.username = username
         self.password = password
         Request.proxies = kwargs.get("proxy")  # Defaults to None if key isn't found
@@ -66,19 +70,24 @@ class APIHandler(AlarmAPIMixin,
         :return: bool
         """
         try:
+            # Suppress only the single warning from urllib3 needed.
+            requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+
             body = [{"cmd": "Login", "action": 0,
                      "param": {"User": {"userName": self.username, "password": self.password}}}]
             param = {"cmd": "Login", "token": "null"}
             response = Request.post(self.url, data=body, params=param)
             if response is not None:
+                # print("LOGIN GOT: ", response.text)
                 data = response.json()[0]
                 code = data["code"]
                 if int(code) == 0:
                     self.token = data["value"]["Token"]["name"]
-                    print("Login success")
-                    return True
-                print(self.token)
-                return False
+                    # print("Login success")
+                else:
+                    # print(self.token)
+                    print("ERROR: LOGIN RESPONSE: ", response.text)
+                    return False
             else:
                 # TODO: Verify this change w/ owner. Delete old code if acceptable.
                 #  A this point, response is NoneType. There won't be a status code property.
@@ -86,8 +95,22 @@ class APIHandler(AlarmAPIMixin,
                 print("Failed to login\nResponse was null.")
                 return False
         except Exception as e:
-            print("Error Login\n", e)
-            raise
+            print(f"ERROR Login Failed, exception: {e}")
+            return False
+
+        try:
+            ability = self.get_ability()
+            self.ability = ability[0]["value"]["Ability"]
+            self.scheduleVersion = self.ability["scheduleVersion"]["ver"]
+            print("API VERSION: ", self.scheduleVersion)
+        except Exception as e:
+            self.logout()
+            return False
+
+        return True
+
+    def is_logged_in(self) -> bool:
+        return self.token is not None
 
     def logout(self) -> bool:
         """
@@ -100,7 +123,7 @@ class APIHandler(AlarmAPIMixin,
             # print(ret)
             return True
         except Exception as e:
-            print("Error Logout\n", e)
+            print(f"ERROR Logout Failed, exception: {e}")
             return False
 
     def _execute_command(self, command: str, data: List[Dict], multi: bool = False) -> \
@@ -139,5 +162,5 @@ class APIHandler(AlarmAPIMixin,
                 response = Request.post(self.url, data=data, params=params)
                 return response.json()
         except Exception as e:
-            print(f"Command {command} failed: {e}")
+            print(f"ERROR Command {command} failed, exception: {e}")
             raise

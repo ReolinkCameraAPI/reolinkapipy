@@ -10,6 +10,8 @@ try:
     from PIL.Image import Image, open as open_image
 
     from reolinkapi.utils.rtsp_client import RtspClient
+    def __init__(self):
+        self.rtsp_client = None
 
 
     class StreamAPIMixin:
@@ -22,9 +24,13 @@ try:
             :param callback:
             :param proxies: Default is none, example: {"host": "localhost", "port": 8000}
             """
-            rtsp_client = RtspClient(
+            self.rtsp_client = RtspClient(
                 ip=self.ip, username=self.username, password=self.password, profile=self.profile, proxies=proxies, callback=callback)
-            return rtsp_client.open_stream()
+            return self.rtsp_client.open_stream()
+
+        def stop_stream(self):
+            if self.rtsp_client:
+                self.rtsp_client.stop_stream()
 
         def get_snap(self, timeout: float = 3, proxies: Any = None) -> Optional[Image]:
             """
