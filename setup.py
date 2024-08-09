@@ -48,7 +48,7 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name=NAME,
-    python_requires='>=3.6.0',
+    python_requires='>=3.12.4',
     version=find_version('reolinkapi', '__init__.py'),
     description=DESCRIPTION,
     long_description=long_description,
