@@ -23,22 +23,32 @@ def read_config(props_path: str) -> dict:
 
 # Read in your ip, username, & password
 #   (NB! you'll likely have to create this file. See tests/test_camera.py for details on structure)
-config = read_config('../secrets.cfg')
+config = read_config('camera.cfg')
 
 ip = config.get('camera', 'ip')
 un = config.get('camera', 'username')
 pw = config.get('camera', 'password')
 
 # Connect to camera
-cam = Camera(ip, un, pw)
+cam = Camera(ip, un, pw, https=True)
 
-start = (dt.now() - timedelta(hours=1))
+start = dt.combine(dt.now(), dt.min.time())
 end = dt.now()
 # Collect motion events between these timestamps for substream
-processed_motions = cam.get_motion_files(start=start, end=end, streamtype='sub')
+processed_motions = cam.get_motion_files(start=start, end=end, streamtype='main', channel=0)
+processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=1)
 
-dl_dir = os.path.join(os.path.expanduser('~'), 'Downloads')
+start = dt.now() - timedelta(days=1)
+end = dt.combine(start, dt.max.time())
+processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=1)
+
+
+output_files = []
 for i, motion in enumerate(processed_motions):
     fname = motion['filename']
     # Download the mp4
-    resp = cam.get_file(fname, output_path=os.path.join(dl_dir, f'motion_event_{i}.mp4'))
+    print("Getting %s" % (fname))
+    output_path = os.path.join('/tmp/', fname.replace('/','_'))
+    output_files += output_path
+    if not os.path.isfile(output_path):
+        resp = cam.get_file(fname, output_path=output_path)
