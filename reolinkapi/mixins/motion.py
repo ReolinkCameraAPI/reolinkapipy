@@ -10,7 +10,7 @@ PROCESSED_MOTION_LIST_TYPE = List[Dict[str, Union[str, dt]]]
 class MotionAPIMixin:
     """API calls for past motion alerts."""
     def get_motion_files(self, start: dt, end: dt = dt.now(),
-                         streamtype: str = 'sub') -> PROCESSED_MOTION_LIST_TYPE:
+                         streamtype: str = 'sub', channel = 0) -> PROCESSED_MOTION_LIST_TYPE:
         """
         Get the timestamps and filenames of motion detection events for the time range provided.
 
@@ -22,7 +22,7 @@ class MotionAPIMixin:
         """
         search_params = {
             'Search': {
-                'channel': 0,
+                'channel': channel,
                 'streamType': streamtype,
                 'onlyStatus': 0,
                 'StartTime': {
