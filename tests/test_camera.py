@@ -35,6 +35,12 @@ class TestCamera(unittest.TestCase):
         self.assertTrue(self.cam.ip == self.config.get('camera', 'ip'))
         self.assertTrue(self.cam.token != '')
 
+    def test_snapshot(self):
+        img = self.cam.get_snap()
+        # write Pillow Image to file
+        img.save('./tmp/snaps/camera.jpg')
+        self.assertTrue(os.path.exists('./tmp/snaps/camera.jpg'))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -26,15 +26,16 @@ AUTHOR_EMAIL = 'alanoterblanche@gmail.com'
 AUTHOR = 'Benehiko'
 LICENSE = 'GPL-3.0'
 INSTALL_REQUIRES = [
+    'setuptools',
     'PySocks==1.7.1',
-    'PyYaml==5.3.1',
-    'requests>=2.18.4',
+    'PyYaml==6.0.2',
+    'requests>=2.32.3',
 ]
 EXTRAS_REQUIRE = {
     'streaming': [
-        'numpy==1.19.4',
-        'opencv-python==4.4.0.46',
-        'Pillow==8.0.1',
+        'numpy==2.0.1',
+        'opencv-python==4.10.0.84',
+        'Pillow==10.4.0',
     ],
 }
 
@@ -47,7 +48,7 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name=NAME,
-    python_requires='>=3.6.0',
+    python_requires='>=3.12.4',
     version=find_version('reolinkapi', '__init__.py'),
     description=DESCRIPTION,
     long_description=long_description,

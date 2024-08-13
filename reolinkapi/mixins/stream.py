@@ -52,12 +52,16 @@ try:
             except Exception as e:
                 print("Could not get Image data\n", e)
                 raise
-except ImportError:
+except ImportError as err:
+    print("ImportError", err)
+
     class StreamAPIMixin:
         """ API calls for opening a video stream or capturing an image from the camera."""
 
         def open_video_stream(self, callback: Any = None, proxies: Any = None) -> Any:
-            raise ImportError('''open_video_stream requires streaming extra dependencies\nFor instance "pip install reolinkapi[streaming]"''')
+            raise ImportError(f'open_video_stream requires streaming extra dependencies\nFor instance "pip install '
+                              f'reolinkapi[streaming]"')
 
         def get_snap(self, timeout: float = 3, proxies: Any = None) -> Optional['Image']:
-            raise ImportError('''open_video_stream requires streaming extra dependencies\nFor instance "pip install reolinkapi[streaming]"''')
+            raise ImportError(
+                f'get_snap requires streaming extra dependencies\nFor instance "pip install reolinkapi[streaming]"')
