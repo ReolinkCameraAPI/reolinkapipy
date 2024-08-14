@@ -5,7 +5,10 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QSl
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtCore import Qt, QUrl
+from PyQt6.QtGui import QWheelEvent
 from reolinkapi import Camera
+from threading import Lock
+
 
 def read_config(props_path: str) -> dict:
     config = RawConfigParser()
@@ -24,43 +27,43 @@ class ZoomSlider(QSlider):
             super().keyPressEvent(event)
 
 class CameraPlayer(QWidget):
-    def __init__(self, rtsp_url, camera: Camera):
+    def __init__(self, rtsp_url_wide, rtsp_url_telephoto, camera: Camera):
         super().__init__()
         self.setWindowTitle("Camera Player")
         self.setGeometry(10, 10, 1900, 1150)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus) 
 
         self.camera = camera
+        self.move_lock = Lock()
+        self.move_in_progress = False
 
-        # Create media player
-        self.media_player = QMediaPlayer()
-        self.audio_output = QAudioOutput()
-        self.media_player.setAudioOutput(self.audio_output)
-        self.media_player.errorOccurred.connect(self.handle_error)
-        self.media_player.setSource(QUrl(rtsp_url))
+        # Create media players
+        self.media_player_wide = QMediaPlayer()
+        self.media_player_telephoto = QMediaPlayer()
 
-        # Create video widget
-        self.video_widget = QVideoWidget()
-        self.media_player.setVideoOutput(self.video_widget)
-
-        # Create zoom slider
-        self.zoom_slider = ZoomSlider(Qt.Orientation.Vertical)
-        self.zoom_slider.setRange(0, 100)
-        self.zoom_slider.setValue(0)
-        self.zoom_slider.valueChanged.connect(self.set_zoom)
+        # Create video widgets
+        self.video_widget_wide = QVideoWidget()
+        self.video_widget_telephoto = QVideoWidget()
+        self.media_player_wide.setVideoOutput(self.video_widget_wide)
+        self.media_player_telephoto.setVideoOutput(self.video_widget_telephoto)
+        self.video_widget_wide.wheelEvent = self.handle_wheel_event
+        self.video_widget_telephoto.wheelEvent = self.handle_wheel_event
 
         # Create layout
-        layout = QVBoxLayout()
-        video_layout = QHBoxLayout()
-        video_layout.addWidget(self.video_widget, 4)
-        video_layout.addWidget(self.zoom_slider, 1)
-        layout.addLayout(video_layout)
+        layout = QHBoxLayout()
+        layout.addWidget(self.video_widget_wide, 2)
+        layout.addWidget(self.video_widget_telephoto, 2)
         self.setLayout(layout)
 
-        # Set source and start playing
-        self.media_player.setSource(QUrl(rtsp_url))
-        self.media_player.play()
+        # Start playing the streams
+        self.media_player_wide.setSource(QUrl(rtsp_url_wide))
+        self.media_player_telephoto.setSource(QUrl(rtsp_url_telephoto))
+        self.media_player_wide.play()
+        self.media_player_telephoto.play()
 
+    def is_move_in_progress(self):
+        with self.move_lock:
+            return self.move_in_progress
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Escape:
@@ -75,8 +78,15 @@ class CameraPlayer(QWidget):
             self.move_camera("down")
 
     def move_camera(self, direction):
-        speed = 25  # You can adjust this value as needed
+        if self.is_move_in_progress():
+            print(f"Move already in progress, ignoring {direction} command")
+            return
+
+        speed = 25
         try:
+            with self.move_lock:
+                self.move_in_progress = True
+
             if direction == "left":
                 response = self.camera.move_left(speed)
             elif direction == "right":
@@ -89,28 +99,35 @@ class CameraPlayer(QWidget):
                 print(f"Invalid direction: {direction}")
                 return
 
-            response = response[0]
-            if response.get('code') == 0:
-                print(f"Successfully moved camera {direction}")
+            if response[0].get('code') == 0:
+                print(f"Successfully started moving camera {direction}")
             else:
-                self.show_error_message(f"Failed to move camera {direction}", response.get('msg', 'Unknown error'))
+                self.show_error_message(f"Failed to move camera {direction}", response[0].get('msg', 'Unknown error'))
+
+            # Immediately stop the camera movement
+            stop_response = self.camera.stop_ptz()
+            if stop_response[0].get('code') != 0:
+                self.show_error_message("Failed to stop camera movement", stop_response[0].get('msg', 'Unknown error'))
+
         except Exception as e:
             self.show_error_message(f"Error moving camera {direction}", str(e))
+        finally:
+            with self.move_lock:
+                self.move_in_progress = False
 
-    def set_zoom(self, value):
-        try:
-            zoom_speed = value / 2  # Adjust this factor as needed
-            if value > self.zoom_slider.value():
-                response = self.camera._send_operation('ZoomInc', speed=zoom_speed)
-            else:
-                response = self.camera._send_operation('ZoomDec', speed=zoom_speed)
+    def handle_wheel_event(self, event: QWheelEvent):
+        delta = event.angleDelta().y()
+        if delta > 0:
+            self.change_zoom(zoom_in = True)
+        elif delta < 0:
+            self.change_zoom(zoom_in = False)
 
-            if response.get('code') == 0:
-                print(f"Successfully set zoom to {value}")
-            else:
-                self.show_error_message("Failed to set zoom", response.get('msg', 'Unknown error'))
-        except Exception as e:
-            self.show_error_message("Error setting zoom", str(e))
+    def change_zoom(self, zoom_in):
+        zoom_speed = 10
+        cmd = 'ZoomInc' if zoom_in else 'ZoomDec'
+        response = self.camera._send_operation(cmd, speed=zoom_speed)
+        response = response[0]
+        print(str(response))
 
     def show_error_message(self, title, message):
         print(f"Error: {title} {message}")
@@ -129,9 +146,13 @@ if __name__ == '__main__':
     # Connect to camera
     cam = Camera(ip, un, pw, https=True)
 
-    rtsp_url = f"rtsp://{un}:{pw}@{ip}/h264Preview_01_sub"
+    rtsp_url_wide =      f"rtsp://{un}:{pw}@{ip}/Preview_01_sub"
+    rtsp_url_telephoto = f"rtsp://{un}:{pw}@{ip}/Preview_02_sub"
+
+    # Connect to camera
+    cam = Camera(ip, un, pw, https=True)
 
     app = QApplication(sys.argv)
-    player = CameraPlayer(rtsp_url, cam)
+    player = CameraPlayer(rtsp_url_wide, rtsp_url_telephoto, cam)
     player.show()
     sys.exit(app.exec())
