@@ -31,14 +31,13 @@ class ZoomSlider(QSlider):
 class CameraPlayer(QWidget):
     def __init__(self, rtsp_url_wide, rtsp_url_telephoto, camera: Camera):
         super().__init__()
-        self.setWindowTitle("Camera Player")
-        self.setGeometry(10, 10, 1900, 1150)
+        self.setWindowTitle("Reolink PTZ Streamer")
+        self.setGeometry(10, 10, 1900, 600)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus) 
 
         self.camera = camera
         self.zoom_timer = QTimer(self)
         self.zoom_timer.timeout.connect(self.stop_zoom)
-        self.move_timer = QTimer(self)
 
         # Create media players
         self.media_player_wide = QMediaPlayer()
@@ -66,13 +65,16 @@ class CameraPlayer(QWidget):
 
 
     def keyPressEvent(self, event):
+        if event.isAutoRepeat():
+            return
         if event.key() == Qt.Key.Key_Escape:
             self.close()
         elif event.key() in (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Up, Qt.Key.Key_Down):
-            print("Arrow key pressed")
             self.start_move(event.key())
 
     def keyReleaseEvent(self, event):
+        if event.isAutoRepeat():
+            return
         if event.key() in (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Up, Qt.Key.Key_Down):
             self.stop_move()
 
@@ -88,34 +90,29 @@ class CameraPlayer(QWidget):
             self.move_camera(direction)
 
     def stop_move(self):
-        self.move_timer.stop()
         response = self.camera.stop_ptz()
         print("Stop PTZ")
         if response[0].get('code') != 0:
-            self.show_error_message("Failed to stop camera movement", response[0].get('msg', 'Unknown error'))
+            self.show_error_message("Failed to stop camera movement", str(response[0]))
 
     def move_camera(self, direction):
         speed = 25
-        try:
-            if direction == "left":
-                response = self.camera.move_left(speed)
-            elif direction == "right":
-                response = self.camera.move_right(speed)
-            elif direction == "up":
-                response = self.camera.move_up(speed)
-            elif direction == "down":
-                response = self.camera.move_down(speed)
-            else:
-                print(f"Invalid direction: {direction}")
-                return
+        if direction == "left":
+            response = self.camera.move_left(speed)
+        elif direction == "right":
+            response = self.camera.move_right(speed)
+        elif direction == "up":
+            response = self.camera.move_up(speed)
+        elif direction == "down":
+            response = self.camera.move_down(speed)
+        else:
+            print(f"Invalid direction: {direction}")
+            return
 
-            if response[0].get('code') == 0:
-                print(f"Moving camera {direction}")
-            else:
-                self.show_error_message(f"Failed to move camera {direction}", response[0].get('msg', 'Unknown error'))
-
-        except Exception as e:
-            self.show_error_message(f"Error moving camera {direction}", str(e))
+        if response[0].get('code') == 0:
+            print(f"Moving camera {direction}")
+        else:
+            self.show_error_message(f"Failed to move camera {direction}", str(response[0]))
 
     def handle_wheel_event(self, event: QWheelEvent):
         delta = event.angleDelta().y()
@@ -139,15 +136,15 @@ class CameraPlayer(QWidget):
             response = self.camera.start_zooming_out(speed)
         
         if response[0].get('code') == 0:
-            print(f"Started zooming {direction}")
+            print(f"Zooming {direction}")
             self.zoom_timer.start(200)  # Stop zooming after 200ms
         else:
-            self.show_error_message(f"Failed to start zooming {direction}", response[0].get('msg', 'Unknown error'))
+            self.show_error_message(f"Failed to start zooming {direction}", str(response[0]))
 
     def stop_zoom(self):
         response = self.camera.stop_zooming()
         if response[0].get('code') != 0:
-            self.show_error_message("Failed to stop zooming", response[0].get('msg', 'Unknown error'))
+            self.show_error_message("Failed to stop zooming", str(response[0]))
 
     def show_error_message(self, title, message):
         print(f"Error: {title} {message}")
