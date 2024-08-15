@@ -52,7 +52,7 @@ def decode_hex_to_flags(hex_value):
 def parse_filename(file_name):
     #  Mp4Record_2024-08-12_RecM13_DST20240812_214255_214348_1F1E828_4DDA4D.mp4
     # https://github.com/sven337/ReolinkLinux/wiki/Figuring-out-the-file-names#file-name-structure
-    pattern = r'.*?Mp4Record_(\d{4}-\d{2}-\d{2})_RecM(\d)\d_DST(\d{8})_(\d{6})_(\d{6})_(\w{4,8})_(\w{4,8})\.mp4'
+    pattern = r'.*?Mp4Record_(\d{4}-\d{2}-\d{2})_Rec[MS](\d)\d_DST(\d{8})_(\d{6})_(\d{6})_(\w{4,8})_(\w{4,8})\.mp4'
     match = re.match(pattern, file_name)
 
     if match:
