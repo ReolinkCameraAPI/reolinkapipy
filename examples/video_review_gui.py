@@ -17,6 +17,9 @@ from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtCore import Qt, QUrl, QTimer, QThread, pyqtSignal, QMutex
 from PyQt6.QtGui import QColor, QBrush, QFont
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 def path_name_from_camera_path(fname):
    # Mp4Record/2024-08-12/RecM13_DST20240812_214255_214348_1F1E828_4DDA4D.mp4
    return fname.replace('/', '_')
