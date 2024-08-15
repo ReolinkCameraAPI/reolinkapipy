@@ -4,11 +4,13 @@ from configparser import RawConfigParser
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QSlider
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
-from PyQt6.QtCore import Qt, QUrl
+from PyQt6.QtCore import Qt, QUrl, QTimer
 from PyQt6.QtGui import QWheelEvent
 from reolinkapi import Camera
 from threading import Lock
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def read_config(props_path: str) -> dict:
     config = RawConfigParser()
@@ -34,8 +36,9 @@ class CameraPlayer(QWidget):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus) 
 
         self.camera = camera
-        self.move_lock = Lock()
-        self.move_in_progress = False
+        self.zoom_timer = QTimer(self)
+        self.zoom_timer.timeout.connect(self.stop_zoom)
+        self.move_timer = QTimer(self)
 
         # Create media players
         self.media_player_wide = QMediaPlayer()
@@ -61,32 +64,39 @@ class CameraPlayer(QWidget):
         self.media_player_wide.play()
         self.media_player_telephoto.play()
 
-    def is_move_in_progress(self):
-        with self.move_lock:
-            return self.move_in_progress
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Escape:
             self.close()
-        elif event.key() == Qt.Key.Key_Left:
-            self.move_camera("left")
-        elif event.key() == Qt.Key.Key_Right:
-            self.move_camera("right")
-        elif event.key() == Qt.Key.Key_Up:
-            self.move_camera("up")
-        elif event.key() == Qt.Key.Key_Down:
-            self.move_camera("down")
+        elif event.key() in (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Up, Qt.Key.Key_Down):
+            print("Arrow key pressed")
+            self.start_move(event.key())
+
+    def keyReleaseEvent(self, event):
+        if event.key() in (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Up, Qt.Key.Key_Down):
+            self.stop_move()
+
+    def start_move(self, key):
+        direction = {
+            Qt.Key.Key_Left: "left",
+            Qt.Key.Key_Right: "right",
+            Qt.Key.Key_Up: "up",
+            Qt.Key.Key_Down: "down"
+        }.get(key)
+
+        if direction:
+            self.move_camera(direction)
+
+    def stop_move(self):
+        self.move_timer.stop()
+        response = self.camera.stop_ptz()
+        print("Stop PTZ")
+        if response[0].get('code') != 0:
+            self.show_error_message("Failed to stop camera movement", response[0].get('msg', 'Unknown error'))
 
     def move_camera(self, direction):
-        if self.is_move_in_progress():
-            print(f"Move already in progress, ignoring {direction} command")
-            return
-
         speed = 25
         try:
-            with self.move_lock:
-                self.move_in_progress = True
-
             if direction == "left":
                 response = self.camera.move_left(speed)
             elif direction == "right":
@@ -100,34 +110,44 @@ class CameraPlayer(QWidget):
                 return
 
             if response[0].get('code') == 0:
-                print(f"Successfully started moving camera {direction}")
+                print(f"Moving camera {direction}")
             else:
                 self.show_error_message(f"Failed to move camera {direction}", response[0].get('msg', 'Unknown error'))
 
-            # Immediately stop the camera movement
-            stop_response = self.camera.stop_ptz()
-            if stop_response[0].get('code') != 0:
-                self.show_error_message("Failed to stop camera movement", stop_response[0].get('msg', 'Unknown error'))
-
         except Exception as e:
             self.show_error_message(f"Error moving camera {direction}", str(e))
-        finally:
-            with self.move_lock:
-                self.move_in_progress = False
 
     def handle_wheel_event(self, event: QWheelEvent):
         delta = event.angleDelta().y()
         if delta > 0:
-            self.change_zoom(zoom_in = True)
+            self.zoom_in()
         elif delta < 0:
-            self.change_zoom(zoom_in = False)
+            self.zoom_out()
 
-    def change_zoom(self, zoom_in):
-        zoom_speed = 10
-        cmd = 'ZoomInc' if zoom_in else 'ZoomDec'
-        response = self.camera._send_operation(cmd, speed=zoom_speed)
-        response = response[0]
-        print(str(response))
+    def zoom_in(self):
+        self.start_zoom('in')
+
+    def zoom_out(self):
+        self.start_zoom('out')
+
+    def start_zoom(self, direction: str):
+        self.zoom_timer.stop()  # Stop any ongoing zoom timer
+        speed = 60  # You can adjust this value as needed
+        if direction == 'in':
+            response = self.camera.start_zooming_in(speed)
+        else:
+            response = self.camera.start_zooming_out(speed)
+        
+        if response[0].get('code') == 0:
+            print(f"Started zooming {direction}")
+            self.zoom_timer.start(200)  # Stop zooming after 200ms
+        else:
+            self.show_error_message(f"Failed to start zooming {direction}", response[0].get('msg', 'Unknown error'))
+
+    def stop_zoom(self):
+        response = self.camera.stop_zooming()
+        if response[0].get('code') != 0:
+            self.show_error_message("Failed to stop zooming", response[0].get('msg', 'Unknown error'))
 
     def show_error_message(self, title, message):
         print(f"Error: {title} {message}")
