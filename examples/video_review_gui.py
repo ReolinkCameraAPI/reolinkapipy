@@ -146,9 +146,12 @@ class DownloadThread(QThread):
         self.mutex.unlock()
         self.wait_condition.wakeAll()
 
-    def add_to_queue(self, fname, output_path):
+    def add_to_queue(self, fname, output_path, left=False):
         self.mutex.lock()
-        self.download_queue.append((fname, output_path))
+        if left:
+            self.download_queue.appendleft((fname, output_path))
+        else:
+            self.download_queue.append((fname, output_path))
         self.wait_condition.wakeOne()
         self.mutex.unlock()
 
@@ -388,7 +391,7 @@ class VideoPlayer(QWidget):
                 # Remove the item from its current position in the queue
                 self.download_queue.remove(found_item)
                 # Add the item to the end of the queue
-                self.download_thread.add_to_queue(*found_item)
+                self.download_thread.add_to_queue(*found_item, left=True)
             return
 
         print(f"Playing video: {video_path}")
@@ -493,13 +496,13 @@ if __name__ == '__main__':
 
     start = dt.combine(dt.now(), dt.min.time())
     end = dt.now()
-    processed_motions = cam.get_motion_files(start=start, end=end, streamtype='main', channel=0)
-    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=1)
+    processed_motions = cam.get_motion_files(start=start, end=end, streamtype='sub', channel=0)
+    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='sub', channel=1)
 
     start = dt.now() - timedelta(days=1)
     end = dt.combine(start, dt.max.time())
-    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=0)
-    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=1)
+    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='sub', channel=0)
+    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='sub', channel=1)
 
 
     if len(processed_motions) == 0:
