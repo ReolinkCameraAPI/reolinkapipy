@@ -6,7 +6,6 @@ import signal
 import sys
 import re
 import datetime
-import queue
 import subprocess
 from configparser import RawConfigParser
 from datetime import datetime as dt, timedelta
@@ -14,8 +13,9 @@ from reolinkapi import Camera
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QWidget, QTableWidget, QTableWidgetItem, QPushButton, QLabel, QFileDialog, QHeaderView, QStyle, QSlider, QStyleOptionSlider, QSplitter
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
-from PyQt6.QtCore import Qt, QUrl, QTimer, QThread, pyqtSignal, QMutex
-from PyQt6.QtGui import QColor, QBrush, QFont
+from PyQt6.QtCore import Qt, QUrl, QTimer, QThread, pyqtSignal, QMutex, QWaitCondition
+from PyQt6.QtGui import QColor, QBrush, QFont, QIcon
+from collections import deque
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -109,12 +109,21 @@ class DownloadThread(QThread):
         self.download_queue = download_queue
         self.cam = cam
         self.mutex = QMutex()
+        self.wait_condition = QWaitCondition()
         self.is_running = True
 
     def run(self):
         while self.is_running:
+            self.mutex.lock()
+            if len(self.download_queue) == 0:
+                self.wait_condition.wait(self.mutex)
+            self.mutex.unlock()
+
+            if not self.is_running:
+                break
+
             try:
-                fname, output_path = self.download_queue.get(timeout=1)
+                fname, output_path = self.download_queue.popleft()
                 output_path = os.path.join(video_storage_dir, output_path)
                 if os.path.isfile(output_path):
                     print(f"File already exists: {output_path}")
@@ -128,12 +137,19 @@ class DownloadThread(QThread):
                         self.download_complete.emit(output_path)
                     else:
                         print(f"Download failed: {fname}")
-            except queue.Empty:
+            except IndexError:
                 pass
 
     def stop(self):
         self.mutex.lock()
         self.is_running = False
+        self.mutex.unlock()
+        self.wait_condition.wakeAll()
+
+    def add_to_queue(self, fname, output_path):
+        self.mutex.lock()
+        self.download_queue.append((fname, output_path))
+        self.wait_condition.wakeOne()
         self.mutex.unlock()
 
 
@@ -144,7 +160,7 @@ class VideoPlayer(QWidget):
         super().__init__()
         self.setWindowTitle("Reolink Video Review GUI")
         self.cam = cam
-        self.download_queue = queue.Queue()
+        self.download_queue = deque()
         self.download_thread = DownloadThread(self.download_queue, self.cam)
         self.download_thread.download_start.connect(self.on_download_start)
         self.download_thread.download_complete.connect(self.on_download_complete)
@@ -161,8 +177,8 @@ class VideoPlayer(QWidget):
         
         # Create table widget to display video files
         self.video_table = QTableWidget()
-        self.video_table.setColumnCount(9)
-        self.video_table.setHorizontalHeaderLabels(["Video Path", "Start Datetime", "End Time", "Channel", "Person", "Vehicle", "Pet", "Motion", "Timer" ])
+        self.video_table.setColumnCount(10)
+        self.video_table.setHorizontalHeaderLabels(["Video Path", "Start Datetime", "End Time", "Channel", "Person", "Vehicle", "Pet", "Motion", "Timer", "Status" ])
         self.video_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
         self.video_table.setSortingEnabled(True)
         self.video_table.cellClicked.connect(self.play_video)
@@ -289,6 +305,9 @@ class VideoPlayer(QWidget):
             font.setItalic(True)
             file_name_item.setFont(font)
 
+            status_item = QTableWidgetItem()
+            status_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+
             self.video_table.setItem(row_position, 0, file_name_item)
             self.video_table.setItem(row_position, 1, start_datetime_item)
             self.video_table.setItem(row_position, 2, QTableWidgetItem(parsed_data['end_time']))
@@ -300,6 +319,7 @@ class VideoPlayer(QWidget):
             self.video_table.setItem(row_position, 6, QTableWidgetItem("✓" if parsed_data['triggers']['ai_ad'] else ""))
             self.video_table.setItem(row_position, 7, QTableWidgetItem("✓" if parsed_data['triggers']['is_motion_record'] else ""))
             self.video_table.setItem(row_position, 8, QTableWidgetItem("✓" if parsed_data['triggers']['is_schedule_record'] else ""))
+            self.video_table.setItem(row_position, 9, status_item)
 
             if parsed_data['triggers']['ai_other']:
                 print(f"File {file_path} has ai_other flag!")
@@ -311,10 +331,12 @@ class VideoPlayer(QWidget):
 
             output_path = os.path.join(video_storage_dir, base_file_name)
             if os.path.isfile(output_path):
+                status_item.setText("4K")
                 self.file_exists_signal.emit(output_path)
             else:
                 # Add to download queue
-                self.download_queue.put((video_path, base_file_name))
+                status_item.setIcon(QIcon("queued.png"))
+                self.download_thread.add_to_queue(video_path, base_file_name)
         else:
             print(f"Could not parse file {video_path}")
     
@@ -327,6 +349,8 @@ class VideoPlayer(QWidget):
                 font.setItalic(False)
                 font.setBold(False)
                 file_name_item.setFont(font)
+                status_item = self.video_table.item(row, 9)
+                status_item.setText("4K")
                 break
     
     def on_download_start(self, video_path):
@@ -338,6 +362,8 @@ class VideoPlayer(QWidget):
                 font = QFont()
                 font.setBold(True)
                 file_name_item.setFont(font)
+                status_item = self.video_table.item(row, 9)
+                status_item.setIcon(QIcon("spinner.gif"))
                 break
 
     def play_video(self, row, column):
@@ -345,7 +371,19 @@ class VideoPlayer(QWidget):
         video_path = os.path.join(video_storage_dir, file_name_item.text())
        
         if file_name_item.font().italic() or file_name_item.foreground().color().lightness() >= 200:
-            print(f"Video {video_path} is not yet downloaded. Please wait.")
+            print(f"Video {video_path} is not yet downloaded. Moving it to top of queue. Please wait for download.")
+             # Find the item in the download_queue that matches the base file name
+            found_item = None
+            for item in list(self.download_queue):
+                if item[1] == file_name_item.text():
+                    found_item = item
+                    break
+
+            if found_item:
+                # Remove the item from its current position in the queue
+                self.download_queue.remove(found_item)
+                # Add the item to the end of the queue
+                self.download_thread.add_to_queue(*found_item)
             return
 
         print(f"Playing video: {video_path}")
@@ -430,6 +468,7 @@ def read_config(props_path: str) -> dict:
 def signal_handler(sig, frame):
     print("Exiting the application...")
     sys.exit(0)
+    QApplication.quit()
 
 
 
@@ -457,6 +496,9 @@ if __name__ == '__main__':
     processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=0)
     processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=1)
 
+
+    if len(processed_motions) == 0:
+        print("Camera did not return any video?!")
 
     video_files = []
     for i, motion in enumerate(processed_motions):
