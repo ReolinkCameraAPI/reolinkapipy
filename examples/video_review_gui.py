@@ -342,7 +342,6 @@ class VideoPlayer(QWidget):
 
             output_path = os.path.join(video_storage_dir, base_file_name)
             if os.path.isfile(output_path):
-                status_item.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
                 self.file_exists_signal.emit(output_path)
             else:
                 # Add to download queue
@@ -353,15 +352,24 @@ class VideoPlayer(QWidget):
     
     def on_download_complete(self, video_path):
         for row in range(self.video_table.rowCount()):
-            if self.video_table.item(row, 1).text() == os.path.basename(video_path):
-                file_name_item = self.video_table.item(row, 1)
+            file_name_item = self.video_table.item(row, 1)
+            if file_name_item.text() == os.path.basename(video_path):
                 file_name_item.setForeground(QBrush(QColor(0, 0, 0)))  # Black color for normal text
                 font = QFont()
                 font.setItalic(False)
                 font.setBold(False)
                 file_name_item.setFont(font)
                 status_item = self.video_table.item(row, 0)
-                status_item.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
+                if "RecS" in file_name_item.text():
+                    # One day (hopefully) offer the option to download the
+                    # high-res version This is not trivial because we have to
+                    # re-do a camera search for the relevant time period and
+                    # match based on start and end dates (+/- one second in my
+                    # experience)
+                    # For now simply display that this is low-res.
+                    status_item.setText("lowres")
+                else:
+                    status_item.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
                 break
     
     def on_download_start(self, video_path):
@@ -499,13 +507,13 @@ if __name__ == '__main__':
 
     start = dt.combine(dt.now(), dt.min.time())
     end = dt.now()
-    processed_motions = cam.get_motion_files(start=start, end=end, streamtype='sub', channel=0)
-    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='sub', channel=1)
+    processed_motions = cam.get_motion_files(start=start, end=end, streamtype='main', channel=0)
+    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=1)
 
     start = dt.now() - timedelta(days=1)
     end = dt.combine(start, dt.max.time())
-    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='sub', channel=0)
-    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='sub', channel=1)
+    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=0)
+    processed_motions += cam.get_motion_files(start=start, end=end, streamtype='main', channel=1)
 
 
     if len(processed_motions) == 0:
