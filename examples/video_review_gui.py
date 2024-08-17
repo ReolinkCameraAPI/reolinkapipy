@@ -275,7 +275,7 @@ class VideoPlayer(QWidget):
     def add_initial_videos(self, video_files):
         for video_path in video_files:
             self.add_video(video_path)
-        self.video_table.sortItems(1, Qt.SortOrder.DescendingOrder)
+        self.video_table.sortItems(2, Qt.SortOrder.DescendingOrder)
 
     def open_videos(self):
         file_dialog = QFileDialog(self)
@@ -286,7 +286,7 @@ class VideoPlayer(QWidget):
             for file in file_dialog.selectedFiles():
                self.add_video(os.path.basename(file))
             self.video_table.setSortingEnabled(True)
-        self.video_table.sortItems(1, Qt.SortOrder.DescendingOrder)
+        self.video_table.sortItems(2, Qt.SortOrder.DescendingOrder)
 
     def add_video(self, video_path):
         # We are passed the camera file name, e.g. Mp4Record/2024-08-12/RecM13_DST20240812_214255_214348_1F1E828_4DDA4D.mp4
@@ -299,7 +299,10 @@ class VideoPlayer(QWidget):
             start_datetime_str = parsed_data['start_datetime'].strftime("%Y-%m-%d %H:%M:%S")
             start_datetime_item = QTableWidgetItem(start_datetime_str)
             start_datetime_item.setData(Qt.ItemDataRole.UserRole, parsed_data['start_datetime'])
-    
+   
+            end_time = datetime.datetime.strptime(parsed_data['end_time'], "%H%M%S")
+            end_time_str = end_time.strftime("%H:%M:%S")
+
             # Create the item for the first column with the base file name
             file_name_item = QTableWidgetItem(base_file_name)
 
@@ -319,7 +322,7 @@ class VideoPlayer(QWidget):
             self.video_table.setItem(row_position, 0, status_item)
             self.video_table.setItem(row_position, 1, file_name_item)
             self.video_table.setItem(row_position, 2, start_datetime_item)
-            self.video_table.setItem(row_position, 3, QTableWidgetItem(parsed_data['end_time']))
+            self.video_table.setItem(row_position, 3, QTableWidgetItem(end_time_str))
             self.video_table.setItem(row_position, 4, QTableWidgetItem(f"{parsed_data['channel']}"))
             
             # Set individual trigger flags
