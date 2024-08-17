@@ -178,21 +178,26 @@ class VideoPlayer(QWidget):
         # Create table widget to display video files
         self.video_table = QTableWidget()
         self.video_table.setColumnCount(10)
-        self.video_table.setHorizontalHeaderLabels(["Video Path", "Start Datetime", "End Time", "Channel", "Person", "Vehicle", "Pet", "Motion", "Timer", "Status" ])
+        self.video_table.setHorizontalHeaderLabels(["Status", "Video Path", "Start Datetime", "End Time", "Channel", "Person", "Vehicle", "Pet", "Motion", "Timer" ])
         self.video_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
         self.video_table.setSortingEnabled(True)
         self.video_table.cellClicked.connect(self.play_video)
 
         # Set smaller default column widths
-        self.video_table.setColumnWidth(0, 120)  # Video Path
-        self.video_table.setColumnWidth(1, 130)  # Start Datetime
-        self.video_table.setColumnWidth(2, 80)   # End Time
-        self.video_table.setColumnWidth(3, 35)   # Channel
-        self.video_table.setColumnWidth(4, 35)   # Person
-        self.video_table.setColumnWidth(5, 35)   # Vehicle
-        self.video_table.setColumnWidth(6, 35)   # Pet
-        self.video_table.setColumnWidth(7, 35)   # Motion
-        self.video_table.setColumnWidth(8, 30)   # Timer
+        self.video_table.setColumnWidth(0, 35)   # Status
+        self.video_table.setColumnWidth(1, 120)  # Video Path
+        self.video_table.setColumnWidth(2, 130)  # Start Datetime
+        self.video_table.setColumnWidth(3, 80)   # End Time
+        self.video_table.setColumnWidth(4, 35)   # Channel
+        self.video_table.setColumnWidth(5, 35)   # Person
+        self.video_table.setColumnWidth(6, 35)   # Vehicle
+        self.video_table.setColumnWidth(7, 35)   # Pet
+        self.video_table.setColumnWidth(8, 35)   # Motion
+        self.video_table.setColumnWidth(9, 30)   # Timer
+
+        self.video_table.verticalHeader().setVisible(False)
+
+        QIcon.setThemeName("Adwaita")
 
         # Create open button to select video files
         self.open_button = QPushButton("Open Videos")
@@ -308,18 +313,18 @@ class VideoPlayer(QWidget):
             status_item = QTableWidgetItem()
             status_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
-            self.video_table.setItem(row_position, 0, file_name_item)
-            self.video_table.setItem(row_position, 1, start_datetime_item)
-            self.video_table.setItem(row_position, 2, QTableWidgetItem(parsed_data['end_time']))
-            self.video_table.setItem(row_position, 3, QTableWidgetItem(f"{parsed_data['channel']}"))
+            self.video_table.setItem(row_position, 0, status_item)
+            self.video_table.setItem(row_position, 1, file_name_item)
+            self.video_table.setItem(row_position, 2, start_datetime_item)
+            self.video_table.setItem(row_position, 3, QTableWidgetItem(parsed_data['end_time']))
+            self.video_table.setItem(row_position, 4, QTableWidgetItem(f"{parsed_data['channel']}"))
             
             # Set individual trigger flags
-            self.video_table.setItem(row_position, 4, QTableWidgetItem("✓" if parsed_data['triggers']['ai_pd'] else ""))
-            self.video_table.setItem(row_position, 5, QTableWidgetItem("✓" if parsed_data['triggers']['ai_vd'] else ""))
-            self.video_table.setItem(row_position, 6, QTableWidgetItem("✓" if parsed_data['triggers']['ai_ad'] else ""))
-            self.video_table.setItem(row_position, 7, QTableWidgetItem("✓" if parsed_data['triggers']['is_motion_record'] else ""))
-            self.video_table.setItem(row_position, 8, QTableWidgetItem("✓" if parsed_data['triggers']['is_schedule_record'] else ""))
-            self.video_table.setItem(row_position, 9, status_item)
+            self.video_table.setItem(row_position, 5, QTableWidgetItem("✓" if parsed_data['triggers']['ai_pd'] else ""))
+            self.video_table.setItem(row_position, 6, QTableWidgetItem("✓" if parsed_data['triggers']['ai_vd'] else ""))
+            self.video_table.setItem(row_position, 7, QTableWidgetItem("✓" if parsed_data['triggers']['ai_ad'] else ""))
+            self.video_table.setItem(row_position, 8, QTableWidgetItem("✓" if parsed_data['triggers']['is_motion_record'] else ""))
+            self.video_table.setItem(row_position, 9, QTableWidgetItem("✓" if parsed_data['triggers']['is_schedule_record'] else ""))
 
             if parsed_data['triggers']['ai_other']:
                 print(f"File {file_path} has ai_other flag!")
@@ -331,43 +336,43 @@ class VideoPlayer(QWidget):
 
             output_path = os.path.join(video_storage_dir, base_file_name)
             if os.path.isfile(output_path):
-                status_item.setText("4K")
+                status_item.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
                 self.file_exists_signal.emit(output_path)
             else:
                 # Add to download queue
-                status_item.setIcon(QIcon("queued.png"))
+                status_item.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_CommandLink))
                 self.download_thread.add_to_queue(video_path, base_file_name)
         else:
             print(f"Could not parse file {video_path}")
     
     def on_download_complete(self, video_path):
         for row in range(self.video_table.rowCount()):
-            if self.video_table.item(row, 0).text() == os.path.basename(video_path):
-                file_name_item = self.video_table.item(row, 0)
+            if self.video_table.item(row, 1).text() == os.path.basename(video_path):
+                file_name_item = self.video_table.item(row, 1)
                 file_name_item.setForeground(QBrush(QColor(0, 0, 0)))  # Black color for normal text
                 font = QFont()
                 font.setItalic(False)
                 font.setBold(False)
                 file_name_item.setFont(font)
-                status_item = self.video_table.item(row, 9)
-                status_item.setText("4K")
+                status_item = self.video_table.item(row, 0)
+                status_item.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
                 break
     
     def on_download_start(self, video_path):
         for row in range(self.video_table.rowCount()):
-            if self.video_table.item(row, 0).text() == os.path.basename(video_path):
-                file_name_item = self.video_table.item(row, 0)
+            if self.video_table.item(row, 1).text() == os.path.basename(video_path):
+                file_name_item = self.video_table.item(row, 1)
                 grey_color = QColor(200, 200, 200)  # Light grey
                 file_name_item.setForeground(QBrush(grey_color))
                 font = QFont()
                 font.setBold(True)
                 file_name_item.setFont(font)
-                status_item = self.video_table.item(row, 9)
-                status_item.setIcon(QIcon("spinner.gif"))
+                status_item = self.video_table.item(row, 0)
+                status_item.setIcon(QIcon.fromTheme("emblem-synchronizing"))
                 break
 
     def play_video(self, row, column):
-        file_name_item = self.video_table.item(row, 0)
+        file_name_item = self.video_table.item(row, 1)
         video_path = os.path.join(video_storage_dir, file_name_item.text())
        
         if file_name_item.font().italic() or file_name_item.foreground().color().lightness() >= 200:
