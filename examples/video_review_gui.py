@@ -187,7 +187,7 @@ class VideoPlayer(QWidget):
         self.video_tree.setColumnWidth(0, 35)   # Status
         self.video_tree.setColumnWidth(1, 120)  # Video Path
         self.video_tree.setColumnWidth(2, 130)  # Start Datetime
-        self.video_tree.setColumnWidth(3, 80)   # End Time
+        self.video_tree.setColumnWidth(3, 70)   # End Time
         self.video_tree.setColumnWidth(4, 35)   # Channel
         self.video_tree.setColumnWidth(5, 35)   # Person
         self.video_tree.setColumnWidth(6, 35)   # Vehicle
@@ -401,8 +401,7 @@ class VideoPlayer(QWidget):
                 # experience)
                 # For now simply display that this is low-res.
                 item.setText(0, "sub")
-            else:
-                item.setIcon(1, QIcon())
+            item.setIcon(1, QIcon())
         else:
             item.setIcon(1, self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxCritical))
 
