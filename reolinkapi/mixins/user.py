@@ -37,14 +37,15 @@ class UserAPIMixin:
         print("Could not add user. Camera responded with:", r_data["value"])
         return False
 
-    def modify_user(self, username: str, password: str) -> bool:
+    def modify_user(self, username: str, oldPassword: str, newPassword: str) -> bool:
         """
         Modify the user's password by specifying their username
         :param username: The user which would want to be modified
-        :param password: The new password
+        :param oldPassword: The old password
+        :param newPassword: The new password
         :return: whether the user was modified successfully
         """
-        body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "password": password}}}]
+        body = [{"cmd": "ModifyUser", "action": 0, "param": {"User": {"userName": username, "oldPassword": oldPassword, "newPassword": newPassword}}}]
         r_data = self._execute_command('ModifyUser', body)[0]
         if r_data["value"]["rspCode"] == 200:
             return True
