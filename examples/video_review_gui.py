@@ -383,7 +383,6 @@ class VideoPlayer(QWidget):
         return None
 
     def on_download_complete(self, video_path, success):
-        print(f"on_download_complete {video_path} success={success}")
         item = self.find_item_by_path(os.path.basename(video_path))
         if not item:
             print(f"on_download_complete {video_path} did not find item?!")
@@ -569,6 +568,6 @@ if __name__ == '__main__':
     video_files.extend([os.path.basename(file) for file in args.files])
     app = QApplication(sys.argv)
     player = VideoPlayer(video_files)
-    player.resize(1900, 1000)
+    player.resize(2400, 1000)
     player.show()
     sys.exit(app.exec())
