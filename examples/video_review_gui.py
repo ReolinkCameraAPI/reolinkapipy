@@ -242,7 +242,11 @@ class VideoPlayer(QWidget):
 
         self.mpv_button = QPushButton("MPV")
         self.mpv_button.clicked.connect(self.open_in_mpv)
-        
+       
+        self.get_highres_button = QPushButton("GetHighRes")
+        self.get_highres_button.clicked.connect(self.get_highres_stream_for_file)
+        self.get_highres_button.setEnabled(False)  # Disable by default
+
         # Create seek slider
         self.seek_slider = ClickableSlider(Qt.Orientation.Horizontal)
         self.seek_slider.setRange(0, 0)
@@ -283,6 +287,7 @@ class VideoPlayer(QWidget):
         control_layout.addWidget(self.play_button)
         control_layout.addWidget(self.seek_slider)
         control_layout.addWidget(self.mpv_button)
+        control_layout.addWidget(self.get_highres_button)
         controls_layout.addLayout(control_layout)
 
         speed_layout = QHBoxLayout()
@@ -469,6 +474,9 @@ class VideoPlayer(QWidget):
                 self.download_thread.add_to_queue(*found_item, left=True)
             return
 
+        # Enable/disable GetHighRes button based on whether it's a sub stream
+        self.get_highres_button.setEnabled("RecS" in file_name_item.text(1))
+
         print(f"Playing video: {video_path}")
         url = QUrl.fromLocalFile(video_path)
         self.media_player.setSource(url)
@@ -482,6 +490,28 @@ class VideoPlayer(QWidget):
 
         # Timer needed to be able to play at seek offset in the video, otherwise setPosition seems ignored
         QTimer.singleShot(20, start_playback)
+
+    def get_highres_stream_for_file(self):
+        current_item = self.video_tree.currentItem()
+        if not current_item or "RecS" not in current_item.text(1):
+            return
+
+        parsed_data = parse_filename(current_item.text(1))
+        if not parsed_data:
+            print(f"Could not parse file {current_item.text(1)}")
+            return
+
+        start_time = parsed_data['start_datetime'] - timedelta(seconds=1)
+        end_time = datetime.datetime.strptime(f"{parsed_data['start_datetime'].strftime('%Y%m%d')} {parsed_data['end_time']}", "%Y%m%d %H%M%S") + timedelta(seconds=1)
+
+        main_files = self.cam.get_motion_files(start=start_time, end=end_time, streamtype='main', channel=parsed_data['channel'])
+
+        if main_files:
+            for main_file in main_files:
+                self.add_video(main_file['filename'])
+            self.video_tree.sortItems(2, Qt.SortOrder.DescendingOrder)
+        else:
+            print(f"No main stream file found for {current_item.text(1)}")
 
     def play_pause(self):
         if self.media_player.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
