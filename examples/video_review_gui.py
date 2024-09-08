@@ -375,8 +375,28 @@ class VideoPlayer(QWidget):
         # Find a potentially pre-existing channel0 item for this datetime, if so, add as a child
         # This lets channel1 appear as a child, but also main & sub videos appear in the same group
         channel_0_item = self.find_channel_0_item(start_datetime)
+        
         if channel_0_item:
-            channel_0_item.addChild(video_item)
+            # Check if the current item is a main stream and the existing channel_0_item is a sub stream
+            if "RecM" in base_file_name and "RecS" in channel_0_item.text(1):
+                # Make the current main stream item the new parent
+                new_parent = video_item
+                # Move all children of the sub stream item to the new main stream item
+                while channel_0_item.childCount() > 0:
+                    child = channel_0_item.takeChild(0)
+                    new_parent.addChild(child)
+                # Remove the old sub stream item
+                parent = channel_0_item.parent()
+                if parent:
+                    parent.removeChild(channel_0_item)
+                else:
+                    index = self.video_tree.indexOfTopLevelItem(channel_0_item)
+                    self.video_tree.takeTopLevelItem(index)
+                # Add the new main stream item as a top-level item
+                self.video_tree.addTopLevelItem(new_parent)
+            else:
+                # If it's not a main stream replacing a sub stream, add as a child as before
+                channel_0_item.addChild(video_item)
         else:
             self.video_tree.addTopLevelItem(video_item)
 
