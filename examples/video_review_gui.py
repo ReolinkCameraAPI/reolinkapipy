@@ -52,28 +52,61 @@ def decode_hex_to_flags(hex_value):
 
 def parse_filename(file_name):
     #  Mp4Record_2024-08-12_RecM13_DST20240812_214255_214348_1F1E828_4DDA4D.mp4
+    #  Mp4Record_2024-09-13-RecS09_DST20240907_084519_084612_0_55289080000000_307BC0.mp4
     # https://github.com/sven337/ReolinkLinux/wiki/Figuring-out-the-file-names#file-name-structure
-    pattern = r'.*?Mp4Record_(\d{4}-\d{2}-\d{2})_Rec[MS](\d)\d_DST(\d{8})_(\d{6})_(\d{6})_(\w{4,8})_(\w{4,8})\.mp4'
+    pattern = r'.*?Mp4Record_(\d{4}-\d{2}-\d{2})_Rec[MS](\d)(\d)_(DST)?(\d{8})_(\d{6})_(\d{6})'
+    v3_suffix = r'.*_(\w{4,8})_(\w{4,8})\.mp4'
+    v9_suffix = r'.*_(\d)_(\w{7})(\w{7})_(\w{4,8})\.mp4'
     match = re.match(pattern, file_name)
+
+    out = {}
+    version = 0
 
     if match:
         date = match.group(1)  # YYYY-MM-DD
-        channel = int(match.group(2))  # Mx as integer
-        start_date = match.group(3)  # YYYYMMDD
-        start_time = match.group(4)  # HHMMSS
-        end_time = match.group(5)  # HHMMSS
-        flags_hex = match.group(6)  # flags hex
-        file_size = int(match.group(7), 16)
-        
+        channel = int(match.group(2))  
+        version = int(match.group(3)) # version
+        start_date = match.group(5)  # YYYYMMDD
+        start_time = match.group(6)  # HHMMSS
+        end_time = match.group(7)  # HHMMSS
+
         # Combine date and start time into a datetime object
         start_datetime = datetime.datetime.strptime(f"{start_date} {start_time}", "%Y%m%d %H%M%S")
         
-        triggers = decode_hex_to_flags(flags_hex)
-        
-        return {'start_datetime': start_datetime, 'channel': channel, 'end_time': end_time, 'triggers': triggers, 'file_size': file_size}
+        out = {'start_datetime': start_datetime, 'channel': channel, 'end_time': end_time }
     else:
         print("parse error")
         return None
+       
+    if version == 9:
+        match = re.match(v9_suffix, file_name)
+        if not match:
+            print(f"v9 parse error for {file_name}")
+            return None
+
+        animal_type = match.group(1)
+        flags_hex1 = match.group(2)
+        flags_hex2 = match.group(3)
+        file_size = int(match.group(4), 16)
+
+        triggers = decode_hex_to_flags(flags_hex1)
+
+        out.update({'animal_type' : animal_type, 'file_size' : file_size, 'triggers' : triggers })
+
+    elif version == 2 or version == 3:
+        match = re.match(v3_suffix, file_name)
+        if not match:
+            print(f"v3 parse error for {file_name}")
+            return None
+
+        flags_hex = match.group(1)
+        file_size = int(match.group(2), 16)
+
+        triggers = decode_hex_to_flags(flags_hex)
+
+        out.update({'file_size' : file_size, 'triggers' : triggers })
+
+    return out
 
 class ClickableSlider(QSlider):
     def mousePressEvent(self, event):
