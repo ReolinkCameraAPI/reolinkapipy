@@ -612,7 +612,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     
     parser = argparse.ArgumentParser(description="Reolink Video Review GUI")
-    parser.add_argument('--sub', action='store_true', help="Search for sub channel instead of main channel")
+    parser.add_argument('--main', action='store_true', help="Search for main channel instead of sub channel")
     parser.add_argument('files', nargs='*', help="Optional video file names to process")
     args = parser.parse_args()
 
@@ -629,7 +629,7 @@ if __name__ == '__main__':
     start = dt.combine(dt.now(), dt.min.time())
     end = dt.now()
 
-    streamtype = 'sub' if args.sub else 'main'
+    streamtype = 'sub' if not args.main else 'main'
     processed_motions = cam.get_motion_files(start=start, end=end, streamtype=streamtype, channel=0)
     processed_motions += cam.get_motion_files(start=start, end=end, streamtype=streamtype, channel=1)
 
