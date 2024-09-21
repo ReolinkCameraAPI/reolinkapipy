@@ -56,7 +56,7 @@ def parse_filename(file_name):
     # https://github.com/sven337/ReolinkLinux/wiki/Figuring-out-the-file-names#file-name-structure
     pattern = r'.*?Mp4Record_(\d{4}-\d{2}-\d{2})_Rec[MS](\d)(\d)_(DST)?(\d{8})_(\d{6})_(\d{6})'
     v3_suffix = r'.*_(\w{4,8})_(\w{4,8})\.mp4'
-    v9_suffix = r'.*_(\d)_(\w{7})(\w{7})_(\w{4,8})\.mp4'
+    v9_suffix = r'.*_(\d)_(\w{7})(\w{7})_(\w{1,8})\.mp4'
     match = re.match(pattern, file_name)
 
     out = {}
@@ -444,6 +444,7 @@ class VideoPlayer(QWidget):
         item = self.find_item_by_path(os.path.basename(video_path))
         if not item:
             print(f"on_download_complete {video_path} did not find item?!")
+            return
         item.setForeground(1, QBrush(QColor(0, 0, 0)))  # Black color for normal text
         font = item.font(1)
         font.setItalic(False)
