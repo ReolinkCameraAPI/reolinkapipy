@@ -3,6 +3,42 @@ from typing import Dict
 
 class NetworkAPIMixin:
     """API calls for network settings."""
+    def set_network_settings(self, ip: str, gateway: str, mask: str, dns1: str, dns2: str, mac: str,
+                            use_dhcp: bool = True, auto_dns: bool = True) -> Dict:
+        """
+        Set network settings including IP, gateway, subnet mask, DNS, and connection type (DHCP or Static).
+        
+        :param ip: str
+        :param gateway: str
+        :param mask: str
+        :param dns1: str
+        :param dns2: str
+        :param mac: str
+        :param use_dhcp: bool
+        :param auto_dns: bool
+        :return: Dict
+        """
+        body = [{"cmd": "SetLocalLink", "action": 0, "param": {
+            "LocalLink": {
+                "dns": {
+                    "auto": 1 if auto_dns else 0,
+                    "dns1": dns1,
+                    "dns2": dns2
+                },
+                "mac": mac,
+                "static": {
+                    "gateway": gateway,
+                    "ip": ip,
+                    "mask": mask
+                },
+                "type": "DHCP" if use_dhcp else "Static"
+            }
+        }}]
+        
+        return self._execute_command('SetLocalLink', body)
+        print("Successfully Set Network Settings")
+        return True
+
     def set_net_port(self, http_port: float = 80, https_port: float = 443, media_port: float = 9000,
                      onvif_port: float = 8000, rtmp_port: float = 1935, rtsp_port: float = 554) -> bool:
         """

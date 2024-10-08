@@ -9,3 +9,4 @@ if __name__ == "__main__":
     dst = cam.get_dst()
     ok = cam.add_user("foo", "bar", "admin")
     alarm = cam.get_alarm_motion()
+    cam.set_device_name(name='my_camera')
