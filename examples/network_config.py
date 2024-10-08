@@ -30,6 +30,9 @@ pw = config.get('camera', 'password')
 # Connect to camera
 cam = Camera(ip, un, pw)
 
+# Set NTP
+cam.set_ntp(enable=True, interval=1440, port=123, server="time-b.nist.gov")
+
 # Get current network settings
 current_settings = cam.get_network_general()
 print("Current settings:", current_settings)

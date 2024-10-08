@@ -72,6 +72,27 @@ class NetworkAPIMixin:
             }}}]
         return self._execute_command('SetWifi', body)
 
+    def set_ntp(self, enable: bool = True, interval: int = 1440, port: int = 123, server: str = "pool.ntp.org") -> Dict:
+        """
+        Set NTP settings.
+
+        :param enable: bool
+        :param interval: int
+        :param port: int
+        :param server: str
+        :return: Dict
+        """
+        body = [{"cmd": "SetNtp", "action": 0, "param": {
+            "Ntp": {
+                "enable": 1 if enable else 0,
+                "interval": interval,
+                "port": port,
+                "server": server
+            }}}]
+        response = self._execute_command('SetNtp', body)
+        print("Successfully Set NTP Settings")
+        return response
+
     def get_net_ports(self) -> Dict:
         """
         Get network ports
