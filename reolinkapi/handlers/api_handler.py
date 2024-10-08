@@ -58,6 +58,7 @@ class APIHandler(AlarmAPIMixin,
         self.username = username
         self.password = password
         Request.proxies = kwargs.get("proxy")  # Defaults to None if key isn't found
+        Request.session = kwargs.get("session")  # Defaults to None if key isn't found
 
     def login(self) -> bool:
         """

@@ -4,6 +4,14 @@ from typing import List, Dict, Union, Optional
 
 class Request:
     proxies = None
+    session = None
+
+    @staticmethod
+    def __getSession():
+        reqHandler = requests
+        if Request.session is not None:
+            reqHandler = Request.session
+        return reqHandler
 
     @staticmethod
     def post(url: str, data: List[Dict], params: Dict[str, Union[str, float]] = None) -> \
@@ -17,7 +25,7 @@ class Request:
         """
         try:
             headers = {'content-type': 'application/json'}
-            r = requests.post(url, verify=False, params=params, json=data, headers=headers,
+            r = Request.__getSession().post(url, verify=False, params=params, json=data, headers=headers,
                               proxies=Request.proxies)
             if r.status_code == 200:
                 return r
@@ -37,7 +45,7 @@ class Request:
         :return:
         """
         try:
-            data = requests.get(url=url, verify=False, params=params, timeout=timeout, proxies=Request.proxies)
+            data = Request.__getSession().get(url=url, verify=False, params=params, timeout=timeout, proxies=Request.proxies)
             return data
         except Exception as e:
             print("Get Error\n", e)
