@@ -32,7 +32,7 @@ class CameraPlayer(QWidget):
     def __init__(self, rtsp_url_wide, rtsp_url_telephoto, camera: Camera):
         super().__init__()
         self.setWindowTitle("Reolink PTZ Streamer")
-        self.setGeometry(10, 10, 1900, 600)
+        self.setGeometry(10, 10, 2400, 900)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus) 
 
         self.camera = camera
