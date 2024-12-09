@@ -84,7 +84,7 @@ class NetworkAPIMixin:
         """
         body = [{"cmd": "SetNtp", "action": 0, "param": {
             "Ntp": {
-                "enable": 1 if enable else 0,
+                "enable": int(enable),
                 "interval": interval,
                 "port": port,
                 "server": server
