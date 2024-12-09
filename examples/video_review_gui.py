@@ -56,7 +56,7 @@ def parse_filename(file_name):
     # https://github.com/sven337/ReolinkLinux/wiki/Figuring-out-the-file-names#file-name-structure
     pattern = r'.*?Mp4Record_(\d{4}-\d{2}-\d{2})_Rec[MS](\d)(\d)_(DST)?(\d{8})_(\d{6})_(\d{6})'
     v3_suffix = r'.*_(\w{4,8})_(\w{4,8})\.mp4'
-    v9_suffix = r'.*_(\d)_(\w{7})(\w{7})_(\w{4,8})\.mp4'
+    v9_suffix = r'.*_(\d)_(\w{7})(\w{7})_(\w{1,8})\.mp4'
     match = re.match(pattern, file_name)
 
     out = {}
@@ -375,8 +375,28 @@ class VideoPlayer(QWidget):
         # Find a potentially pre-existing channel0 item for this datetime, if so, add as a child
         # This lets channel1 appear as a child, but also main & sub videos appear in the same group
         channel_0_item = self.find_channel_0_item(start_datetime)
+        
         if channel_0_item:
-            channel_0_item.addChild(video_item)
+            # Check if the current item is a main stream and the existing channel_0_item is a sub stream
+            if "RecM" in base_file_name and "RecS" in channel_0_item.text(1):
+                # Make the current main stream item the new parent
+                new_parent = video_item
+                # Move all children of the sub stream item to the new main stream item
+                while channel_0_item.childCount() > 0:
+                    child = channel_0_item.takeChild(0)
+                    new_parent.addChild(child)
+                # Remove the old sub stream item
+                parent = channel_0_item.parent()
+                if parent:
+                    parent.removeChild(channel_0_item)
+                else:
+                    index = self.video_tree.indexOfTopLevelItem(channel_0_item)
+                    self.video_tree.takeTopLevelItem(index)
+                # Add the new main stream item as a top-level item
+                self.video_tree.addTopLevelItem(new_parent)
+            else:
+                # If it's not a main stream replacing a sub stream, add as a child as before
+                channel_0_item.addChild(video_item)
         else:
             self.video_tree.addTopLevelItem(video_item)
 
@@ -424,6 +444,7 @@ class VideoPlayer(QWidget):
         item = self.find_item_by_path(os.path.basename(video_path))
         if not item:
             print(f"on_download_complete {video_path} did not find item?!")
+            return
         item.setForeground(1, QBrush(QColor(0, 0, 0)))  # Black color for normal text
         font = item.font(1)
         font.setItalic(False)
@@ -592,7 +613,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     
     parser = argparse.ArgumentParser(description="Reolink Video Review GUI")
-    parser.add_argument('--sub', action='store_true', help="Search for sub channel instead of main channel")
+    parser.add_argument('--main', action='store_true', help="Search for main channel instead of sub channel")
     parser.add_argument('files', nargs='*', help="Optional video file names to process")
     args = parser.parse_args()
 
@@ -609,7 +630,7 @@ if __name__ == '__main__':
     start = dt.combine(dt.now(), dt.min.time())
     end = dt.now()
 
-    streamtype = 'sub' if args.sub else 'main'
+    streamtype = 'sub' if not args.main else 'main'
     processed_motions = cam.get_motion_files(start=start, end=end, streamtype=streamtype, channel=0)
     processed_motions += cam.get_motion_files(start=start, end=end, streamtype=streamtype, channel=1)
 
