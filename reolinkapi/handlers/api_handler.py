@@ -121,7 +121,7 @@ class APIHandler(AlarmAPIMixin,
         try:
             if self.token is None:
                 raise ValueError("Login first")
-            if command == 'Download':
+            if command == 'Download' or command == 'Playback':
                 # Special handling for downloading an mp4
                 # Pop the filepath from data
                 tgt_filepath = data[0].pop('filepath')
