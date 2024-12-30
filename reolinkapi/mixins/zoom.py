@@ -31,6 +31,16 @@ class ZoomAPIMixin:
         data = [{"cmd": "StartZoomFocus", "action": 0, "param": {"ZoomFocus": {"channel": 0, "op": "FocusPos", "pos": position}}}]
         return self._execute_command('StartZoomFocus', data)
 
+    def get_auto_focus(self) -> Dict:
+        """This command returns the current auto focus status."""
+        data = [{"cmd": "GetAutoFocus", "action": 0, "param": {"channel": 0}}]
+        return self._execute_command('GetAutoFocus', data)
+    
+    def set_auto_focus(self, disable: bool) -> Dict:
+        """This command sets the auto focus status."""
+        data = [{"cmd": "SetAutoFocus", "action": 0, "param": {"channel": 0, "disable": disable}}]
+        return self._execute_command('SetAutoFocus', data)
+
     def start_zooming_in(self, speed: float = 60) -> Dict:
         """
         The camera zooms in until self.stop_zooming() is called.
