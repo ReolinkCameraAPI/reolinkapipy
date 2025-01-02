@@ -38,7 +38,7 @@ class ZoomAPIMixin:
     
     def set_auto_focus(self, disable: bool) -> Dict:
         """This command sets the auto focus status."""
-        data = [{"cmd": "SetAutoFocus", "action": 0, "param": {"channel": 0, "disable": disable}}]
+        data = [{"cmd": "SetAutoFocus", "action": 0, "param": {"AutoFocus": {"channel": 0, "disable": 1 if disable else 0}}}]
         return self._execute_command('SetAutoFocus', data)
 
     def start_zooming_in(self, speed: float = 60) -> Dict:
