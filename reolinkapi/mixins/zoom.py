@@ -16,6 +16,31 @@ class ZoomAPIMixin:
         data = [{"cmd": "PtzCtrl", "action": 0, "param": {"channel": 0, "op": "Stop"}}]
         return self._execute_command('PtzCtrl', data)
 
+    def get_zoom_focus(self) -> Dict:
+        """This command returns the current zoom and focus values."""
+        data = [{"cmd": "GetZoomFocus", "action": 0, "param": {"channel": 0}}]
+        return self._execute_command('GetZoomFocus', data)
+
+    def start_zoom_pos(self, position: float) -> Dict:
+        """This command sets the zoom position."""
+        data = [{"cmd": "StartZoomFocus", "action": 0, "param": {"ZoomFocus": {"channel": 0, "op": "ZoomPos", "pos": position}}}]
+        return self._execute_command('StartZoomFocus', data)
+
+    def start_focus_pos(self, position: float) -> Dict:
+        """This command sets the focus position."""
+        data = [{"cmd": "StartZoomFocus", "action": 0, "param": {"ZoomFocus": {"channel": 0, "op": "FocusPos", "pos": position}}}]
+        return self._execute_command('StartZoomFocus', data)
+
+    def get_auto_focus(self) -> Dict:
+        """This command returns the current auto focus status."""
+        data = [{"cmd": "GetAutoFocus", "action": 0, "param": {"channel": 0}}]
+        return self._execute_command('GetAutoFocus', data)
+    
+    def set_auto_focus(self, disable: bool) -> Dict:
+        """This command sets the auto focus status."""
+        data = [{"cmd": "SetAutoFocus", "action": 0, "param": {"AutoFocus": {"channel": 0, "disable": 1 if disable else 0}}}]
+        return self._execute_command('SetAutoFocus', data)
+
     def start_zooming_in(self, speed: float = 60) -> Dict:
         """
         The camera zooms in until self.stop_zooming() is called.

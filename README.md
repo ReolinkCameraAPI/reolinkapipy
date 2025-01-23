@@ -109,8 +109,8 @@ GET:
 - [X] User -> Manage User
 - [X] Device -> HDD/SD Card
 - [x] PTZ -> Presets, Calibration Status
-- [ ] Zoom
-- [ ] Focus
+- [x] Zoom
+- [x] Focus
 - [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
 - [ ] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
 - [X] Image Data -> "Snap" Frame from Video Stream
@@ -152,6 +152,7 @@ do not work and is not supported here.
 - RLC-410-5MP
 - RLC-510A
 - RLC-520
+- RLC-823A
 - C1-Pro
 - D400
 - E1 Zoom
