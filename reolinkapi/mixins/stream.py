@@ -40,7 +40,7 @@ try:
                 'user': self.username,
                 'password': self.password,
             }
-            parms = parse.urlencode(data).encode("utf-8")
+            parms = parse.urlencode(data, safe="!").encode("utf-8")
 
             try:
                 response = requests.get(self.url, proxies=proxies, params=parms, timeout=timeout)
