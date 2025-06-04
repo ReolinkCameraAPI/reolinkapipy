@@ -51,8 +51,8 @@ class PtzAPIMixin:
         return self._execute_command('PtzCtrl', data)
 
     def _send_set_preset(self, enable: float, preset: float = 1, name: str = 'pos1') -> Dict:
-        data = [{"cmd": "SetPtzPreset", "action": 0, "param": {
-            "channel": 0, "enable": enable, "id": preset, "name": name}}]
+        data = [{"cmd": "SetPtzPreset", "action": 0, "param": { "PtzPreset": {
+            "channel": 0, "enable": enable, "id": preset, "name": name}}}]
         return self._execute_command('PtzCtrl', data)
 
     def go_to_preset(self, speed: float = 60, index: float = 1) -> Dict:
